@@ -1,13 +1,18 @@
 #pragma once
-#include<queue>
+
 #include<list>
 #include"PaginaWeb.h"
+#include<Windows.h>
 class Pestaña
 {
 private:
-	queue<PaginaWeb, list<PaginaWeb>> Historial;
+	list<PaginaWeb> Historial;
 public:
-
+	void AgregarAlHistorial(PaginaWeb*);
+	PaginaWeb Avanzar(list<PaginaWeb>::iterator);
+	PaginaWeb Retroceder(list<PaginaWeb>::iterator);
+	void mostrarHistorial();
+	
 
 
 

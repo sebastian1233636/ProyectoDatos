@@ -17,12 +17,6 @@ PaginaWeb::PaginaWeb() {
 
 }
 
-PaginaWeb::PaginaWeb(PaginaWeb& copia) {
-	this->URL = copia.URL;
-	this->Titulo = copia.Titulo;
-	this->marcador = copia.marcador;
-	
-}
 
 string PaginaWeb::getURL()
 {

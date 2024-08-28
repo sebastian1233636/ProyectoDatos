@@ -3,14 +3,14 @@
 using namespace std;
 class PaginaWeb
 {
-public:
+private:
 	string URL;
 	string Titulo;
 	bool marcador;
-private:
+public:
 	PaginaWeb(string, string);
 	PaginaWeb();
-	PaginaWeb(PaginaWeb&);
+	
 
 	string getURL();
 	string getTitulo();
