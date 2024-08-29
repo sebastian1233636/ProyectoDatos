@@ -16,13 +16,13 @@ string PaginaWeb::getURL(){return URL;}
 
 string PaginaWeb::getTitulo(){return Titulo;}
 
-bool PaginaWeb::getFavorito(){return marcador;}
-
 void PaginaWeb::MostrarPaginaWeb(){
-	cout << "------------------------------------" << getURL() << "----------------------------------------" << endl;
-	if (getFavorito() == true) {
-		cout << "FAVORITO" << endl;
-	}
+    stringstream s;
+    cout << "----------------------------------------\n";
+    cout << "| " + getURL() + "\n";
+    if (marcador == true) {cout << "| Sitio Favorito \n";}
+    cout << "| " + getTitulo() + "\n";
+    cout << "----------------------------------------\n";
 }
 
 void PaginaWeb::PonerMarcador(){marcador = true;}

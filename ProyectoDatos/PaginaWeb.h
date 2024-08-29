@@ -3,6 +3,7 @@
 
 #include<iostream>
 #include<Windows.h>
+#include<sstream>
 
 using namespace std;
 
@@ -17,7 +18,6 @@ public:
 	
 	string getURL();
 	string getTitulo();
-	bool getFavorito();
 
 	void MostrarPaginaWeb();
 	void PonerMarcador();

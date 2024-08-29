@@ -5,9 +5,9 @@ int main() {
 	PaginaWeb* pag1 = new PaginaWeb("https://store.steampowered.com", "Steam");
 	PaginaWeb* pag2 = new PaginaWeb("https://onlyfans.com", "OnlyFans");
 	PaginaWeb* pag3 = new PaginaWeb("https://www.playstation.com", "PlayStation");
-	pes->InsertarPrimero(pag1);
-	pes->InsertarPrimero(pag2);
-	pes->InsertarPrimero(pag3);
-	pes->ExplorarHistorial(pes->getTail());
+	pes->insertarPrimero(pag1);
+	pes->insertarPrimero(pag2);
+	pes->insertarPrimero(pag3);
+	pes->explorarHistorial();
 	return 0;
 }
