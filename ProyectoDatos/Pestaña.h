@@ -1,32 +1,26 @@
-#pragma once
+#ifndef PESTAÑA_H
+#define PESTAÑA_H
+
 #include"PaginaWeb.h"
-#include<Windows.h>
-#include<conio.h>
 
 struct NodoPag {
 	PaginaWeb* paginaWeb;
 	NodoPag* siguiente;
 	NodoPag* anterior;
-
 };
 
-
-
-class Pestaña
-{
+class Pestaña{
 private:
-	NodoPag* tail;//primero
-	NodoPag* head;//ultimo
+	NodoPag* tail;//Primero
+	NodoPag* head;//Ultimo
 public:
 	Pestaña();
 	~Pestaña();
-	void InsertarPrimero(PaginaWeb*);
-	void ExplorarHistorial(NodoPag*);
+
 	NodoPag* getTail();
 	NodoPag* getHead();
-	
 
-
-
+	void insertarPrimero(PaginaWeb*);
+	void explorarHistorial();
 };
-
+#endif

@@ -1,13 +1,11 @@
 #include "Pestaña.h"
 
-Pestaña::Pestaña()
-{
+Pestaña::Pestaña(){
 	tail = nullptr;
 	head = nullptr;
 }
 
-Pestaña::~Pestaña()
-{
+Pestaña::~Pestaña(){
 	NodoPag* aux = tail;
 	while (aux != nullptr) {
 		tail = tail->siguiente;
@@ -18,8 +16,11 @@ Pestaña::~Pestaña()
 	head = nullptr;
 }
 
-void Pestaña::InsertarPrimero(PaginaWeb* pag)
-{
+NodoPag* Pestaña::getTail() {return tail;}
+
+NodoPag* Pestaña::getHead() {return head;}
+
+void Pestaña::insertarPrimero(PaginaWeb* pag){
 	NodoPag* nuevo = new NodoPag();
 	nuevo->paginaWeb = pag;
 	if (tail == nullptr) {
@@ -34,16 +35,14 @@ void Pestaña::InsertarPrimero(PaginaWeb* pag)
 	}
 }
 
-void Pestaña::ExplorarHistorial(NodoPag* nodoActual)
-{
+void Pestaña::explorarHistorial(){
 	bool bandera = true;
-	nodoActual = tail;
+	NodoPag* nodoActual = tail;
 	while (bandera == true) {
-
 		if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 			if (nodoActual->anterior == nullptr) {
 				nodoActual->paginaWeb->MostrarPaginaWeb();
-				cout << "no se puede retroceder mas" << endl;
+				cout << "No se puede retroceder mas" << endl;
 			}
 			else {
 				nodoActual->paginaWeb->MostrarPaginaWeb();
@@ -51,8 +50,6 @@ void Pestaña::ExplorarHistorial(NodoPag* nodoActual)
 			}
 			Sleep(100);
 		}
-
-
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
 			if (nodoActual->siguiente == nullptr) {
 				nodoActual->paginaWeb->MostrarPaginaWeb();
@@ -64,24 +61,11 @@ void Pestaña::ExplorarHistorial(NodoPag* nodoActual)
 			}
 			Sleep(100);
 		}
-
-
-
-		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
-			bandera = false;
+		if (GetAsyncKeyState('F') & 0x8000) {
+			nodoActual->paginaWeb->PonerMarcador();
+			cout << "Pagina marcada como favorita" << endl;
+			Sleep(100);
 		}
-
-
+		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {bandera = false;}
 	}
-
-}
-
-NodoPag* Pestaña::getTail()
-{
-	return tail;
-}
-
-NodoPag* Pestaña::getHead()
-{
-    return head;
 }
