@@ -8,12 +8,10 @@ int main() {
 	PaginaWeb* pag1 = new PaginaWeb("aaaaa", "Steam");
 	PaginaWeb* pag2 = new PaginaWeb("bbbbb", "OnlyFans");
 	PaginaWeb* pag3 = new PaginaWeb("ccccc", "PlayStation");
-	pes->AgregarAlHistorial(pag1);
-	pes->AgregarAlHistorial(pag2);
-	pes->AgregarAlHistorial(pag3);
-
-	pes->mostrarHistorial();
-
+	pes->InsertarPrimero(pag1);
+	pes->InsertarPrimero(pag2);
+	pes->InsertarPrimero(pag3);
+	pes->ExplorarHistorial(pes->getTail());
 
 	
 	return 0;

@@ -1,77 +1,87 @@
 #include "Pestaña.h"
 
-
-
-
-void Pestaña::AgregarAlHistorial(PaginaWeb* pag)
+Pestaña::Pestaña()
 {
-	Historial.push_front(*pag);
+	tail = nullptr;
+	head = nullptr;
 }
 
-PaginaWeb Pestaña::Avanzar(list<PaginaWeb>::iterator iter)
+Pestaña::~Pestaña()
 {
-	if (iter == Historial.end()) {
-		cout << "No hay mas paginas para mostrar" << endl;
-		return PaginaWeb("ULTIMO PAGINA","");
+	NodoPag* aux = tail;
+	while (aux != nullptr) {
+		tail = tail->siguiente;
+		delete aux;
+		aux = tail;
+	}
+	tail = nullptr;
+	head = nullptr;
+}
+
+void Pestaña::InsertarPrimero(PaginaWeb* pag)
+{
+	NodoPag* nuevo = new NodoPag();
+	nuevo->paginaWeb = pag;
+	if (tail == nullptr) {
+		tail = head = nuevo;
+		nuevo->siguiente;
+		nuevo->anterior;
 	}
 	else {
-
-		PaginaWeb pagina = *iter;
-		std::cout << "Mostrando página: " << endl;
-
-		iter->MostrarPaginaWeb();
-		return Avanzar(++iter);
-		
-	}
-
-}
-
-PaginaWeb Pestaña::Retroceder(list<PaginaWeb>::iterator iter)
-{
-	if (iter == Historial.begin()) {
-		cout << "No hay mas paginas para mostrar" << endl;
-		return PaginaWeb("PRIMERA PAGINA", "");
-	}
-	else {
-		PaginaWeb pagina = *iter;
-		std::cout << "Mostrando página: " << endl;
-
-		iter->MostrarPaginaWeb();
-		
-		return Retroceder(--iter);
+		nuevo->siguiente = tail;
+		tail->anterior = nuevo;
+		tail = nuevo;
 	}
 }
 
-void Pestaña::mostrarHistorial()
+void Pestaña::ExplorarHistorial(NodoPag* nodoActual)
 {
-	list<PaginaWeb>::iterator iter;
-	iter = Historial.begin();
 	bool bandera = true;
-	system("cls");
-	cout << "Oprima las felchas de arriba o abajo para avanzar y retroceder" << endl;
-	while (bandera) {
+	nodoActual = tail;
+	while (bandera == true) {
 
-		if (GetAsyncKeyState(VK_UP) & 0x8000) {
-			//Avanzar(iter).MostrarPaginaWeb();
-			cout << "---------" << endl;
+		if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
+			if (nodoActual->anterior == nullptr) {
+				nodoActual->paginaWeb->MostrarPaginaWeb();
+				cout << "no se puede retroceder mas" << endl;
+			}
+			else {
+				nodoActual->paginaWeb->MostrarPaginaWeb();
+				nodoActual = nodoActual->anterior;
+			}
 			Sleep(100);
-		}// Espera un poco para evitar detección múltiple rápida
+		}
 
-		if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
-			Retroceder(iter).MostrarPaginaWeb();
-			
+
+		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
+			if (nodoActual->siguiente == nullptr) {
+				nodoActual->paginaWeb->MostrarPaginaWeb();
+				cout << "No se puede avanzar mas" << endl;
+			}
+			else {
+				nodoActual->paginaWeb->MostrarPaginaWeb();
+				nodoActual = nodoActual->siguiente;
+			}
 			Sleep(100);
-		}// Espera un poco para evitar detección múltiple rápida
-		
-		
+		}
+
+
+
 		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
 			bandera = false;
 		}
+
+
 	}
 
 }
 
+NodoPag* Pestaña::getTail()
+{
+	return tail;
+}
 
-
-
-
+NodoPag* Pestaña::getHead()
+{
+    return head;
+}

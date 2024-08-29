@@ -1,17 +1,29 @@
 #pragma once
-
-#include<list>
 #include"PaginaWeb.h"
 #include<Windows.h>
+#include<conio.h>
+
+struct NodoPag {
+	PaginaWeb* paginaWeb;
+	NodoPag* siguiente;
+	NodoPag* anterior;
+
+};
+
+
+
 class Pestaña
 {
 private:
-	list<PaginaWeb> Historial;
+	NodoPag* tail;//primero
+	NodoPag* head;//ultimo
 public:
-	void AgregarAlHistorial(PaginaWeb*);
-	PaginaWeb Avanzar(list<PaginaWeb>::iterator);
-	PaginaWeb Retroceder(list<PaginaWeb>::iterator);
-	void mostrarHistorial();
+	Pestaña();
+	~Pestaña();
+	void InsertarPrimero(PaginaWeb*);
+	void ExplorarHistorial(NodoPag*);
+	NodoPag* getTail();
+	NodoPag* getHead();
 	
 
 
