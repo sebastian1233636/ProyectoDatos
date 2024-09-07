@@ -40,41 +40,51 @@ void Pestaña::insertarPrimero(PaginaWeb* pag){
 void Pestaña::explorarHistorial(){
 	bool bandera = true;
 	NodoPag* nodoActual = tail;
-	while (bandera == true) {
-		if (modoIcognito) {
-			cout << "No guardar historial ni marcadores" << endl;
-		}
-		else {
-			if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
-				if (nodoActual->anterior == nullptr) {
-					nodoActual->paginaWeb->MostrarPaginaWeb();
-					cout << "No se puede retroceder mas" << endl;
-				}
-				else {
-					nodoActual->paginaWeb->MostrarPaginaWeb();
-					nodoActual = nodoActual->anterior;
-				}
-				Sleep(100);
+
+	if (nodoActual == nullptr) {
+		cout << "El historial de páginas web está vacío." << endl;
+	}
+	else {
+		while (bandera == true) {
+			if (modoIcognito) {
+				cout << "No guardar historial ni marcadores" << endl;
 			}
-			if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
-				if (nodoActual->siguiente == nullptr) {
-					nodoActual->paginaWeb->MostrarPaginaWeb();
-					cout << "No se puede avanzar mas" << endl;
+			else {
+				if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
+					if (nodoActual->anterior == nullptr) {
+						nodoActual->paginaWeb->MostrarPaginaWeb();
+						cout << "No se puede retroceder mas" << endl;
+
+					}
+					else {
+						nodoActual->paginaWeb->MostrarPaginaWeb();
+						nodoActual = nodoActual->anterior;
+					}
+					Sleep(300);
 				}
-				else {
-					nodoActual->paginaWeb->MostrarPaginaWeb();
-					nodoActual = nodoActual->siguiente;
+				if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
+					if (nodoActual->siguiente == nullptr) {
+						nodoActual->paginaWeb->MostrarPaginaWeb();
+						cout << "No se puede avanzar mas" << endl;
+					}
+					else {
+
+						nodoActual->paginaWeb->MostrarPaginaWeb();
+						nodoActual = nodoActual->siguiente;
+					}
+					Sleep(300);
 				}
-				Sleep(100);
+
+				if (GetAsyncKeyState('F') & 0x8000) {
+					nodoActual->paginaWeb->PonerMarcador();
+					cout << "Pagina marcada como favorita" << endl;
+					Sleep(300);
+				}
+				if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) { bandera = false; }
 			}
-			if (GetAsyncKeyState('F') & 0x8000) {
-				nodoActual->paginaWeb->PonerMarcador();
-				cout << "Pagina marcada como favorita" << endl;
-				Sleep(100);
-			}
-			if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) { bandera = false; }
 		}
 	}
+
 }
 
 void Pestaña::activarModoIcognito()

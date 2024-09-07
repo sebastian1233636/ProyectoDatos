@@ -38,31 +38,42 @@ void AdminPestañas::InsertarPrimero(Pestaña* pes){
 void AdminPestañas::ExplorarHistorialPestañas(){
 	bool bandera = true;
 	NodoPest* nodoActual = tail;
-	while (bandera == true) {
-
-		if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
-			if (nodoActual->anterior == nullptr) {
-				cout << nodoActual->pestaña->mostrarPestaña() << endl;
-				cout << "No se puede retroceder mas" << endl;
-			}
-			else {
-				cout << nodoActual->pestaña->mostrarPestaña() << endl;
-				nodoActual = nodoActual->anterior;
-			}
-			Sleep(200);
-		}
-
-		if (GetAsyncKeyState(VK_UP) & 0x8000) {
-			if (nodoActual->siguiente == nullptr) {
-				cout << nodoActual->pestaña->mostrarPestaña() << endl;
-				cout << "No se puede retroceder mas" << endl;
-			}
-			else {
-				cout << nodoActual->pestaña->mostrarPestaña() << endl;
-				nodoActual = nodoActual->siguiente;
-			}
-			Sleep(200);
-		}
-		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) { bandera = false; }
+	if (nodoActual == nullptr) {
+		cout << " no hay historial todavia" << endl;
 	}
+	else {
+		while (bandera == true) {
+
+			if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
+				if (nodoActual->anterior == nullptr) {
+					cout << nodoActual->pestaña->mostrarPestaña() << endl;
+					nodoActual->pestaña->explorarHistorial();
+					cout << "No se puede retroceder mas" << endl;
+				}
+				else {
+					cout << nodoActual->pestaña->mostrarPestaña() << endl;
+					nodoActual->pestaña->explorarHistorial();
+					nodoActual = nodoActual->anterior;
+				}
+				Sleep(200);
+			}
+
+			if (GetAsyncKeyState(VK_UP) & 0x8000) {
+				if (nodoActual->siguiente == nullptr) {
+					cout << nodoActual->pestaña->mostrarPestaña() << endl;
+					nodoActual->pestaña->explorarHistorial();
+					cout << "No se puede retroceder mas" << endl;
+				}
+				else {
+					cout << nodoActual->pestaña->mostrarPestaña() << endl;
+					nodoActual->pestaña->explorarHistorial();
+					nodoActual = nodoActual->siguiente;
+				}
+				Sleep(200);
+			}
+			if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) { bandera = false; }
+		}
+	}
+
+	
 }
