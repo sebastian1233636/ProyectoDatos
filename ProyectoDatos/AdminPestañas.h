@@ -22,5 +22,6 @@ public:
 
 	void InsertarPrimero(Pestaña*);
 	void ExplorarHistorialPestañas();
+	void BuscarFavorito();
 };
 #endif

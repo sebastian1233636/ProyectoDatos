@@ -11,14 +11,17 @@ private:
 	string URL;
 	string Titulo;
 	bool marcador;
-	
+	bool mostrada;
 public:
 	PaginaWeb(string, string);
 	PaginaWeb();
 	
 	string getURL();
 	string getTitulo();
+	bool getMarcador();
 
+	bool yaMostrada();
+	void marcarComoMostrada();
 	void MostrarPaginaWeb();
 	void PonerMarcador();
 	void QuitarMarcador();

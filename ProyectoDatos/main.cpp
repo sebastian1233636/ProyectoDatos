@@ -7,15 +7,19 @@ int main() {
 	Pestaña* pes3 = new Pestaña("Pestaña 3");
 	PaginaWeb* pag1 = new PaginaWeb("https://store.steampowered.com", "Steam");
 	PaginaWeb* pag2 = new PaginaWeb("https://onlyfans.com", "OnlyFans");
-	PaginaWeb* pag3 = new PaginaWeb("https://www.playstation.com", "PlayStation");
+	PaginaWeb* pag3 = new PaginaWeb("https://www.playstation.com", "PlayStation");	
+	PaginaWeb* pag4 = new PaginaWeb("https://www.aulavirtual.com", "Aula Virtual");
 	pes1->insertarPrimero(pag1);
 	pes1->insertarPrimero(pag2);
 	pes1->insertarPrimero(pag3);
 
+	pes2->insertarPrimero(pag1);
+	pes2->insertarPrimero(pag2);
+	pes2->insertarPrimero(pag4);
+
 	Admin->InsertarPrimero(pes1);
 	Admin->InsertarPrimero(pes2);
 	Admin->InsertarPrimero(pes3);
-
 	Admin->ExplorarHistorialPestañas();
 	return 0;
 }

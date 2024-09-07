@@ -41,9 +41,8 @@ void Pestaña::explorarHistorial(){
 	bool bandera = true;
 	NodoPag* nodoActual = tail;
 
-	if (nodoActual == nullptr) {
-		cout << "El historial de páginas web está vacío." << endl;
-	}
+	if (nodoActual == nullptr) {cout << "El historial de páginas web está vacío." << endl;}
+
 	else {
 		while (bandera == true) {
 			if (modoIcognito) {
@@ -52,7 +51,6 @@ void Pestaña::explorarHistorial(){
 			else {
 				if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 					if (nodoActual->anterior == nullptr) {
-						nodoActual->paginaWeb->MostrarPaginaWeb();
 						cout << "No se puede retroceder mas" << endl;
 
 					}
@@ -64,17 +62,14 @@ void Pestaña::explorarHistorial(){
 				}
 				if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
 					if (nodoActual->siguiente == nullptr) {
-						nodoActual->paginaWeb->MostrarPaginaWeb();
 						cout << "No se puede avanzar mas" << endl;
 					}
 					else {
-
 						nodoActual->paginaWeb->MostrarPaginaWeb();
 						nodoActual = nodoActual->siguiente;
 					}
 					Sleep(300);
 				}
-
 				if (GetAsyncKeyState('F') & 0x8000) {
 					nodoActual->paginaWeb->PonerMarcador();
 					cout << "Pagina marcada como favorita" << endl;
@@ -87,16 +82,21 @@ void Pestaña::explorarHistorial(){
 
 }
 
-void Pestaña::activarModoIcognito()
-{
-	modoIcognito = true;
+void Pestaña::buscarFavorito(){
+	NodoPag* nodoActual = tail;
+	while (nodoActual != nullptr) {
+		if (nodoActual->paginaWeb->getMarcador() == true && nodoActual->paginaWeb->yaMostrada() == false) {
+			nodoActual->paginaWeb->marcarComoMostrada();
+			nodoActual->paginaWeb->MostrarPaginaWeb();
+			nodoActual = nodoActual->siguiente;
+		}
+		else(nodoActual = nodoActual->siguiente);
+	}
 }
 
-void Pestaña::desactivarModoIcognito()
-{
-	modoIcognito = false;
+void Pestaña::activarModoIcognito(){modoIcognito = true;}
 
-}
+void Pestaña::desactivarModoIcognito(){modoIcognito = false;}
 
 string Pestaña::mostrarPestaña()
 {

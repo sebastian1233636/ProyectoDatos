@@ -24,6 +24,7 @@ public:
 
 	void insertarPrimero(PaginaWeb*);
 	void explorarHistorial();
+	void buscarFavorito();
 	void activarModoIcognito(); 
 	void desactivarModoIcognito(); 
 	string mostrarPestaña();

@@ -35,6 +35,14 @@ void AdminPestañas::InsertarPrimero(Pestaña* pes){
 	}
 }
 
+void AdminPestañas::BuscarFavorito(){
+	NodoPest* nodoActual = tail;
+	while (nodoActual != nullptr) {
+		nodoActual->pestaña->buscarFavorito();
+		nodoActual = nodoActual->siguiente;
+	}
+}
+
 void AdminPestañas::ExplorarHistorialPestañas(){
 	bool bandera = true;
 	NodoPest* nodoActual = tail;
@@ -43,7 +51,6 @@ void AdminPestañas::ExplorarHistorialPestañas(){
 	}
 	else {
 		while (bandera == true) {
-
 			if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
 				if (nodoActual->anterior == nullptr) {
 					cout << nodoActual->pestaña->mostrarPestaña() << endl;
@@ -74,6 +81,4 @@ void AdminPestañas::ExplorarHistorialPestañas(){
 			if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) { bandera = false; }
 		}
 	}
-
-	
 }
