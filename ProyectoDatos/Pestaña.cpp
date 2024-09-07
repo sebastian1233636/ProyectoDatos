@@ -1,8 +1,9 @@
 #include "Pestaña.h"
 
-Pestaña::Pestaña(){
+Pestaña::Pestaña(string nom){
 	tail = nullptr;
 	head = nullptr;
+	nombre = nom;
 	modoIcognito = false;
 }
 
@@ -85,5 +86,12 @@ void Pestaña::desactivarModoIcognito()
 {
 	modoIcognito = false;
 
+}
+
+string Pestaña::mostrarPestaña()
+{
+	stringstream s;
+	s << "-------------------------" << nombre << "---------------------------" << endl;
+	return s.str();
 }
 

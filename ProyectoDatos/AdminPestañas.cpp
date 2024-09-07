@@ -38,25 +38,27 @@ void AdminPestañas::InsertarPrimero(Pestaña* pes){
 void AdminPestañas::ExplorarHistorialPestañas(){
 	bool bandera = true;
 	NodoPest* nodoActual = tail;
+
+
 	while (bandera == true) {
 		if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
 			if (nodoActual->anterior == nullptr) {
-				nodoActual->pestaña->explorarHistorial();
+				nodoActual->pestaña->mostrarPestaña();
 				cout << "No se puede retroceder mas" << endl;
 			}
 			else {
-				nodoActual->pestaña->explorarHistorial();
+				nodoActual->pestaña->mostrarPestaña();
 				nodoActual = nodoActual->anterior;
 			}
 			Sleep(100);
 		}
 		if (GetAsyncKeyState(VK_UP) & 0x8000) {
 			if (nodoActual->siguiente == nullptr) {
-				nodoActual->pestaña->explorarHistorial();
+				nodoActual->pestaña->mostrarPestaña();
 				cout << "No se puede avanzar mas" << endl;
 			}
 			else {
-				nodoActual->pestaña->explorarHistorial();
+				nodoActual->pestaña->mostrarPestaña();
 				nodoActual = nodoActual->siguiente;
 			}
 			Sleep(100);

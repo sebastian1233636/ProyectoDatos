@@ -14,8 +14,9 @@ private:
 	NodoPag* tail;//Primero
 	NodoPag* head;//Ultimo
 	bool modoIcognito;
+	string nombre;
 public:
-	Pestaña();
+	Pestaña(string);
 	~Pestaña();
 
 	NodoPag* getTail();
@@ -25,6 +26,7 @@ public:
 	void explorarHistorial();
 	void activarModoIcognito(); 
 	void desactivarModoIcognito(); 
+	string mostrarPestaña();
 
 };
 #endif
