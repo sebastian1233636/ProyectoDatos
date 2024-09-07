@@ -25,10 +25,7 @@ void PaginaWeb::MostrarPaginaWeb(){
     cout << "----------------------------------------\n";
 }
 
-void PaginaWeb::PonerMarcador(){marcador = true;}
+void PaginaWeb::PonerMarcador() { marcador = true; }
 
-void PaginaWeb::QuitarMarcador()
-{
-	marcador = false; 
-}
+void PaginaWeb::QuitarMarcador() { marcador = false; }
 

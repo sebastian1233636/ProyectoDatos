@@ -129,13 +129,11 @@
   <ItemGroup>
     <ClCompile Include="AdminPestañas.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Marcador.cpp" />
     <ClCompile Include="PaginaWeb.cpp" />
     <ClCompile Include="Pestaña.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdminPestañas.h" />
-    <ClInclude Include="Marcador.h" />
     <ClInclude Include="PaginaWeb.h" />
     <ClInclude Include="Pestaña.h" />
   </ItemGroup>
