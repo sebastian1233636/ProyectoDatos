@@ -13,6 +13,7 @@ class Pestaña{
 private:
 	NodoPag* tail;//Primero
 	NodoPag* head;//Ultimo
+	bool modoIcognito;
 public:
 	Pestaña();
 	~Pestaña();
@@ -22,5 +23,8 @@ public:
 
 	void insertarPrimero(PaginaWeb*);
 	void explorarHistorial();
+	void activarModoIcognito(); 
+	void desactivarModoIcognito(); 
+
 };
 #endif

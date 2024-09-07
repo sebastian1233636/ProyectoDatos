@@ -21,5 +21,6 @@ public:
 
 	void MostrarPaginaWeb();
 	void PonerMarcador();
+	void QuitarMarcador();
 };
 #endif

@@ -26,3 +26,9 @@ void PaginaWeb::MostrarPaginaWeb(){
 }
 
 void PaginaWeb::PonerMarcador(){marcador = true;}
+
+void PaginaWeb::QuitarMarcador()
+{
+	marcador = false; 
+}
+
