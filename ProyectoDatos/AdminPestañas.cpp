@@ -43,42 +43,115 @@ void AdminPestañas::BuscarFavorito(){
 	}
 }
 
-void AdminPestañas::ExplorarHistorialPestañas(){
+void AdminPestañas::ExplorarHistorialPestañas() {
 	bool bandera = true;
 	NodoPest* nodoActual = tail;
+
 	if (nodoActual == nullptr) {
-		cout << " no hay historial todavia" << endl;
+		cout << "No hay historial todavía" << endl;
+		return;
 	}
-	else {
-		while (bandera == true) {
+
+	while (bandera) {
+		system("cls");
+		menuAdminPestañas(nodoActual);
+
+
+		while (true) {
 			if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
 				if (nodoActual->anterior == nullptr) {
-					cout << nodoActual->pestaña->mostrarPestaña() << endl;
-					nodoActual->pestaña->explorarHistorial();
-					cout << "No se puede retroceder mas" << endl;
+					cout << "NO SE PUEDE AVANZAR MAS" << endl;
+					system("pause");
 				}
 				else {
-					cout << nodoActual->pestaña->mostrarPestaña() << endl;
-					nodoActual->pestaña->explorarHistorial();
 					nodoActual = nodoActual->anterior;
 				}
 				Sleep(200);
+				break;
 			}
 
 			if (GetAsyncKeyState(VK_UP) & 0x8000) {
 				if (nodoActual->siguiente == nullptr) {
-					cout << nodoActual->pestaña->mostrarPestaña() << endl;
-					nodoActual->pestaña->explorarHistorial();
-					cout << "No se puede retroceder mas" << endl;
+					cout << "NO SE PUEDE AVANZAR MAS" << endl;
+					system("pause");
 				}
 				else {
-					cout << nodoActual->pestaña->mostrarPestaña() << endl;
-					nodoActual->pestaña->explorarHistorial();
 					nodoActual = nodoActual->siguiente;
 				}
 				Sleep(200);
+				break;
 			}
-			if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) { bandera = false; }
+
+			if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
+				bandera = false;
+				break;
+			}
+			Sleep(100);
+		}
+	}
+
+
+}
+
+int AdminPestañas::contadorPestañas()
+{
+
+	return tam;
+}
+
+void AdminPestañas::menuAdminPestañas(NodoPest* actual)
+{
+	int op = 0;
+	bool control = true;
+	while (control != false) {
+
+		cout << actual->pestaña->mostrarPestaña() << endl;
+		actual->pestaña->explorarHistorial();
+
+		cout << "---------------------------------------" << endl;
+		cout << "1.Ir al sitio web" << endl;
+		cout << "2.Nueva pestaña" << endl;
+		cout << "3.Colocar Marcador" << endl;
+		cout << "4.Modo incognito" << endl;
+		cout << "5.Busquedas y filtros" << endl;
+		cout << "6.Configuracion" << endl;
+		cout << "7.Regresar" << endl;
+		cout << "---------------------------------------" << endl;
+		cout << "Digite una opcion" << endl;
+		cin >> op;
+		switch (op) {
+		case 1:
+			//hacer la busqueda en el excel y agregar la pagina web segun corresponda
+			//si no esta lanzar 404 not found
+			break;
+		case 2: {
+			string nombrePestaña = "Pestaña " + to_string(tam + 1);
+			Pestaña* pes = new Pestaña(nombrePestaña);
+			InsertarPrimero(pes);
+			break;
+		}
+
+		case 3:
+
+			break;
+
+		case 4:
+
+			break;
+
+		case 5:
+			break;
+
+		case 6:
+			break;
+
+		case 7:
+			control = false;
+			break;
+
+		default:
+			cout << "Opcion no valida" << endl;
+			break;
 		}
 	}
 }

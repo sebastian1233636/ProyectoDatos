@@ -13,6 +13,7 @@ class AdminPestañas{
 private:
 	NodoPest* tail;//Primero
 	NodoPest* head;//Ultimo
+	int tam;
 public:
 	AdminPestañas();
 	~AdminPestañas();
@@ -23,5 +24,8 @@ public:
 	void InsertarPrimero(Pestaña*);
 	void ExplorarHistorialPestañas();
 	void BuscarFavorito();
+	int contadorPestañas();
+	void menuAdminPestañas(NodoPest* actual);
+
 };
 #endif
