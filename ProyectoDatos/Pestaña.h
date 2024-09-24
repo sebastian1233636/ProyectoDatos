@@ -2,6 +2,8 @@
 #define PESTAÑA_H
 
 #include"PaginaWeb.h"
+#include <fstream>
+using namespace std;
 
 struct NodoPag {
 	PaginaWeb* paginaWeb;
@@ -18,6 +20,10 @@ private:
 public:
 	Pestaña(string);
 	~Pestaña();
+	bool getIcognito();
+	void explorarHistorialIcognito();
+	void cargarArchivoCSV(const string& archivoCVS);
+	void guardarArchivoCSV(const string& archivoCSV);
 
 	NodoPag* getTail();
 	NodoPag* getHead();

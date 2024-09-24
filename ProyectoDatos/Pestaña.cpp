@@ -1,4 +1,5 @@
 #include "Pestaña.h"
+#include <iostream>
 
 Pestaña::Pestaña(string nom){
 	tail = nullptr;
@@ -16,6 +17,10 @@ Pestaña::~Pestaña(){
 	}
 	tail = nullptr;
 	head = nullptr;
+}
+bool Pestaña::getIcognito()
+{
+	return false;
 }
 
 NodoPag* Pestaña::getTail() {return tail;}
@@ -127,4 +132,125 @@ void Pestaña::timeFilter(int minutos)
 		actual = actual->siguiente; // Avanza al siguiente nodo
 	}
 }
+ 
 
+
+void Pestaña::explorarHistorialIcognito()
+{
+
+	bool bandera = true;
+	NodoPag* nodoActual = tail;
+
+
+	if (nodoActual == nullptr) {
+		cout << "El historial de páginas web está vacío." << endl;
+		return;
+	}
+
+	cout << "Modo incógnito activado. No se guardará historial ni marcadores." << endl;
+
+	while (bandera) {
+		// Solo se permite la navegación en modo incógnito sin guardar nada
+		if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
+			if (nodoActual->anterior == nullptr) {
+				cout << "No se puede retroceder más." << endl;
+			}
+			else {
+				nodoActual->paginaWeb->MostrarPaginaWeb();
+				nodoActual = nodoActual->anterior;
+			}
+			Sleep(300);
+		}
+
+		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
+			if (nodoActual->siguiente == nullptr) {
+				cout << "No se puede avanzar más." << endl;
+			}
+			else {
+				nodoActual->paginaWeb->MostrarPaginaWeb();
+				nodoActual = nodoActual->siguiente;
+			}
+			Sleep(300);
+		}
+
+		// Salir del modo de exploración
+		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
+			bandera = false;
+		}
+	}
+
+}
+void Pestaña::cargarArchivoCSV(const string& archivoCVS)
+{
+	ifstream archivo(archivoCVS, ios::binary);
+	if (!archivo) {
+		cout << "No se pudo cargar el archivo binario" << endl;
+
+	}
+	int canPestanas = 0;
+	archivo.read(reinterpret_cast<char*>(&canPestanas), sizeof(canPestanas));
+	for (int i = 0; i < canPestanas; i++) {
+		bool incogito;
+		archivo.read(reinterpret_cast<char*>(&incogito), sizeof(canPestanas));
+		Pestaña nuevaPestana("nombre");
+		int canSitio = 0;
+		archivo.read(reinterpret_cast<char*>(&canSitio), sizeof(canSitio));
+		for (int j = 0; j < canSitio; j++) {
+			string titulo;
+			string url;
+			bool marcadores;
+			size_t LTitulo = 0;
+			archivo.read(reinterpret_cast<char*>(&LTitulo), sizeof(LTitulo));
+			titulo.resize(LTitulo);
+			archivo.read(&titulo[0], LTitulo);
+			size_t LUrl = 0;
+			archivo.read(reinterpret_cast<char*>(&LUrl), sizeof(LUrl));
+			archivo.read(&url[0], LUrl);
+			archivo.read(reinterpret_cast<char*>(&marcadores), sizeof(marcadores));
+			PaginaWeb* paginaWeb = new PaginaWeb(titulo, url);
+			nuevaPestana.explorarHistorial();
+
+		}
+	}
+	archivo.close();
+	cout << "Cargando archovo CSV Binario" << endl;
+
+}
+
+void Pestaña::guardarArchivoCSV(const string& archivoCSV)
+{
+
+	ofstream archivo(archivoCSV, ios::binary);
+	if (!archivo) {
+		cout << "No se pudo abrir el archivo CSV Bianrio" << endl;
+	}
+	int cantPestanas = 0;
+	archivo.write(reinterpret_cast<char*>(&cantPestanas), sizeof(cantPestanas));
+	int listaP = admin.contadorPestañas();
+
+
+	for (int i = 0; i <= listaP; i++) {
+		bool icognito = getIcognito();
+		archivo.write(reinterpret_cast<char*>(&icognito), sizeof(icognito));
+		int cantPagWeb = 0;
+		archivo.write(reinterpret_cast<char*>(&cantPagWeb), sizeof(cantPagWeb));
+		for (NodoPag().paginaWeb->MostrarPaginaWeb()) {
+			string titulo = NodoPag().paginaWeb->getTitulo();
+			string url = NodoPag().paginaWeb->getURL();
+			bool marcadores = NodoPag().paginaWeb->getMarcador();
+			size_t LonT = titulo.size();
+			archivo.write(reinterpret_cast<char*>(&LonT), sizeof(LonT));
+			archivo.write(titulo.c_str(), LonT);
+			size_t LonUrl = url.size();
+			archivo.write(reinterpret_cast<char*>(&LonUrl), sizeof(LonUrl));
+			archivo.write(reinterpret_cast<char*>(&marcadores), sizeof(marcadores));
+
+
+
+
+		}
+
+	}
+	archivo.close();
+	cout << "Se guardo el archivo CSV Binario" << endl;
+}

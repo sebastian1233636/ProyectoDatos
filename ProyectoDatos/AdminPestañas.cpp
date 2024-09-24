@@ -104,6 +104,7 @@ int AdminPestañas::contadorPestañas()
 void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 {
 	int op = 0;
+	bool incognito;
 	bool control = true;
 	bool control6 = true;
 	while (control != false) {
@@ -137,15 +138,39 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 			break;
 		}
 
-		case 3: {
+		
+		case 3:{
+			if (!incognito) {
+				string marcador;
+				cout << "Ingrese el nombre del marcador: ";
+				cin >> marcador;
+				NodoPag().paginaWeb->getMarcador();
+				cout << "Marcador agregado: " << marcador << endl;
+			}
+			else {
+				cout << "La opción de marcadores no está disponible en modo incógnito." << endl;
+			}
 
 
 			break;
 		}
 
-		case 4:
+		case 4: {
+
+			if (incognito) {
+				cout << "Modo incógnito activado." << endl;
+				actual->pestaña->activarModoIcognito();
+				actual->pestaña->explorarHistorialIcognito();
+
+			}
+			else {
+				cout << "Modo incógnito desactivado." << endl;
+				actual->pestaña->desactivarModoIcognito();
+			}
+
 
 			break;
+		}
 
 		case 5:
 			break;
