@@ -105,6 +105,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 {
 	int op = 0;
 	bool control = true;
+	bool control6 = true;
 	while (control != false) {
 
 		cout << actual->pestaña->mostrarPestaña() << endl;
@@ -126,8 +127,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 		case 1: {
 			//hacer la busqueda en el excel y agregar la pagina web segun corresponda
 			//si no esta lanzar 404 not found
-			PaginaWeb* pag1 = new PaginaWeb("https://store.steampowered.com", "Steam");
-			actual->pestaña->insertarPrimero(pag1);
+
 			break;
 		}
 		case 2: {
@@ -138,9 +138,6 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 		}
 
 		case 3: {
-
-			PaginaWeb* pag2 = new PaginaWeb("https://onlyfans.com", "OnlyFans");
-			actual->pestaña->insertarPrimero(pag2);
 
 
 			break;
@@ -153,8 +150,23 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 		case 5:
 			break;
 
-		case 6:
+		case 6:{
+			//--------------------------------------------------------------------------------------
+			//FUNCIONES A IMPLEMENTAR: 
+
+			//FILTRAR POR TIEMPO
+
+			//ELIMINAR CADA CIERTO TIEMPO
+
+			//LIMITAR LA CANTIDAD DE ENTRADAS
+				
+
+
+
+			//--------------------------------------------------------------------------------------
+
 			break;
+		}
 
 		case 7:
 			control = false;
