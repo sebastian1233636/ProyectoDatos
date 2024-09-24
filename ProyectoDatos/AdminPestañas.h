@@ -26,6 +26,7 @@ public:
 	void BuscarFavorito();
 	int contadorPestañas();
 	void menuAdminPestañas(NodoPest* actual);
+	PaginaWeb* buscaPaginaWeb(string);
 
 };
 #endif

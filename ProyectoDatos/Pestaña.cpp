@@ -1,6 +1,7 @@
 #include "Pestaña.h"
 #include <iostream>
 
+
 Pestaña::Pestaña(string nom){
 	tail = nullptr;
 	head = nullptr;
@@ -180,6 +181,7 @@ void Pestaña::explorarHistorialIcognito()
 	}
 
 }
+
 void Pestaña::cargarArchivoCSV(const string& archivoCVS)
 {
 	ifstream archivo(archivoCVS, ios::binary);
@@ -217,7 +219,7 @@ void Pestaña::cargarArchivoCSV(const string& archivoCVS)
 
 }
 
-void Pestaña::guardarArchivoCSV(const string& archivoCSV)
+/*void Pestaña::guardarArchivoCSV(const string& archivoCSV)
 {
 
 	ofstream archivo(archivoCSV, ios::binary);
@@ -226,7 +228,7 @@ void Pestaña::guardarArchivoCSV(const string& archivoCSV)
 	}
 	int cantPestanas = 0;
 	archivo.write(reinterpret_cast<char*>(&cantPestanas), sizeof(cantPestanas));
-	int listaP = admin.contadorPestañas();
+	int listaP = AdminPestañas.contadorPestañas();
 
 
 	for (int i = 0; i <= listaP; i++) {
@@ -253,4 +255,4 @@ void Pestaña::guardarArchivoCSV(const string& archivoCSV)
 	}
 	archivo.close();
 	cout << "Se guardo el archivo CSV Binario" << endl;
-}
+}*/

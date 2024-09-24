@@ -101,10 +101,16 @@ int AdminPestañas::contadorPestañas()
 	return tam;
 }
 
+
+
+
+
+
 void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 {
 	int op = 0;
-	bool incognito;
+	int op2 = 0;
+	bool incognito = false;
 	bool control = true;
 	bool control6 = true;
 	while (control != false) {
@@ -126,8 +132,17 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 		cin >> op;
 		switch (op) {
 		case 1: {
-			//hacer la busqueda en el excel y agregar la pagina web segun corresponda
-			//si no esta lanzar 404 not found
+			string url;
+			cout << "Digite el URL de la pagina" << endl;
+			cin >> url;
+			PaginaWeb* PagNueva = buscaPaginaWeb(url);
+			if (PagNueva == nullptr) {
+				cout << "ERROR 404 NOT FOUND" << endl;
+			}
+			else {
+				actual->pestaña->insertarPrimero(PagNueva);
+			}
+
 
 			break;
 		}
@@ -185,6 +200,48 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 
 			//LIMITAR LA CANTIDAD DE ENTRADAS
 				
+			while (control6 != false) {
+
+				cout << "---------------------------------------" << endl;
+				cout << "1.Filtrar por tiempo" << endl;
+				cout << "2.Limitar cantidad de entradas" << endl;
+				cout << "3.Eliminar historial cada cierto tiempo" << endl;
+				cout << "4.Regresar" << endl;
+				cout << "---------------------------------------" << endl;
+				cin >> op2;
+				switch (op2) {
+				case 1: {
+					int min = 0;
+					cout << "Digite el numero de minutos" << endl;
+					cin >> min;
+					actual->pestaña->timeFilter(min);
+					break;
+				}
+
+
+				case 2: {
+
+					break;
+				}
+
+				case 3: {
+
+					break;
+				}
+
+				case 4: {
+					control6 = false;
+					break;
+				}
+
+				default:
+					cout << "Opcion no valida" << endl;
+					break;
+
+				}
+
+
+				}
 
 
 
@@ -202,4 +259,37 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 			break;
 		}
 	}
+}
+
+PaginaWeb* AdminPestañas::buscaPaginaWeb(string urlBuscado)
+{
+	string archivo("Prueba.csv");
+	ifstream file(archivo);
+	PaginaWeb* pagAr = new PaginaWeb();
+	if (!file.is_open()) {
+		cout << "El archivo no se abrio" << endl;
+
+	}
+	else {
+		string linea;
+		while (getline(file, linea)) {
+			stringstream ss(linea);
+			string url;
+			string titulo;
+
+			if (getline(ss, url, ',') && getline(ss, titulo)) {
+				if (url == urlBuscado) {
+					 pagAr = new PaginaWeb(url, titulo);
+					 return pagAr;
+				}
+				else {
+					pagAr = nullptr;
+				}
+				
+			}
+		}
+		file.close();
+	}
+
+	return nullptr;
 }
