@@ -108,6 +108,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 	while (control != false) {
 
 		cout << actual->pestaña->mostrarPestaña() << endl;
+		cout << "punto de control" << endl;
 		actual->pestaña->explorarHistorial();
 
 		cout << "---------------------------------------" << endl;
@@ -122,10 +123,13 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 		cout << "Digite una opcion" << endl;
 		cin >> op;
 		switch (op) {
-		case 1:
+		case 1: {
 			//hacer la busqueda en el excel y agregar la pagina web segun corresponda
 			//si no esta lanzar 404 not found
+			PaginaWeb* pag1 = new PaginaWeb("https://store.steampowered.com", "Steam");
+			actual->pestaña->insertarPrimero(pag1);
 			break;
+		}
 		case 2: {
 			string nombrePestaña = "Pestaña " + to_string(tam + 1);
 			Pestaña* pes = new Pestaña(nombrePestaña);
@@ -133,9 +137,14 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 			break;
 		}
 
-		case 3:
+		case 3: {
+
+			PaginaWeb* pag2 = new PaginaWeb("https://onlyfans.com", "OnlyFans");
+			actual->pestaña->insertarPrimero(pag2);
+
 
 			break;
+		}
 
 		case 4:
 

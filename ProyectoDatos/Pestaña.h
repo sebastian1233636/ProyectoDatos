@@ -28,6 +28,7 @@ public:
 	void activarModoIcognito(); 
 	void desactivarModoIcognito(); 
 	string mostrarPestaña();
+	void timeFilter(int);
 
 };
 #endif

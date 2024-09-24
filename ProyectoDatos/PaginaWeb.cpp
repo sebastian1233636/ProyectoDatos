@@ -5,6 +5,7 @@ PaginaWeb::PaginaWeb(string U, string tit) {
 	Titulo = tit;
 	marcador = false;
 	mostrada = false;
+	tiempoIngreso = time(nullptr);
 }
 
 PaginaWeb::PaginaWeb() {
@@ -12,6 +13,7 @@ PaginaWeb::PaginaWeb() {
 	Titulo = "sin registro";
 	marcador = false;
 	mostrada = false;
+	tiempoIngreso = time(nullptr);
 }
 
 string PaginaWeb::getURL(){return URL;}
@@ -25,15 +27,35 @@ bool PaginaWeb::yaMostrada(){return mostrada;}
 void PaginaWeb::marcarComoMostrada() {mostrada = true;}
 
 void PaginaWeb::MostrarPaginaWeb(){
-    stringstream s;
     cout << "----------------------------------------\n";
     cout << "| " + getURL() + "\n";
     if (marcador == true) {cout << "| Sitio Favorito \n";}
     cout << "| " + getTitulo() + "\n";
+	cout << "| " + mostrarTiempo();
     cout << "----------------------------------------\n";
 }
 
 void PaginaWeb::PonerMarcador() { marcador = true; }
 
 void PaginaWeb::QuitarMarcador() { marcador = false; }
+
+time_t PaginaWeb::getTiempo()
+{
+	return tiempoIngreso;
+}
+
+string PaginaWeb::mostrarTiempo()
+{
+	time_t now = std::time(nullptr);
+	double seconds = difftime(now, tiempoIngreso);
+
+	// Convertir a minutos, por ejemplo
+	int minutos = static_cast<int>(seconds / 60);
+	return std::to_string(minutos) + " pasados desde ingreso";
+}
+
+void PaginaWeb::setTiempo(time_t t)
+{
+	tiempoIngreso = t;
+}
 

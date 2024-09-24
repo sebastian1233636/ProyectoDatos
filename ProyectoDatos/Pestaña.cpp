@@ -51,22 +51,26 @@ void Pestaña::explorarHistorial(){
 			else {
 				if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 					if (nodoActual->anterior == nullptr) {
+						nodoActual->paginaWeb->MostrarPaginaWeb();
 						cout << "No se puede retroceder mas" << endl;
 
 					}
 					else {
 						nodoActual->paginaWeb->MostrarPaginaWeb();
 						nodoActual = nodoActual->anterior;
+						
 					}
 					Sleep(300);
 				}
 				if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
 					if (nodoActual->siguiente == nullptr) {
+						nodoActual->paginaWeb->MostrarPaginaWeb();
 						cout << "No se puede avanzar mas" << endl;
 					}
 					else {
 						nodoActual->paginaWeb->MostrarPaginaWeb();
 						nodoActual = nodoActual->siguiente;
+						
 					}
 					Sleep(300);
 				}
@@ -103,5 +107,24 @@ string Pestaña::mostrarPestaña()
 	stringstream s;
 	s << "-------------------------" << nombre << "---------------------------" << endl;
 	return s.str();
+}
+
+void Pestaña::timeFilter(int minutos)
+{
+	time_t tiempoActual = std::time(nullptr); // Obtiene el tiempo actual
+	NodoPag* actual = head; // Comienza desde el inicio de la lista
+
+	// Iterar sobre la lista de nodos
+	while (actual != nullptr) {
+		PaginaWeb* pagina = actual->paginaWeb;
+		double segundosTranscurridos = difftime(tiempoActual, pagina->getTiempo());
+
+		// Compara si la página fue agregada dentro de los últimos "minutos"
+		if (segundosTranscurridos <= minutos * 60) {
+			pagina->MostrarPaginaWeb(); // Muestra la página si cumple con la condición
+		}
+
+		actual = actual->siguiente; // Avanza al siguiente nodo
+	}
 }
 

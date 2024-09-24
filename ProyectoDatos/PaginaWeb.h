@@ -5,6 +5,8 @@
 #include<iostream>
 #include<Windows.h>
 #include<sstream>
+#include<ctime>
+
 using namespace std;
 class PaginaWeb{
 private:
@@ -12,6 +14,7 @@ private:
 	string Titulo;
 	bool marcador;
 	bool mostrada;
+	time_t tiempoIngreso;
 public:
 	PaginaWeb(string, string);
 	PaginaWeb();
@@ -25,5 +28,9 @@ public:
 	void MostrarPaginaWeb();
 	void PonerMarcador();
 	void QuitarMarcador();
+
+	time_t getTiempo();
+	string mostrarTiempo();
+	void setTiempo(time_t);
 };
 #endif
