@@ -3,6 +3,7 @@
 AdminPestañas::AdminPestañas(){
 	tail = nullptr;
 	head = nullptr;
+	tam = 0;
 }
 
 AdminPestañas::~AdminPestañas(){
@@ -33,6 +34,7 @@ void AdminPestañas::InsertarPrimero(Pestaña* pes){
 		tail->anterior = nuevo;
 		tail = nuevo;
 	}
+	tam++;
 }
 
 void AdminPestañas::BuscarFavorito(){
