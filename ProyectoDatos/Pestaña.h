@@ -22,22 +22,21 @@ public:
 	Pestaña(string);
 	~Pestaña();
 	bool getIcognito();
-	void explorarHistorialIcognito();
+	void explorarHistorialIncognito();
 	void cargarArchivoCSV(const string& archivoCVS);
 	void guardarArchivoCSV(const string& archivoCSV);
 
 	NodoPag* getTail();
 	NodoPag* getHead();
 
-	void insertarPrimero(PaginaWeb*);
+	void insertarPrimero(PaginaWeb&);
 	void explorarHistorial();
 	void buscarFavorito();
-	void activarModoIcognito(); 
-	void desactivarModoIcognito(); 
+	void activarModoIncognito(); 
+	void desactivarModoIncognito(); 
 	string mostrarPestaña();
 	string mostrarPestañaIncognito();
 	void timeFilter(int);
 	void eliminarCadaTiempo(int);
-
 };
 #endif

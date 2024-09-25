@@ -3,6 +3,7 @@
 PaginaWeb::PaginaWeb(string U, string tit) {
 	URL = U;
 	Titulo = tit;
+	MarcadorPersonal = "";
 	marcador = false;
 	mostrada = false;
 	tiempoIngreso = time(nullptr);
@@ -10,7 +11,8 @@ PaginaWeb::PaginaWeb(string U, string tit) {
 
 PaginaWeb::PaginaWeb() {
 	URL = "Sin registro";
-	Titulo = "sin registro";
+	Titulo = "Sin registro";
+	MarcadorPersonal = "";
 	marcador = false;
 	mostrada = false;
 	tiempoIngreso = time(nullptr);
@@ -20,42 +22,40 @@ string PaginaWeb::getURL(){return URL;}
 
 string PaginaWeb::getTitulo(){return Titulo;}
 
+string PaginaWeb::getMarcadorPersonal() { return MarcadorPersonal; }
+
 bool PaginaWeb::getMarcador() { return marcador; }
 
 bool PaginaWeb::yaMostrada(){return mostrada;}
 
+void PaginaWeb::getMarcadorPersonal(string marcador) { MarcadorPersonal = marcador; }
+
 void PaginaWeb::marcarComoMostrada() {mostrada = true;}
 
-void PaginaWeb::MostrarPaginaWeb(){
-    cout << "----------------------------------------\n";
-    cout << "| " + getURL() + "\n";
-    if (marcador == true) {cout << "| Sitio Favorito \n";}
-    cout << "| " + getTitulo() + "\n";
-	cout << "| " + mostrarTiempo();
-    cout << "----------------------------------------\n";
+void PaginaWeb::MostrarPaginaWeb() {
+	cout << "----------------------------------------\n";
+	if (!getMarcadorPersonal().empty()) { cout << "| " << getMarcadorPersonal() << endl; }
+	cout << "| " << getURL() << "\n";
+	if (marcador) { cout << "| Sitio Favorito \n"; }
+	cout << "| " << getTitulo() << "\n";
+	cout << "| " << mostrarTiempo() << "\n";
+	cout << "----------------------------------------\n";
 }
 
 void PaginaWeb::PonerMarcador() { marcador = true; }
 
 void PaginaWeb::QuitarMarcador() { marcador = false; }
 
-time_t PaginaWeb::getTiempo()
-{
-	return tiempoIngreso;
-}
+time_t PaginaWeb::getTiempo() { return tiempoIngreso; }
 
-string PaginaWeb::mostrarTiempo()
-{
+string PaginaWeb::mostrarTiempo(){
 	time_t now = std::time(nullptr);
 	double seconds = difftime(now, tiempoIngreso);
-
-	// Convertir a minutos, por ejemplo
 	int minutos = static_cast<int>(seconds / 60);
-	return std::to_string(minutos) + " pasados desde ingreso";
+
+	if (minutos == 0) { return "Hace unos segundos"; }
+	else if (minutos == 1) { return std::to_string(minutos) + " minuto pasado desde ingreso"; }
+	else { return std::to_string(minutos) + " minutos pasados desde ingreso"; }
 }
 
-void PaginaWeb::setTiempo(time_t t)
-{
-	tiempoIngreso = t;
-}
-
+void PaginaWeb::setTiempo(time_t t) { tiempoIngreso = t; }

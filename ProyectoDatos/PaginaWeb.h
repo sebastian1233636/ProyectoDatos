@@ -12,6 +12,7 @@ class PaginaWeb{
 private:
 	string URL;
 	string Titulo;
+	string MarcadorPersonal;
 	bool marcador;
 	bool mostrada;
 	time_t tiempoIngreso;
@@ -21,8 +22,10 @@ public:
 	
 	string getURL();
 	string getTitulo();
+	string getMarcadorPersonal();
 	bool getMarcador();
 
+	void getMarcadorPersonal(string);
 	bool yaMostrada();
 	void marcarComoMostrada();
 	void MostrarPaginaWeb();
