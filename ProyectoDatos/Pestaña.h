@@ -3,6 +3,7 @@
 
 #include"PaginaWeb.h"
 #include <fstream>
+#include <wincrypt.h>
 using namespace std;
 
 struct NodoPag {
@@ -35,6 +36,7 @@ public:
 	void desactivarModoIcognito(); 
 	string mostrarPestaña();
 	void timeFilter(int);
+	void eliminarCadaTiempo(int);
 
 };
 #endif

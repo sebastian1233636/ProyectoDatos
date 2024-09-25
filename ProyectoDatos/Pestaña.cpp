@@ -118,7 +118,7 @@ string Pestaña::mostrarPestaña()
 void Pestaña::timeFilter(int minutos)
 {
 	time_t tiempoActual = std::time(nullptr); // Obtiene el tiempo actual
-	NodoPag* actual = head; // Comienza desde el inicio de la lista
+	NodoPag* actual = tail; // Comienza desde el inicio de la lista
 
 	// Iterar sobre la lista de nodos
 	while (actual != nullptr) {
@@ -133,7 +133,52 @@ void Pestaña::timeFilter(int minutos)
 		actual = actual->siguiente; // Avanza al siguiente nodo
 	}
 }
- 
+
+void Pestaña::eliminarCadaTiempo(int minutos) {
+	time_t tiempoActual = std::time(nullptr);
+	NodoPag* aux = tail; // Comienza desde el primer nodo (tail)
+
+	while (aux != nullptr) {
+		double segundosTranscurridos = difftime(tiempoActual, aux->paginaWeb->getTiempo());
+
+		if (segundosTranscurridos > minutos * 60) {
+			NodoPag* nodoAEliminar = aux;
+			aux = aux->siguiente; // Avanzar al siguiente antes de eliminar el actual
+
+			// Si el nodo a eliminar es el único en la lista
+			if (nodoAEliminar == head && nodoAEliminar == tail) {
+				head = tail = nullptr;
+			}
+			// Si es el primer nodo (tail)
+			else if (nodoAEliminar == tail) {
+				tail = tail->siguiente;
+				if (tail != nullptr) {
+					tail->anterior = nullptr;
+				}
+			}
+			// Si es el último nodo (head)
+			else if (nodoAEliminar == head) {
+				head = head->anterior;
+				if (head != nullptr) {
+					head->siguiente = nullptr;
+				}
+			}
+			// Si está en medio de la lista
+			else {
+				NodoPag* prevNode = nodoAEliminar->anterior;
+				NodoPag* nextNode = nodoAEliminar->siguiente;
+				prevNode->siguiente = nextNode;
+				nextNode->anterior = prevNode;
+			}
+
+			delete nodoAEliminar; // Eliminar el nodo
+		}
+		else {
+			aux = aux->siguiente; // Si no se elimina, avanza al siguiente nodo
+		}
+	}
+}
+
 
 
 void Pestaña::explorarHistorialIcognito()

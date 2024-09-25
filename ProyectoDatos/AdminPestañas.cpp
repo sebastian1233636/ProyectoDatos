@@ -126,7 +126,8 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 		cout << "4.Modo incognito" << endl;
 		cout << "5.Busquedas y filtros" << endl;
 		cout << "6.Configuracion" << endl;
-		cout << "7.Regresar" << endl;
+		cout << "7.Importacion y exportacion" << endl;
+		cout << "8.Regresar" << endl;
 		cout << "---------------------------------------" << endl;
 		cout << "Digite una opcion" << endl;
 		cin >> op;
@@ -192,21 +193,13 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 
 		case 6:{
 			//--------------------------------------------------------------------------------------
-			//FUNCIONES A IMPLEMENTAR: 
-
-			//FILTRAR POR TIEMPO
-
-			//ELIMINAR CADA CIERTO TIEMPO
-
-			//LIMITAR LA CANTIDAD DE ENTRADAS
-				
+			control6 = true;
 			while (control6 != false) {
 
 				cout << "---------------------------------------" << endl;
-				cout << "1.Filtrar por tiempo" << endl;
-				cout << "2.Limitar cantidad de entradas" << endl;
-				cout << "3.Eliminar historial cada cierto tiempo" << endl;
-				cout << "4.Regresar" << endl;
+				cout << "1.Limitar cantidad de entradas" << endl;
+				cout << "2.Eliminar historial cada cierto tiempo" << endl;
+				cout << "3.Regresar" << endl;
 				cout << "---------------------------------------" << endl;
 				cin >> op2;
 				switch (op2) {
@@ -220,18 +213,19 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 
 
 				case 2: {
-
+					int mins = 0;
+					cout << "En este opcion se elminarán las paginas que superen los minutos ingresados" << endl;
+					cout << "Digite los minutos deseados" << endl;
+					cin >> mins;
+					cout << "Eliminando paginas que superen los " << mins << " minutos" << endl;
+					actual->pestaña->eliminarCadaTiempo(mins);
 					break;
 				}
 
 				case 3: {
-
-					break;
-				}
-
-				case 4: {
 					control6 = false;
 					break;
+				
 				}
 
 				default:
@@ -251,6 +245,10 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 		}
 
 		case 7:
+		
+			break;
+
+		case 8:
 			control = false;
 			break;
 
