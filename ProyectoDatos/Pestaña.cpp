@@ -21,7 +21,7 @@ Pestaña::~Pestaña(){
 }
 bool Pestaña::getIcognito()
 {
-	return false;
+	return modoIcognito;
 }
 
 NodoPag* Pestaña::getTail() {return tail;}
@@ -114,6 +114,19 @@ string Pestaña::mostrarPestaña()
 	s << "-------------------------" << nombre << "---------------------------" << endl;
 	return s.str();
 }
+
+string Pestaña::mostrarPestañaIncognito() {
+	return "-------------------------------\n"
+		"|       MODO INCOGNITO         |\n"
+		"|       _____________          |\n"
+		"|      |             |         |\n"
+		"|      |   PRIVADO    |         |\n"
+		"|      |_____________|         |\n"
+		"|       No se guarda           |\n"
+		"|     el historial aqui        |\n"
+		"-------------------------------\n";
+}
+
 
 void Pestaña::timeFilter(int minutos)
 {

@@ -35,6 +35,7 @@ public:
 	void activarModoIcognito(); 
 	void desactivarModoIcognito(); 
 	string mostrarPestaña();
+	string mostrarPestañaIncognito();
 	void timeFilter(int);
 	void eliminarCadaTiempo(int);
 

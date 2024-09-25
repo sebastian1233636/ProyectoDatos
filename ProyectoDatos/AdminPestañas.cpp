@@ -110,14 +110,23 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 {
 	int op = 0;
 	int op2 = 0;
+	int op4 = 0;
 	bool incognito = false;
 	bool control = true;
 	bool control6 = true;
+	bool control4 = true;
 	while (control != false) {
 
-		cout << actual->pestaña->mostrarPestaña() << endl;
-		cout << "punto de control" << endl;
-		actual->pestaña->explorarHistorial();
+		
+		if (actual->pestaña->getIcognito() == false) {
+			cout << actual->pestaña->mostrarPestaña() << endl;
+			actual->pestaña->explorarHistorial();
+		}
+		else {
+			cout << "Modo incognito activado, no hay historial" << endl;
+			cout << actual->pestaña->mostrarPestañaIncognito() << endl;
+		}
+		
 
 		cout << "---------------------------------------" << endl;
 		cout << "1.Ir al sitio web" << endl;
@@ -172,16 +181,34 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 		}
 
 		case 4: {
+			control4 = true;
+			while (control4 != false) {
 
-			if (incognito) {
-				cout << "Modo incógnito activado." << endl;
-				actual->pestaña->activarModoIcognito();
-				actual->pestaña->explorarHistorialIcognito();
+				cout << "1.Activar modo incognito" << endl;
+				cout << "2.Desactivar modo incognito" << endl;
+				cout << "3.regresar" << endl;
+				cout << "Digite la opcion" << endl;
+				cin >> op4;
+				switch (op4) {
+				case 1:
+					actual->pestaña->activarModoIcognito();
+					break;
 
-			}
-			else {
-				cout << "Modo incógnito desactivado." << endl;
-				actual->pestaña->desactivarModoIcognito();
+
+
+				case 2:
+					actual->pestaña->desactivarModoIcognito();
+					break;
+
+
+				case 3:
+					control4 = false;
+					break;
+
+				}
+
+		
+
 			}
 
 
