@@ -1,12 +1,12 @@
-#include "AdminPestañas.h"
+#include "AdminPestaÃ±as.h"
 
-AdminPestañas::AdminPestañas(){
+AdminPestaÃ±as::AdminPestaÃ±as(){
 	tail = nullptr;
 	head = nullptr;
 	tam = 0;
 }
 
-AdminPestañas::~AdminPestañas(){
+AdminPestaÃ±as::~AdminPestaÃ±as(){
 	NodoPest* aux = tail;
 	while (aux != nullptr) {
 		tail = tail->siguiente;
@@ -17,13 +17,13 @@ AdminPestañas::~AdminPestañas(){
 	head = nullptr;
 }
 
-NodoPest* AdminPestañas::getTail() {return tail;}
+NodoPest* AdminPestaÃ±as::getTail() {return tail;}
 
-NodoPest* AdminPestañas::getHead() {return head;}
+NodoPest* AdminPestaÃ±as::getHead() {return head;}
 
-void AdminPestañas::InsertarPrimero(Pestaña* pes){
+void AdminPestaÃ±as::InsertarPrimero(PestaÃ±a* pes){
 	NodoPest* nuevo = new NodoPest();
-	nuevo->pestaña = pes;
+	nuevo->pestaÃ±a = pes;
 	if (tail == nullptr) {
 		tail = head = nuevo;
 		nuevo->siguiente;
@@ -37,15 +37,15 @@ void AdminPestañas::InsertarPrimero(Pestaña* pes){
 	tam++;
 }
 
-void AdminPestañas::BuscarFavorito(){
+void AdminPestaÃ±as::BuscarFavorito(){
 	NodoPest* nodoActual = tail;
 	while (nodoActual != nullptr) {
-		nodoActual->pestaña->buscarFavorito();
+		nodoActual->pestaÃ±a->buscarFavorito();
 		nodoActual = nodoActual->siguiente;
 	}
 }
 
-void AdminPestañas::ExplorarHistorialPestañas() {
+void AdminPestaÃ±as::ExplorarHistorialPestaÃ±as() {
 	bool bandera = true;
 	NodoPest* nodoActual = tail;
 
@@ -56,11 +56,11 @@ void AdminPestañas::ExplorarHistorialPestañas() {
 
 	while (bandera) {
 		system("cls");
-		menuAdminPestañas(nodoActual);
+		menuAdminPestaÃ±as(nodoActual);
 		while (true) {
 			if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
 				if (nodoActual->anterior == nullptr) {
-					cout << "NO SE PUEDE AVANZAR MAS" << endl;
+					cout << "NO SE PUEDE RETROCEDER MAS" << endl;
 					system("pause");
 				}
 				else {
@@ -92,9 +92,9 @@ void AdminPestañas::ExplorarHistorialPestañas() {
 	} 
 }
 
-int AdminPestañas::contadorPestañas() { return tam; }
+int AdminPestaÃ±as::contadorPestaÃ±as() { return tam; }
 
-void AdminPestañas::menuAdminPestañas(NodoPest* actual){
+void AdminPestaÃ±as::menuAdminPestaÃ±as(NodoPest* actual){
 	int op = 0;
 	int op2 = 0;
 	int op3 = 0;
@@ -108,15 +108,15 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual){
 	bool control4 = true;
 	while (control != false) {
 		system("cls");
-		if (actual->pestaña->getIcognito() == false) {
+		if (actual->pestaÃ±a->getIcognito() == false) {
 		
-			cout << actual->pestaña->mostrarPestaña() << endl;
-			actual->pestaña->explorarHistorial();
+			cout << actual->pestaÃ±a->mostrarPestaÃ±a() << endl;
+			actual->pestaÃ±a->explorarHistorial();
 		}
-		else { cout << actual->pestaña->mostrarPestañaIncognito() << endl; }
+		else { cout << actual->pestaÃ±a->mostrarPestaÃ±aIncognito() << endl; }
 		cout << "---------------------------------------" << endl;
 		cout << "1.Ir al sitio web" << endl;
-		cout << "2.Nueva pestaña" << endl;
+		cout << "2.Nueva pestaÃ±a" << endl;
 		cout << "3.Modo incognito" << endl;
 		cout << "4.Busquedas y filtros" << endl;
 		cout << "5.Configuracion" << endl;
@@ -134,15 +134,15 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual){
 			cout << endl;
 			PaginaWeb* PagNueva = buscaPaginaWeb(url);
 			if (PagNueva == nullptr) { cout << "ERROR 404 NOT FOUND" << endl; }
-			else { actual->pestaña->insertarPrimero(*PagNueva);}
+			else { actual->pestaÃ±a->insertarPrimero(*PagNueva);}
 			system("pause");
 			break;
 		}
 		case 2: {
-			string nombrePestaña = "Pestana " + to_string(tam + 1);
-			Pestaña* pes = new Pestaña(nombrePestaña);
+			string nombrePestaÃ±a = "Pestana " + to_string(tam + 1);
+			PestaÃ±a* pes = new PestaÃ±a(nombrePestaÃ±a);
 			InsertarPrimero(pes);
-            cout << "Se ha creado una nueva pestaña. Siga las instrucciones anteriores para navegar a ella." << endl;
+            cout << "Se ha creado una nueva pestaÃ±a. Siga las instrucciones anteriores para navegar a ella." << endl;
             system("pause");
 			break;
 		}
@@ -157,15 +157,15 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual){
 				cin >> op3;
 				switch (op3) {
 				case 1:
-					actual->pestaña->activarModoIncognito();
-					if (actual->pestaña->getIcognito() == true) {
+					actual->pestaÃ±a->activarModoIncognito();
+					if (actual->pestaÃ±a->getIcognito() == true) {
 						cout << "Modo incognito activado" << endl;
 					}
 					system("pause");
 					break;
 				case 2:
-					actual->pestaña->desactivarModoIncognito();
-					if (actual->pestaña->getIcognito() == false) {
+					actual->pestaÃ±a->desactivarModoIncognito();
+					if (actual->pestaÃ±a->getIcognito() == false) {
 						cout << "Modo incognito desactivado" << endl;
 					}
 					system("pause");
@@ -196,14 +196,14 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual){
 				switch (op4) {
 
 				case 1: {
-					actual->pestaña->buscarFavorito();
+					actual->pestaÃ±a->buscarFavorito();
 					break;
 				}
 
 				case 2: {
 					cout << "Digite la palabra clave para filtrar paginas" << endl;
 					cin >> palabraclave;
-					actual->pestaña->buscarPorPalabraClave(palabraclave);
+					actual->pestaÃ±a->buscarPorPalabraClave(palabraclave);
 
 					break;
 				}
@@ -212,7 +212,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual){
 					PaginaWeb* pag;
 					cout << "Digite el URL o el titulo de la pagina web" << endl;
 					cin >> nom;
-					pag = actual->pestaña->buscarPaginaWeb(nom);
+					pag = actual->pestaÃ±a->buscarPaginaWeb(nom);
 					if (pag == nullptr) {
 						cout << "La pagina que busca no se encuentra" << endl;
 					}
@@ -222,7 +222,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual){
 					break;
 				}
 				case 4: {
-
+					control4 = false;
 					break;
 				}
 
@@ -253,17 +253,17 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual){
 					int min = 0;
 					cout << "Digite el numero de minutos" << endl;
 					cin >> min;
-					actual->pestaña->timeFilter(min);
+					actual->pestaÃ±a->timeFilter(min);
 					system("pause");
 					break;
 				}
 				case 2: {
 					int mins = 0;
-					cout << "En este opcion se elminarán las paginas que superen los minutos ingresados" << endl;
+					cout << "En este opcion se elminarÃ¡n las paginas que superen los minutos ingresados" << endl;
 					cout << "Digite los minutos deseados" << endl;
 					cin >> mins;
 					cout << "Eliminando paginas que superen los " << mins << " minutos" << endl;
-					actual->pestaña->eliminarCadaTiempo(mins);
+					actual->pestaÃ±a->eliminarCadaTiempo(mins);
 					system("pause");
 					break;
 				}
@@ -292,7 +292,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual){
 	}
 }
 
-PaginaWeb* AdminPestañas::buscaPaginaWeb(string urlBuscado){
+PaginaWeb* AdminPestaÃ±as::buscaPaginaWeb(string urlBuscado){
 	string archivo("Prueba.csv");
 	ifstream file(archivo);
 	PaginaWeb* pagAr = new PaginaWeb();
@@ -314,4 +314,51 @@ PaginaWeb* AdminPestañas::buscaPaginaWeb(string urlBuscado){
 		file.close();
 	}
 	return nullptr;
+}
+
+void AdminPestaÃ±as::guardarPestaÃ±aBinario(){
+	ofstream file("PestaÃ±as.bin", ios::binary);
+	if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }
+	else {
+		NodoPest* actual = tail;
+		while (actual != nullptr) {
+			actual->pestaÃ±a->guardarPestaÃ±a(file);
+			actual = actual->siguiente;
+		}
+	}
+	file.close();
+}
+
+void AdminPestaÃ±as::leerPestaÃ±aBinario(){
+	ifstream file("PestaÃ±as.bin", ios::binary);
+	if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }
+	else {
+		file.seekg(0, ios::end);
+		std::streampos fileSize = file.tellg();
+		file.seekg(0, ios::beg);
+		while (file.tellg() < fileSize) {
+			PestaÃ±a* pestaÃ±a = new PestaÃ±a();
+			PestaÃ±a* pes = pestaÃ±a->leerPestaÃ±a(file);
+			if (pes != nullptr) { InsertarPrimero(pes); }
+			else {
+				cout << "Error al leer una pestaÃ±a del archivo." << endl;
+				break;
+			}
+		}
+	}
+	file.close();
+}
+
+void AdminPestaÃ±as::guardarHistorialPestaÃ±a(){
+	NodoPest* actual = tail;
+	ofstream file;
+	string nombre;
+	while (actual != nullptr) {
+		nombre = "Historial" + actual->pestaÃ±a->getNombre() + ".bin";
+		file.open(nombre, ios::binary);
+		if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }
+		actual->pestaÃ±a->guardarHistorialBinario(file);
+		actual = actual->siguiente;
+		file.close();
+	}
 }
