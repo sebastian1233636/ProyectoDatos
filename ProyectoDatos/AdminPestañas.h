@@ -31,5 +31,6 @@ public:
 	void guardarPestañaBinario();
 	void leerPestañaBinario();
 	void guardarHistorialPestaña();
+	void leerHistorialPestaña();
 };
 #endif

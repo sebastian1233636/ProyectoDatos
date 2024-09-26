@@ -99,13 +99,15 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 	int op2 = 0;
 	int op3 = 0;
 	int op4 = 0;
+	int op6 = 0;
 	string nom = "";
 	string palabraclave = "";
 	bool incognito = false;
 	bool control = true;
-	bool control6 = true;
 	bool control3 = true;
 	bool control4 = true;
+	bool control5 = true;
+	bool control6 = true;
 	while (control != false) {
 		system("cls");
 		if (actual->pestaña->getIcognito() == false) {
@@ -233,14 +235,12 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 
 				}
 			}
-
-
 			break;
 		}
 		case 5: {
 			//--------------------------------------------------------------------------------------
-			control6 = true;
-			while (control6 != false) {
+			control5 = true;
+			while (control5 != false) {
 				system("cls");
 				cout << "---------------------------------------" << endl;
 				cout << "1.Limitar cantidad de entradas" << endl;
@@ -269,7 +269,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 				}
 
 				case 3: {
-					control6 = false;
+					control5 = false;
 					break;
 				}
 				default:
@@ -279,9 +279,13 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			}
 			break;
 		}
-		case 6:
-
+		case 6: {
+			guardarPestañaBinario();
+			guardarHistorialPestaña();
+			cout << "Historial guardado" << endl;
+			system("pause");
 			break;
+		}
 		case 7:
 			control = false;
 			break;
@@ -358,6 +362,20 @@ void AdminPestañas::guardarHistorialPestaña() {
 		file.open(nombre, ios::binary);
 		if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }
 		actual->pestaña->guardarHistorialBinario(file);
+		actual = actual->siguiente;
+		file.close();
+	}
+}
+
+void AdminPestañas::leerHistorialPestaña(){
+	NodoPest* actual = tail;
+	ifstream file;
+	string nombre;
+	while (actual != nullptr) {
+		nombre = "Historial" + actual->pestaña->getNombre() + ".bin";
+		file.open(nombre, ios::binary);
+		if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }
+		actual->pestaña->leerHistorialBinario(file);
 		actual = actual->siguiente;
 		file.close();
 	}

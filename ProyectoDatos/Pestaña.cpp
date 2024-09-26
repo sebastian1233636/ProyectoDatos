@@ -253,9 +253,8 @@ Pestaña* Pestaña::leerPestaña(ifstream& file) {
 
 void Pestaña::guardarHistorialBinario(ofstream& file) {
 	NodoPag* actual = tail;
-	file.open("Historial.bin", ios::binary);
 	if (!file.is_open()) {
-		cout << "El archivito no se abrio" << endl;
+		cout << "El archivo no se abrio" << endl;
 	}
 	else {
 		while (actual != nullptr) {
