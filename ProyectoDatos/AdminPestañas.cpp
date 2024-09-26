@@ -97,10 +97,14 @@ int AdminPestañas::contadorPestañas() { return tam; }
 void AdminPestañas::menuAdminPestañas(NodoPest* actual){
 	int op = 0;
 	int op2 = 0;
+	int op3 = 0;
 	int op4 = 0;
+	string nom = "";
+	string palabraclave = "";
 	bool incognito = false;
 	bool control = true;
 	bool control6 = true;
+	bool control3 = true;
 	bool control4 = true;
 	while (control != false) {
 		system("cls");
@@ -143,15 +147,15 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual){
 			break;
 		}
 		case 3: {
-			control4 = true;
-			while (control4 != false) {
+			control3 = true;
+			while (control3 != false) {
 				system("cls");
 				cout << "1.Activar modo incognito" << endl;
 				cout << "2.Desactivar modo incognito" << endl;
 				cout << "3.Regresar" << endl;
 				cout << "Digite la opcion" << endl;
-				cin >> op4;
-				switch (op4) {
+				cin >> op3;
+				switch (op3) {
 				case 1:
 					actual->pestaña->activarModoIncognito();
 					if (actual->pestaña->getIcognito() == true) {
@@ -166,15 +170,73 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual){
 					}
 					system("pause");
 					break;
-				case 3:
-					control4 = false;
+				case 3:{
+					control3 = false;
 					break;
 				}
+
+				default:
+					cout << "Opcion no valida" << endl;
+					break;
+				}
+
 			}
 			break;
 		}
-		case 4:
+		case 4: {
+			control4 = true;
+			while (control4 != false) {
+				cout << "---------------------------------------" << endl;
+				cout << "1.Mostrar solo favoritos" << endl;
+				cout << "2.Busqueda por palabra clave" << endl;
+				cout << "3.Buscar una pagina especifica" << endl;
+				cout << "4.regresar" << endl;
+				cout << "---------------------------------------" << endl;
+				cin >> op4;
+				switch (op4) {
+
+				case 1: {
+					actual->pestaña->buscarFavorito();
+					break;
+				}
+
+				case 2: {
+					cout << "Digite la palabra clave para filtrar paginas" << endl;
+					cin >> palabraclave;
+					actual->pestaña->buscarPorPalabraClave(palabraclave);
+
+					break;
+				}
+
+				case 3: {
+					PaginaWeb* pag;
+					cout << "Digite el URL o el titulo de la pagina web" << endl;
+					cin >> nom;
+					pag = actual->pestaña->buscarPaginaWeb(nom);
+					if (pag == nullptr) {
+						cout << "La pagina que busca no se encuentra" << endl;
+					}
+					else {
+						pag->MostrarPaginaWeb();
+					}
+					break;
+				}
+				case 4: {
+
+					break;
+				}
+
+				default:
+					cout << "Opcion no valida" << endl;
+					break;
+
+
+				}
+			}
+
+
 			break;
+		}
 		case 5:{
 			//--------------------------------------------------------------------------------------
 			control6 = true;

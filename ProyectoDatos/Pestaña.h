@@ -36,6 +36,8 @@ public:
 	void desactivarModoIncognito(); 
 	string mostrarPestaña();
 	string mostrarPestañaIncognito();
+	PaginaWeb* buscarPaginaWeb(string);
+	void buscarPorPalabraClave(string&);
 	void timeFilter(int);
 	void eliminarCadaTiempo(int);
 };

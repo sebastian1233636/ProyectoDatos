@@ -134,6 +134,40 @@ string Pestaña::mostrarPestañaIncognito() {
 		   "-------------------------------\n";
 }
 
+PaginaWeb* Pestaña::buscarPaginaWeb(string nomURL)
+{
+	NodoPag* actual = tail;
+	while (actual != nullptr) {
+		if (nomURL == actual->paginaWeb->getURL() || nomURL == actual->paginaWeb->getTitulo()) {
+			return actual->paginaWeb;
+		}
+		else {
+			actual = actual->siguiente;
+		}
+	}
+	return nullptr;
+}
+
+void Pestaña::buscarPorPalabraClave(string& palabraclave )
+{
+	NodoPag* actual = tail;
+	bool bandera = false;
+
+	while (actual != nullptr) {
+		string url = actual->paginaWeb->getURL();
+		string titulo = actual->paginaWeb->getTitulo();
+		if (url.find(palabraclave) != string::npos || titulo.find(palabraclave) != string::npos) {
+			actual->paginaWeb->MostrarPaginaWeb();
+			bandera = true;
+		}
+		actual = actual->siguiente;
+	}
+
+	if (bandera == false) {
+		cout << "No se encontraron paginas " << endl;
+	}
+}
+
 
 void Pestaña::timeFilter(int minutos){
 	time_t tiempoActual = std::time(nullptr);
