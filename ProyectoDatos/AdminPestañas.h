@@ -1,32 +1,35 @@
-#ifndef ADMINPESTA�AS_H
-#define ADMINPESTA�AS_H
+#ifndef ADMINPESTAÑAS_H
+#define ADMINPESTAÑAS_H
 
-#include"Pesta�a.h"
+#include"Pestaña.h"
 
 struct NodoPest {
-	Pesta�a* pesta�a;
+	Pestaña* pestaña;
 	NodoPest* siguiente;
 	NodoPest* anterior;
 };
 
-class AdminPesta�as{
+class AdminPestañas{
 private:
 	NodoPest* tail;//Primero
 	NodoPest* head;//Ultimo
 	int tam;
 public:
-	AdminPesta�as();
-	~AdminPesta�as();
+	AdminPestañas();
+	~AdminPestañas();
 
 	NodoPest* getTail();
 	NodoPest* getHead();
 
-	void InsertarPrimero(Pesta�a*);
-	void ExplorarHistorialPesta�as();
+	void InsertarPrimero(Pestaña*);
+	void ExplorarHistorialPestañas();
 	void BuscarFavorito();
-	int contadorPesta�as();
-	void menuAdminPesta�as(NodoPest* actual);
+	int contadorPestañas();
+	void menuAdminPestañas(NodoPest* actual);
 	PaginaWeb* buscaPaginaWeb(string);
 
+	void guardarPestañaBinario();
+	void leerPestañaBinario();
+	void guardarHistorialPestaña();
 };
 #endif
