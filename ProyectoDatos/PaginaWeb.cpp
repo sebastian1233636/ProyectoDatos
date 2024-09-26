@@ -24,6 +24,8 @@ string PaginaWeb::getTitulo(){return Titulo;}
 
 string PaginaWeb::getMarcadorPersonal() { return MarcadorPersonal; }
 
+void PaginaWeb::setUrl(string u) { URL = u; }
+
 bool PaginaWeb::getMarcador() { return marcador; }
 
 bool PaginaWeb::yaMostrada(){return mostrada;}
@@ -60,62 +62,33 @@ string PaginaWeb::mostrarTiempo(){
 
 void PaginaWeb::setTiempo(time_t t) { tiempoIngreso = t; }
 
-void PaginaWeb::guardarPaginaWeb(ofstream& file)
-{
-	// Guardar longitud y contenido de URL
-	size_t longitudURL = URL.size();
-	file.write(reinterpret_cast<const char*>(&longitudURL), sizeof(longitudURL));
-	file.write(URL.c_str(), longitudURL);
-
-	// Guardar longitud y contenido de Titulo
-	size_t longitudTitulo = Titulo.size();
+void PaginaWeb::guardarPaginaWeb(ofstream& file){
+	bool marcadores = getMarcador();
+	string titulo = getTitulo();
+	size_t longitudTitulo = titulo.size();
 	file.write(reinterpret_cast<const char*>(&longitudTitulo), sizeof(longitudTitulo));
-	file.write(Titulo.c_str(), longitudTitulo);
-
-	// Guardar longitud y contenido de MarcadorPersonal
-	size_t longitudMarcador = MarcadorPersonal.size();
-	file.write(reinterpret_cast<const char*>(&longitudMarcador), sizeof(longitudMarcador));
-	file.write(MarcadorPersonal.c_str(), longitudMarcador);
-
-	// Guardar el atributo booleano 'marcador'
-	file.write(reinterpret_cast<const char*>(&marcador), sizeof(marcador));
-
+	file.write(titulo.c_str(), longitudTitulo);
+	string url = getURL();
+	size_t longitudURL = url.size();
+	file.write(reinterpret_cast<const char*>(&longitudURL), sizeof(longitudURL));
+	file.write(url.c_str(), longitudURL);
+	file.write(reinterpret_cast<char*>(&marcadores), sizeof(marcadores));
 }
 
-PaginaWeb* PaginaWeb::leerPaginaWeb(ifstream& file)
-{
-	
-	// Leer URL
-	size_t longitudURL;
-	file.read(reinterpret_cast<char*>(&longitudURL), sizeof(longitudURL));
-	string url(longitudURL, '\0');
-	file.read(&url[0], longitudURL);
-
-	// Leer Titulo
-	size_t longitudTitulo;
-	file.read(reinterpret_cast<char*>(&longitudTitulo), sizeof(longitudTitulo));
-	string titulo(longitudTitulo, '\0');
-	file.read(&titulo[0], longitudTitulo);
-
-	// Crear objeto con URL y Titulo
-	PaginaWeb* pagina = new PaginaWeb(url, titulo);
-
-	// Leer MarcadorPersonal
-	size_t longitudMarcadorPersonal;
-	file.read(reinterpret_cast<char*>(&longitudMarcadorPersonal), sizeof(longitudMarcadorPersonal));
-	string marcadorPersonal(longitudMarcadorPersonal, '\0');
-	file.read(&marcadorPersonal[0], longitudMarcadorPersonal);
-	pagina->setMarcadorPersonal(marcadorPersonal);
-
-	// Leer el booleano marcador
-	bool marcador;
-	file.read(reinterpret_cast<char*>(&marcador), sizeof(marcador));
-	if (marcador == true) {
-		pagina->PonerMarcador();
-	}
-	else {
-		pagina->QuitarMarcador();
-	}
-	
-	return pagina;
+PaginaWeb* PaginaWeb::leerPaginaWeb(ifstream& file){
+	string titulo;
+	string url;
+	bool marcadores;
+	size_t LTitulo = 0;
+	file.read(reinterpret_cast<char*>(&LTitulo), sizeof(LTitulo));
+	titulo.resize(LTitulo);
+	file.read(&titulo[0], LTitulo);
+	size_t LUrl = 0;
+	file.read(reinterpret_cast<char*>(&LUrl), sizeof(LUrl));
+	url.resize(LUrl);
+	file.read(&url[0], LUrl);
+	file.read(reinterpret_cast<char*>(&marcadores), sizeof(marcadores));
+	PaginaWeb* paginaWeb = new PaginaWeb(url,titulo);
+	if (marcadores) { paginaWeb->PonerMarcador(); }
+	return paginaWeb;
 }

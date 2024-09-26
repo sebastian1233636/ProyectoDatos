@@ -24,6 +24,7 @@ public:
 	string getURL();
 	string getTitulo();
 	string getMarcadorPersonal();
+	void setUrl(string u);
 	bool getMarcador();
 
 	void setMarcadorPersonal(string);

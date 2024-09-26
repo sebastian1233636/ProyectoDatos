@@ -43,9 +43,5 @@ public:
 
 	void guardarHistorialBinario();
 	void leerHistorialBinario();
-
-
-
-
 };
 #endif

@@ -219,11 +219,10 @@ void Pestaña::eliminarCadaTiempo(int minutos) {
 	}
 }
 
-void Pestaña::guardarHistorialBinario()
-{
+void Pestaña::guardarHistorialBinario(){
 	ofstream file;
 	NodoPag* actual = tail;
-	file.open("../Historial", ios::binary);
+	file.open("../Historial.dat", ios::binary);
 	if (!file.is_open()) {
 		cout << "El archivito no se abrio" << endl;
 	}
@@ -236,27 +235,32 @@ void Pestaña::guardarHistorialBinario()
 	file.close();
 }
 
-void Pestaña::leerHistorialBinario()
-{
-	ifstream file;
-	file.open("../Historial", ios::binary);
+void Pestaña::leerHistorialBinario() {
+	ifstream file("../Historial.dat", ios::binary);
+
 	if (!file.is_open()) {
-		cout << "El archivo no se abrio" << endl;
+		cout << "El archivo no se pudo abrir" << endl;
+		return;
 	}
-	else {
+
+	file.seekg(0, ios::end);
+	std::streampos fileSize = file.tellg();
+	file.seekg(0, ios::beg); 
+
+	while (file.tellg() < fileSize) {
 		PaginaWeb* pagLeida = new PaginaWeb();
-		while (true) {
-			if (pagLeida->leerPaginaWeb(file) != nullptr) {
-				insertarPrimero(*pagLeida);
-			}
-			else {
-				break;
-			}
+		PaginaWeb* pag = pagLeida->leerPaginaWeb(file);
+
+		if (pag != nullptr) { insertarPrimero(*pag); }
+		else {
+			cout << "Error al leer una página web del archivo." << endl;
+			break; 
 		}
-		
 	}
 	file.close();
+	cout << "Lectura del historial completada." << endl;
 }
+
 
 void Pestaña::explorarHistorialIncognito(){
 	bool bandera = true;
