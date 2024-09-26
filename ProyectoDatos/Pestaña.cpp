@@ -57,8 +57,10 @@ void Pestaña::explorarHistorial() {
 	string marcador;
 	NodoPag* nodoActual = tail;
 
-	if (nodoActual == nullptr) { cout << "El historial de paginas web esta vacio." << endl; }
-
+	if (nodoActual == nullptr) { 
+		cout << "El historial de paginas web esta vacio." << endl;
+		system("pause");
+	}
 	else {
 		while (bandera == true) {
 			if (modoIcognito) {

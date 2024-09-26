@@ -110,26 +110,34 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 	bool control6 = true;
 	while (control != false) {
 		system("cls");
-		if (actual->pestaña->getIcognito() == false) {
-
-			cout << actual->pestaña->mostrarPestaña() << endl;
-			actual->pestaña->explorarHistorial();
-		}
-		else { cout << actual->pestaña->mostrarPestañaIncognito() << endl; }
+		cout << "----------------" << actual->pestaña->getNombre() <<  "----------------" << endl;
 		cout << "---------------------------------------" << endl;
-		cout << "1.Ir al sitio web" << endl;
-		cout << "2.Nueva pestaña" << endl;
-		cout << "3.Modo incognito" << endl;
-		cout << "4.Busquedas y filtros" << endl;
-		cout << "5.Configuracion" << endl;
-		cout << "6.Importacion y exportacion" << endl;
-		cout << "7.Regresar" << endl;
+		cout << "1.Ver historial" << endl;
+		cout << "2.Ir al sitio web" << endl;
+		cout << "3.Nueva pestaña" << endl;
+		cout << "4.Modo incognito" << endl;
+		cout << "5.Busquedas y filtros" << endl;
+		cout << "6.Configuracion" << endl;
+		cout << "7.Importacion y exportacion" << endl;
+		cout << "8.Regresar" << endl;
 		cout << "---------------------------------------" << endl;
 		cout << "Digite una opcion:";
 		cin >> op;
 		cout << endl;
 		switch (op) {
+
 		case 1: {
+			if (actual->pestaña->getIcognito() == false) {
+
+				cout << actual->pestaña->mostrarPestaña() << endl;
+				actual->pestaña->explorarHistorial();
+			}
+			else { cout << actual->pestaña->mostrarPestañaIncognito() << endl; }
+			break;
+			
+		}
+
+		case 2: {
 			string url;
 			cout << "Digite el URL de la pagina:";
 			cin >> url;
@@ -140,7 +148,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			system("pause");
 			break;
 		}
-		case 2: {
+		case 3: {
 			string nombrePestaña = "Pestana " + to_string(tam + 1);
 			Pestaña* pes = new Pestaña(nombrePestaña);
 			InsertarPrimero(pes);
@@ -148,7 +156,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			system("pause");
 			break;
 		}
-		case 3: {
+		case 4: {
 			control3 = true;
 			while (control3 != false) {
 				system("cls");
@@ -185,7 +193,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			}
 			break;
 		}
-		case 4: {
+		case 5: {
 			control4 = true;
 			while (control4 != false) {
 				cout << "---------------------------------------" << endl;
@@ -237,7 +245,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			}
 			break;
 		}
-		case 5: {
+		case 6: {
 			//--------------------------------------------------------------------------------------
 			control5 = true;
 			while (control5 != false) {
@@ -279,14 +287,14 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			}
 			break;
 		}
-		case 6: {
+		case 7: {
 			guardarPestañaBinario();
 			guardarHistorialPestaña();
 			cout << "Historial guardado" << endl;
 			system("pause");
 			break;
 		}
-		case 7:
+		case 8:
 			control = false;
 			break;
 		default:
