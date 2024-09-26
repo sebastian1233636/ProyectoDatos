@@ -1,15 +1,22 @@
-#include "Pestaña.h"
+#include "PestaÃ±a.h"
 #include <iostream>
 
 
-Pestaña::Pestaña(string nom){
+PestaÃ±a::PestaÃ±a(string nom){
 	tail = nullptr;
 	head = nullptr;
 	nombre = nom;
 	modoIcognito = false;
 }
 
-Pestaña::~Pestaña(){
+PestaÃ±a::PestaÃ±a() {
+	nombre = "Sin registro";
+	modoIcognito = false;
+	tail = nullptr;
+	head = nullptr;
+}
+
+PestaÃ±a::~PestaÃ±a(){
 	NodoPag* aux = tail;
 	while (aux != nullptr) {
 		tail = tail->siguiente;
@@ -19,16 +26,18 @@ Pestaña::~Pestaña(){
 	tail = nullptr;
 	head = nullptr;
 }
-bool Pestaña::getIcognito()
-{
-	return modoIcognito;
-}
 
-NodoPag* Pestaña::getTail() {return tail;}
+bool PestaÃ±a::getIcognito() { return modoIcognito; }
 
-NodoPag* Pestaña::getHead() {return head;}
+string PestaÃ±a::getNombre() { return nombre; }
 
-void Pestaña::insertarPrimero(PaginaWeb& pag){
+NodoPag* PestaÃ±a::getTail() {return tail;}
+
+NodoPag* PestaÃ±a::getHead() {return head;}
+
+void PestaÃ±a::setNombre(string nom) { nombre = nom; }
+
+void PestaÃ±a::insertarPrimero(PaginaWeb& pag){
 	NodoPag* nuevo = new NodoPag();
 	nuevo->paginaWeb = &pag;
 	if (tail == nullptr) {
@@ -43,7 +52,7 @@ void Pestaña::insertarPrimero(PaginaWeb& pag){
 	}
 }
 
-void Pestaña::explorarHistorial(){
+void PestaÃ±a::explorarHistorial(){
 	bool bandera = true;
 	string marcador;
 	NodoPag* nodoActual = tail;
@@ -98,7 +107,7 @@ void Pestaña::explorarHistorial(){
 	}
 }
 
-void Pestaña::buscarFavorito(){
+void PestaÃ±a::buscarFavorito(){
 	NodoPag* nodoActual = tail;
 	while (nodoActual != nullptr) {
 		if (nodoActual->paginaWeb->getMarcador() == true && nodoActual->paginaWeb->yaMostrada() == false) {
@@ -110,20 +119,21 @@ void Pestaña::buscarFavorito(){
 	}
 }
 
-void Pestaña::activarModoIncognito(){modoIcognito = true;}
+void PestaÃ±a::activarModoIncognito(){modoIcognito = true;}
 
-void Pestaña::desactivarModoIncognito(){modoIcognito = false;}
+void PestaÃ±a::desactivarModoIncognito(){modoIcognito = false;}
 
-string Pestaña::mostrarPestaña(){
+string PestaÃ±a::mostrarPestaÃ±a(){
     stringstream s;
-	s << "|Si desea moverse entre pestanas, presione la opción 7 y las flechas de arriba y abajo." << endl;
+	s << "|Si desea moverse entre pestanas, presione la opciÃ³n 7 y las flechas de arriba y abajo." << endl;
 	s << "|Si desea marcar una pagina web como favorita, presione la tecla F." << endl;
     s << "|-------------------------" << nombre << "---------------------------|" << endl;
     return s.str();
 }
 
-string Pestaña::mostrarPestañaIncognito() {
-	return "-------------------------------\n"
+string PestaÃ±a::mostrarPestaÃ±aIncognito() {
+	return "|-------------------------" + nombre + "---------------------------|\n"
+		   "-------------------------------\n"
 		   "|       MODO INCOGNITO         |\n"
 		   "|       _____________          |\n"
 		   "|      |             |         |\n"
@@ -134,7 +144,7 @@ string Pestaña::mostrarPestañaIncognito() {
 		   "-------------------------------\n";
 }
 
-PaginaWeb* Pestaña::buscarPaginaWeb(string nomURL)
+PaginaWeb* PestaÃ±a::buscarPaginaWeb(string nomURL)
 {
 	NodoPag* actual = tail;
 	while (actual != nullptr) {
@@ -148,7 +158,7 @@ PaginaWeb* Pestaña::buscarPaginaWeb(string nomURL)
 	return nullptr;
 }
 
-void Pestaña::buscarPorPalabraClave(string& palabraclave )
+void PestaÃ±a::buscarPorPalabraClave(string& palabraclave )
 {
 	NodoPag* actual = tail;
 	bool bandera = false;
@@ -169,7 +179,7 @@ void Pestaña::buscarPorPalabraClave(string& palabraclave )
 }
 
 
-void Pestaña::timeFilter(int minutos){
+void PestaÃ±a::timeFilter(int minutos){
 	time_t tiempoActual = std::time(nullptr);
 	NodoPag* actual = tail;
 
@@ -181,7 +191,7 @@ void Pestaña::timeFilter(int minutos){
 	}
 }
 
-void Pestaña::eliminarCadaTiempo(int minutos) {
+void PestaÃ±a::eliminarCadaTiempo(int minutos) {
 	time_t tiempoActual = std::time(nullptr);
 	NodoPag* aux = tail;
 
@@ -219,10 +229,31 @@ void Pestaña::eliminarCadaTiempo(int minutos) {
 	}
 }
 
-void Pestaña::guardarHistorialBinario(){
-	ofstream file;
+void PestaÃ±a::guardarPestaÃ±a(ofstream& file){
+	string name = getNombre();
+	bool incognito = getIcognito();
+	size_t longitudname = name.size();
+	file.write(reinterpret_cast<const char*>(&longitudname), sizeof(longitudname));
+	file.write(name.c_str(), longitudname);
+	file.write(reinterpret_cast<char*>(&incognito), sizeof(incognito));
+}
+
+PestaÃ±a* PestaÃ±a::leerPestaÃ±a(ifstream& file) {
+	string name;
+	bool incognito;
+	size_t Lname= 0;
+	file.read(reinterpret_cast<char*>(&Lname), sizeof(Lname));
+	name.resize(Lname);
+	file.read(&name[0], Lname);
+	file.read(reinterpret_cast<char*>(&incognito), sizeof(incognito));
+	PestaÃ±a* pestaÃ±a = new PestaÃ±a(name);
+	if (incognito) { pestaÃ±a->activarModoIncognito(); }
+	return pestaÃ±a;
+}
+
+void PestaÃ±a::guardarHistorialBinario(ofstream& file){
 	NodoPag* actual = tail;
-	file.open("../Historial.dat", ios::binary);
+	file.open("Historial.bin", ios::binary);
 	if (!file.is_open()) {
 		cout << "El archivito no se abrio" << endl;
 	}
@@ -235,9 +266,7 @@ void Pestaña::guardarHistorialBinario(){
 	file.close();
 }
 
-void Pestaña::leerHistorialBinario() {
-	ifstream file("../Historial.dat", ios::binary);
-
+void PestaÃ±a::leerHistorialBinario(ifstream& file) {
 	if (!file.is_open()) {
 		cout << "El archivo no se pudo abrir" << endl;
 		return;
@@ -253,7 +282,7 @@ void Pestaña::leerHistorialBinario() {
 
 		if (pag != nullptr) { insertarPrimero(*pag); }
 		else {
-			cout << "Error al leer una página web del archivo." << endl;
+			cout << "Error al leer una pÃ¡gina web del archivo." << endl;
 			break; 
 		}
 	}
@@ -262,7 +291,7 @@ void Pestaña::leerHistorialBinario() {
 }
 
 
-void Pestaña::explorarHistorialIncognito(){
+void PestaÃ±a::explorarHistorialIncognito(){
 	bool bandera = true;
 	NodoPag* nodoActual = tail;
 
@@ -275,7 +304,7 @@ void Pestaña::explorarHistorialIncognito(){
 
 	while (bandera) {
 		if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
-			if (nodoActual->anterior == nullptr) { cout << "No se puede retroceder más." << endl; }
+			if (nodoActual->anterior == nullptr) { cout << "No se puede retroceder mÃ¡s." << endl; }
 			else {
 				nodoActual->paginaWeb->MostrarPaginaWeb();
 				nodoActual = nodoActual->anterior;
@@ -283,7 +312,7 @@ void Pestaña::explorarHistorialIncognito(){
 			Sleep(300);
 		}
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
-			if (nodoActual->siguiente == nullptr) { cout << "No se puede avanzar más." << endl; }
+			if (nodoActual->siguiente == nullptr) { cout << "No se puede avanzar mÃ¡s." << endl; }
 			else {
 				nodoActual->paginaWeb->MostrarPaginaWeb();
 				nodoActual = nodoActual->siguiente;
@@ -292,12 +321,4 @@ void Pestaña::explorarHistorialIncognito(){
 		}
 		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) { bandera = false; }
 	}
-}
-
-void Pestaña::cargarArchivoCSV(const string& archivoCVS){
-
-}
-
-void Pestaña::guardarArchivoCSV(const string& archivoCSV){
-
 }
