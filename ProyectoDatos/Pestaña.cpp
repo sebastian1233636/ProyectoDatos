@@ -87,7 +87,7 @@ void Pestaña::explorarHistorial(){
                     cin.ignore();
                     getline(cin, marcador);
                     if (!marcador.empty()) {
-                        nodoActual->paginaWeb->getMarcadorPersonal(marcador);
+                        nodoActual->paginaWeb->setMarcadorPersonal(marcador);
                     }
                     cout << "Pagina marcada como favorita" << endl;
                     Sleep(300);
@@ -217,6 +217,45 @@ void Pestaña::eliminarCadaTiempo(int minutos) {
 			aux = aux->siguiente;
 		}
 	}
+}
+
+void Pestaña::guardarHistorialBinario()
+{
+	ofstream file;
+	NodoPag* actual = tail;
+	file.open("../Historial", ios::binary);
+	if (!file.is_open()) {
+		cout << "El archivito no se abrio" << endl;
+	}
+	else {
+		while (actual != nullptr) {
+			actual->paginaWeb->guardarPaginaWeb(file);
+			actual = actual->siguiente;
+		}
+	}
+	file.close();
+}
+
+void Pestaña::leerHistorialBinario()
+{
+	ifstream file;
+	file.open("../Historial", ios::binary);
+	if (!file.is_open()) {
+		cout << "El archivo no se abrio" << endl;
+	}
+	else {
+		PaginaWeb* pagLeida = new PaginaWeb();
+		while (true) {
+			if (pagLeida->leerPaginaWeb(file) != nullptr) {
+				insertarPrimero(*pagLeida);
+			}
+			else {
+				break;
+			}
+		}
+		
+	}
+	file.close();
 }
 
 void Pestaña::explorarHistorialIncognito(){

@@ -40,5 +40,12 @@ public:
 	void buscarPorPalabraClave(string&);
 	void timeFilter(int);
 	void eliminarCadaTiempo(int);
+
+	void guardarHistorialBinario();
+	void leerHistorialBinario();
+
+
+
+
 };
 #endif

@@ -6,6 +6,7 @@
 #include<Windows.h>
 #include<sstream>
 #include<ctime>
+#include<fstream>
 
 using namespace std;
 class PaginaWeb{
@@ -25,7 +26,8 @@ public:
 	string getMarcadorPersonal();
 	bool getMarcador();
 
-	void getMarcadorPersonal(string);
+	void setMarcadorPersonal(string);
+
 	bool yaMostrada();
 	void marcarComoMostrada();
 	void MostrarPaginaWeb();
@@ -35,5 +37,9 @@ public:
 	time_t getTiempo();
 	string mostrarTiempo();
 	void setTiempo(time_t);
+
+	void guardarPaginaWeb(ofstream&);
+	PaginaWeb* leerPaginaWeb(ifstream&);
+
 };
 #endif
