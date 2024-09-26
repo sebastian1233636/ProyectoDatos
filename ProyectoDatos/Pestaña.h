@@ -1,5 +1,5 @@
-#ifndef PESTA�A_H
-#define PESTA�A_H
+#ifndef PESTAÑA_H
+#define PESTAÑA_H
 
 #include"PaginaWeb.h"
 #include <fstream>
@@ -12,19 +12,20 @@ struct NodoPag {
 	NodoPag* anterior;
 };
 
-class Pesta�a{
+class Pestaña{
 private:
 	NodoPag* tail;//Primero
 	NodoPag* head;//Ultimo
 	bool modoIcognito;
 	string nombre;
 public:
-	Pesta�a(string);
-	~Pesta�a();
+	Pestaña(string);
+	Pestaña();
+	~Pestaña();
+	void setNombre(string nom);
 	bool getIcognito();
+	string getNombre();
 	void explorarHistorialIncognito();
-	void cargarArchivoCSV(const string& archivoCVS);
-	void guardarArchivoCSV(const string& archivoCSV);
 
 	NodoPag* getTail();
 	NodoPag* getHead();
@@ -34,14 +35,17 @@ public:
 	void buscarFavorito();
 	void activarModoIncognito(); 
 	void desactivarModoIncognito(); 
-	string mostrarPesta�a();
-	string mostrarPesta�aIncognito();
+	string mostrarPestaña();
+	string mostrarPestañaIncognito();
 	PaginaWeb* buscarPaginaWeb(string);
 	void buscarPorPalabraClave(string&);
 	void timeFilter(int);
 	void eliminarCadaTiempo(int);
 
-	void guardarHistorialBinario();
-	void leerHistorialBinario();
+	void guardarPestaña(ofstream&);
+	Pestaña* leerPestaña(ifstream&);
+
+	void guardarHistorialBinario(ofstream&);
+	void leerHistorialBinario(ifstream&);
 };
 #endif
