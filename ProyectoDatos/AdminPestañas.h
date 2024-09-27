@@ -15,12 +15,13 @@ private:
 	NodoPest* head;//Ultimo
 	int tam;
 public:
+	//Construtor y Destructor
 	AdminPestañas();
 	~AdminPestañas();
 
+	//Metodos de lista
 	NodoPest* getTail();
 	NodoPest* getHead();
-
 	void InsertarPrimero(Pestaña*);
 	void ExplorarHistorialPestañas();
 	void BuscarFavorito();
@@ -28,6 +29,7 @@ public:
 	void menuAdminPestañas(NodoPest* actual);
 	PaginaWeb* buscaPaginaWeb(string);
 
+	//archivos
 	void guardarPestañaBinario();
 	void leerPestañaBinario();
 	void guardarHistorialPestaña();

@@ -19,17 +19,21 @@ private:
 	bool modoIcognito;
 	string nombre;
 public:
+	//Constructores y Destructor
 	Pestaña(string);
 	Pestaña();
 	~Pestaña();
-	void setNombre(string nom);
-	bool getIcognito();
-	string getNombre();
-	void explorarHistorialIncognito();
 
+
+	//GETTERS
 	NodoPag* getTail();
 	NodoPag* getHead();
-
+	string getNombre();
+	bool getIcognito();
+	//SETTERS
+	void setNombre(string nom);
+	//Metodos de lista
+	void explorarHistorialIncognito();
 	void insertarPrimero(PaginaWeb&);
 	void explorarHistorial();
 	void buscarFavorito();
@@ -42,8 +46,9 @@ public:
 	void timeFilter(int);
 	void eliminarCadaTiempo(int);
 
+	//Archivos
 	void guardarPestaña(ofstream&);
-	Pestaña* leerPestaña(ifstream&);
+	static Pestaña* leerPestaña(ifstream&);
 
 	void guardarHistorialBinario(ofstream&);
 	void leerHistorialBinario(ifstream&);

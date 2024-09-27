@@ -18,27 +18,32 @@ private:
 	bool mostrada;
 	time_t tiempoIngreso;
 public:
+	//CONSTRUCTORES
 	PaginaWeb(string, string);
 	PaginaWeb();
 
+	//GETTERS
 	string getURL();
 	string getTitulo();
 	string getMarcadorPersonal();
-	void setUrl(string u);
 	bool getMarcador();
+	time_t getTiempo();
 
+	//SETTERS
+	void setUrl(string u);
+	void setTitulo(string);
 	void setMarcadorPersonal(string);
+	void setTiempo(time_t);
 
+	//Metodos adicionales
 	bool yaMostrada();
 	void marcarComoMostrada();
 	void MostrarPaginaWeb();
 	void PonerMarcador();
 	void QuitarMarcador();
-
-	time_t getTiempo();
 	string mostrarTiempo();
-	void setTiempo(time_t);
-
+	
+	//archivos
 	void guardarPaginaWeb(ofstream&);
 	PaginaWeb* leerPaginaWeb(ifstream&);
 
