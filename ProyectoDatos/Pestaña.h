@@ -13,6 +13,8 @@ struct NodoPag {
 };
 <<<<<<< HEAD
 
+class Pestaña {
+=======
 // Clase Pestaña gestiona una lista de páginas web navegadas, incluyendo soporte para modo incognito.
 class Pestaña{
 >>>>>>> documentacion interna
@@ -32,7 +34,7 @@ public:
 	~Pestaña();
 <<<<<<< HEAD
 =======
-	
+	// GETTERS
 	bool getIcognito();
 	// Métodos para gestionar la lista de páginas.
 	void explorarHistorialIcognito();// Explora el historial sin guardar nada (modo incógnito).
@@ -51,16 +53,16 @@ public:
 	void setNombre(string nom);
 	//Metodos de lista
 	void explorarHistorialIncognito();
-	void insertarPrimero(PaginaWeb&); // Inserta una nueva página en la primera posición.
-	void explorarHistorial(); // Explora el historial permitiendo navegación y marcadores.
-	void buscarFavorito();// Busca páginas marcadas como favoritas.
-	void activarModoIncognito();// Activa el modo incógnito.
-	void desactivarModoIncognito();// Desactiva el modo incógnito.
-	string mostrarPestaña();// Muestra la información básica de la pestaña
+	void insertarPrimero(PaginaWeb&);
+	void explorarHistorial();
+	void buscarFavorito();
+	void activarModoIncognito();
+	void desactivarModoIncognito();
+	string mostrarPestaña();
 	string mostrarPestañaIncognito();
 	PaginaWeb* buscarPaginaWeb(string);
 	void buscarPorPalabraClave(string&);
-	void timeFilter(int);;// Filtra páginas por tiempo (en minutos).
+	void timeFilter(int);
 	void eliminarCadaTiempo(int);
 
 	//Archivos
@@ -68,12 +70,16 @@ public:
 	static Pestaña* leerPestaña(ifstream&);
 =======
 
-
+	void insertarPrimero(PaginaWeb*); // Inserta una nueva página en la primera posición.
+	void explorarHistorial(); // Explora el historial permitiendo navegación y marcadores.
+	void buscarFavorito(); // Busca páginas marcadas como favoritas.
+	void activarModoIcognito();  // Activa el modo incógnito.
+	void desactivarModoIcognito(); // Desactiva el modo incógnito.
+	string mostrarPestaña(); // Muestra la información básica de la pestaña
+	void timeFilter(int);// Filtra páginas por tiempo (en minutos).
 >>>>>>> documentacion interna
 
-//Guarda el historial de la pestaña en un archivo binario
 	void guardarHistorialBinario(ofstream&);
-//Lee el historial de la pestaña desde un archivo binario.
 	void leerHistorialBinario(ifstream&);
 };
 #endif

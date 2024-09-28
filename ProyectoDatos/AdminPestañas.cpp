@@ -134,78 +134,84 @@ void AdminPestañas::ExplorarHistorialPestañas() {
 }
 
 <<<<<<< HEAD
-	// Devuelve el número total de pestañas en la lista.
 int AdminPestañas::contadorPestañas() { return tam; }
 
 void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
-	int op = 0;// Opción seleccionada por el usuario
+	int op = 0;
 	int op2 = 0;
 	int op3 = 0;
 	int op4 = 0;
 	int op6 = 0;
 	string nom = "";
 	string palabraclave = "";
-	bool incognito = false;// Indica si el modo incógnito está activado
-	bool control = true;// Control para seguir mostrando el menú
+	bool incognito = false;
+	bool control = true;
 	bool control3 = true;
 	bool control4 = true;
 	bool control5 = true;
-	bool control6 = true;// Control para la opción 6 (configuración)
+	bool control6 = true;
 =======
+// Devuelve el número total de pestañas en la lista.
 
+int AdminPestañas::contadorPestañas()
+{
 
-
+	return tam;
+}
 // Muestra el menú de administración de pestañas para la pestaña actual.
 // Permite al usuario realizar varias operaciones como ir al sitio web, crear una nueva pestaña, colocar un marcador, activar modo incógnito, etc.
 
+void AdminPestañas::menuAdminPestañas(NodoPest* actual)
+{
+	int op = 0; // Opción seleccionada por el usuario
+	bool incognito;// Indica si el modo incógnito está activado
+	bool control = true; // Control para seguir mostrando el menú
+	bool control6 = true;// Control para la opción 6 (configuración)
+	// Control para la opción 6 (configuración)
 >>>>>>> documentacion interna
-// Bucle principal que muestra el menú hasta que el usuario elija salir
 	while (control != false) {
-		system("cls");// Limpia la consola
-		cout << "----------------" << actual->pestaña->getNombre() <<  "----------------" << endl; // Muestra el nombre de la pestaña actual
+		system("cls");
+		cout << "----------------" << actual->pestaña->getNombre() <<  "----------------" << endl;
 		cout << "---------------------------------------" << endl;
-		cout << "1.Ver historial" << endl;/// Opción para ver el historial de navegación
-		cout << "2.Ir al sitio web" << endl;// Opción para ir a un sitio web específico
-		cout << "3.Nueva pestaña" << endl;// Opción para crear una nueva pestaña
-		cout << "4.Modo incognito" << endl;// Opción para activar o desactivar el modo incógnito
-		cout << "5.Busquedas y filtros" << endl; // Opción para realizar búsquedas y aplicar filtros
-		cout << "6.Configuracion" << endl;// Opción para modificar configuraciones
-		cout << "7.Importacion y exportacion" << endl;// Opción para importar y exportar datos
-		cout << "8.Regresar" << endl;// Opción para regresar al menú anterior
+		cout << "1.Ver historial" << endl;
+		cout << "2.Ir al sitio web" << endl;
+		cout << "3.Nueva pestaña" << endl;
+		cout << "4.Modo incognito" << endl;
+		cout << "5.Busquedas y filtros" << endl;
+		cout << "6.Configuracion" << endl;
+		cout << "7.Importacion y exportacion" << endl;
+		cout << "8.Regresar" << endl;
 		cout << "---------------------------------------" << endl;
-		cout << "Digite una opcion:";// Solicita al usuario que ingrese una opción
+		cout << "Digite una opcion:";
 		cin >> op;
 <<<<<<< HEAD
 		cout << endl;
 =======
 		// Switch para procesar la opción seleccionada
 >>>>>>> documentacion interna
-// Switch para procesar la opción seleccionada
 		switch (op) {
 
 		case 1: {
-			// Ver historial de la pestaña actual
 			if (actual->pestaña->getIcognito() == false) {
 
-				cout << actual->pestaña->mostrarPestaña() << endl;// Muestra la pestaña normal
-				actual->pestaña->explorarHistorial();// Muestra el historial
+				cout << actual->pestaña->mostrarPestaña() << endl;
+				actual->pestaña->explorarHistorial();
 			}
-			else { cout << actual->pestaña->mostrarPestañaIncognito() << endl; }// Muestra la pestaña en modo incógnito
+			else { cout << actual->pestaña->mostrarPestañaIncognito() << endl; }
 			break;
 			
 		}
 
 		case 2: {
 <<<<<<< HEAD
-	// Ir a un sitio web específico
 			string url;
-			cout << "Digite el URL de la pagina:";// Solicita al usuario que ingrese un URL
+			cout << "Digite el URL de la pagina:";
 			cin >> url;
 			cout << endl;
-			PaginaWeb* PagNueva = buscaPaginaWeb(url);// Busca la página web
-			if (PagNueva == nullptr) { cout << "ERROR 404 NOT FOUND" << endl; }// Muestra error si la página no se encuentra
-			else { actual->pestaña->insertarPrimero(*PagNueva); }// Inserta la página en la pestaña actual
-			system("pause");// Pausa la ejecución
+			PaginaWeb* PagNueva = buscaPaginaWeb(url);
+			if (PagNueva == nullptr) { cout << "ERROR 404 NOT FOUND" << endl; }
+			else { actual->pestaña->insertarPrimero(*PagNueva); }
+			system("pause");
 			break;
 		}
 		case 3: {
@@ -215,41 +221,58 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			cout << "Se ha creado una nueva pestaña. Siga las instrucciones anteriores para navegar a ella." << endl;
 			system("pause");
 =======
-			
+			// Crear una nueva pestaña
+			string nombrePestaña = "Pestaña " + to_string(tam + 1);
+			Pestaña* pes = new Pestaña(nombrePestaña);
+			InsertarPrimero(pes);
 			break;
 		}
 
 		
-		case 4:{
-	
-		
+		case 3:{
+			// Colocar un marcador, si no está en modo incógnito
+			if (!incognito) {
+				string marcador;
+				cout << "Ingrese el nombre del marcador: ";
+				cin >> marcador;
+				NodoPag().paginaWeb->getMarcador();
+				cout << "Marcador agregado: " << marcador << endl;
+			}
+			else {
+				cout << "La opción de marcadores no está disponible en modo incógnito." << endl;
+			}
+
+
+>>>>>>> documentacion interna
+			break;
+		}
+		case 4: {
 <<<<<<< HEAD
 			control3 = true;
 			while (control3 != false) {
 				system("cls");
-				cout << "1.Activar modo incognito" << endl;// Opción para activar modo incógnito
-				cout << "2.Desactivar modo incognito" << endl;// Opción para desactivar modo incógnito
-				cout << "3.Regresar" << endl; // Opción para regresar al menú anterior
+				cout << "1.Activar modo incognito" << endl;
+				cout << "2.Desactivar modo incognito" << endl;
+				cout << "3.Regresar" << endl;
 				cout << "Digite la opcion" << endl;
 				cin >> op3;
 				switch (op3) {
 				case 1:
-					actual->pestaña->activarModoIncognito();// Activa el modo incógnito
+					actual->pestaña->activarModoIncognito();
 					if (actual->pestaña->getIcognito() == true) {
-						cout << "Modo incognito activado" << endl;// Confirma que el modo ha sido activado
-					
+						cout << "Modo incognito activado" << endl;
 					}
-					system("pause");// Pausa la ejecución
+					system("pause");
 					break;
 				case 2:
-					actual->pestaña->desactivarModoIncognito();// Desactiva el modo incógnito
+					actual->pestaña->desactivarModoIncognito();
 					if (actual->pestaña->getIcognito() == false) {
-						cout << "Modo incognito desactivado" << endl; // Confirma que el modo ha sido desactivado
+						cout << "Modo incognito desactivado" << endl;
 					}
 					system("pause");
 					break;
 				case 3: {
-					control3 = false;// Regresa al menú anterior
+					control3 = false;
 					break;
 				}
 =======
@@ -265,41 +288,40 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			break;
 		}
 		case 5: {
-			// Realizar búsquedas y aplicar filtros
 			control4 = true;
 			while (control4 != false) {
 				cout << "---------------------------------------" << endl;
-				cout << "1.Mostrar solo favoritos" << endl;// Opción para mostrar solo las páginas favoritas
-				cout << "2.Busqueda por palabra clave" << endl; // Opción para buscar por palabra clave
-				cout << "3.Buscar una pagina especifica" << endl; // Opción para buscar una página específica
+				cout << "1.Mostrar solo favoritos" << endl;
+				cout << "2.Busqueda por palabra clave" << endl;
+				cout << "3.Buscar una pagina especifica" << endl;
 				cout << "4.regresar" << endl;
-				cout << "---------------------------------------" << endl;// Opción para regresar al menú anterior
+				cout << "---------------------------------------" << endl;
 				cin >> op4;
 				switch (op4) {
 
 				case 1: {
-					actual->pestaña->buscarFavorito();// Busca y muestra los favoritos
+					actual->pestaña->buscarFavorito();
 					break;
 				}
 
 				case 2: {
-					cout << "Digite la palabra clave para filtrar paginas" << endl;// Solicita palabra clave para filtro
+					cout << "Digite la palabra clave para filtrar paginas" << endl;
 					cin >> palabraclave;
-					actual->pestaña->buscarPorPalabraClave(palabraclave);// Aplica filtro por palabra clave
+					actual->pestaña->buscarPorPalabraClave(palabraclave);
 
 					break;
 				}
 
 				case 3: {
 					PaginaWeb* pag;
-					cout << "Digite el URL o el titulo de la pagina web" << endl;// Solicita el URL o título para buscar
+					cout << "Digite el URL o el titulo de la pagina web" << endl;
 					cin >> nom;
-					pag = actual->pestaña->buscarPaginaWeb(nom); // Busca la página web
+					pag = actual->pestaña->buscarPaginaWeb(nom);
 					if (pag == nullptr) {
-						cout << "La pagina que busca no se encuentra" << endl;// Mensaje si la página no se encuentra
+						cout << "La pagina que busca no se encuentra" << endl;
 					}
 					else {
-						pag->MostrarPaginaWeb();// Muestra la página si se encuentra
+						pag->MostrarPaginaWeb();
 					}
 					break;
 				}
@@ -309,7 +331,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 				}
 
 				default:
-					cout << "Opcion no valida" << endl;// Maneja opción inválida
+					cout << "Opcion no valida" << endl;
 					break;
 
 
@@ -318,39 +340,38 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			break;
 		}
 		case 6: {
-			// Configuraciones
 			//--------------------------------------------------------------------------------------
 			control5 = true;
 			while (control5 != false) {
 				system("cls");
 				cout << "---------------------------------------" << endl;
-				cout << "1.Limitar cantidad de entradas" << endl;// Opción para limitar entradas
-				cout << "2.Eliminar historial cada cierto tiempo" << endl;// Opción para eliminar historial
-				cout << "3.Regresar" << endl; // Opción para regresar al menú anterior
+				cout << "1.Limitar cantidad de entradas" << endl;
+				cout << "2.Eliminar historial cada cierto tiempo" << endl;
+				cout << "3.Regresar" << endl;
 				cout << "---------------------------------------" << endl;
 				cin >> op2;
 				switch (op2) {
 				case 1: {
 					int min = 0;
-					cout << "Digite el numero de minutos" << endl;// Solicita al usuario que ingrese minutos
+					cout << "Digite el numero de minutos" << endl;
 					cin >> min;
-					actual->pestaña->timeFilter(min);// Aplica filtro de tiempo
-					system("pause");// Pausa la ejecución
+					actual->pestaña->timeFilter(min);
+					system("pause");
 					break;
 				}
 				case 2: {
 					int mins = 0;
 					cout << "En este opcion se elminarán las paginas que superen los minutos ingresados" << endl;
-					cout << "Digite los minutos deseados" << endl;// Solicita minutos para la eliminación
+					cout << "Digite los minutos deseados" << endl;
 					cin >> mins;
 					cout << "Eliminando paginas que superen los " << mins << " minutos" << endl;
-					actual->pestaña->eliminarCadaTiempo(mins);// Elimina páginas según el tiempo
+					actual->pestaña->eliminarCadaTiempo(mins);
 					system("pause");
 					break;
 				}
 
 				case 3: {
-					control5 = false; // Regresa al menú anterior
+					control5 = false;
 					break;
 				}
 				default:
@@ -361,7 +382,6 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			break;
 		}
 		case 7: {
-			// Importación y exportación
 			guardarPestañaBinario();
 			guardarHistorialPestaña();
 			cout << "Historial guardado" << endl;
@@ -379,81 +399,72 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 }
 
 PaginaWeb* AdminPestañas::buscaPaginaWeb(string urlBuscado) {
-	string archivo("Prueba.csv"); // Nombre del archivo CSV donde se almacenan las páginas
-	ifstream file(archivo);// Abre el archivo para lectura
-	PaginaWeb* pagAr = new PaginaWeb();// Inicializa un objeto PaginaWeb
-	if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }// Mensaje de error si no se puede abrir el archivo
+	string archivo("Prueba.csv");
+	ifstream file(archivo);
+	PaginaWeb* pagAr = new PaginaWeb();
+	if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }
 	else {
-
 		string linea;
-		// Lee cada línea del archivo
 		while (getline(file, linea)) {
 			stringstream ss(linea);
 			string url;
 			string titulo;
-			// Obtiene la URL y el título de cada línea
-			if (getline(ss, url, ',') && getline(ss, titulo)) {// Crea un nuevo objeto PaginaWeb si se encuentra la URL
-
+			if (getline(ss, url, ',') && getline(ss, titulo)) {
 				if (url == urlBuscado) {
 					pagAr = new PaginaWeb(url, titulo);
-					return pagAr;// Devuelve el objeto encontrado
+					return pagAr;
 				}
-				
-				
 				else { pagAr = nullptr; }
 			}
 		}
-		file.close(); // Cierra el archivo
+		file.close();
 	}
 	return nullptr;
 }
 
 void AdminPestañas::guardarPestañaBinario() {
-	ofstream file("Pestañas.bin", ios::binary); // Abre un archivo binario para escritura
-	if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }// Mensaje de error si no se puede abrir el archivo
+	ofstream file("Pestañas.bin", ios::binary);
+	if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }
 	else {
-		NodoPest* actual = tail;// Comienza desde la última pestaña
-		// Itera a través de cada nodo de la lista de pestañas
+		NodoPest* actual = tail;
 		while (actual != nullptr) {
-			actual->pestaña->guardarPestaña(file); // Llama al método de guardar de cada pestaña
-			actual = actual->siguiente;// Avanza al siguiente nodo
+			actual->pestaña->guardarPestaña(file);
+			actual = actual->siguiente;
 		}
 	}
 	file.close();
 }
 
 void AdminPestañas::leerPestañaBinario() {
-	ifstream file("Pestañas.bin", ios::binary); // Abre el archivo binario para lectura
-	if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }// Mensaje de error si no se puede abrir el archivo
+	ifstream file("Pestañas.bin", ios::binary);
+	if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }
 	else {
-		file.seekg(0, ios::end);// Mueve el cursor al final del archivo
-		std::streampos fileSize = file.tellg();// Obtiene el tamaño del archivo
-		file.seekg(0, ios::beg);// Mueve el cursor al principio del archivo
-		// Lee el archivo hasta que se alcance el final
+		file.seekg(0, ios::end);
+		std::streampos fileSize = file.tellg();
+		file.seekg(0, ios::beg);
 		while (file.tellg() < fileSize) {
-			Pestaña* pestaña = new Pestaña(); // Crea un nuevo objeto Pestaña
-			Pestaña* pes = pestaña->leerPestaña(file);// Llama al método de lectura
-			if (pes != nullptr) { InsertarPrimero(pes); } // Inserta la pestaña leída en la lista
+			Pestaña* pestaña = new Pestaña();
+			Pestaña* pes = pestaña->leerPestaña(file);
+			if (pes != nullptr) { InsertarPrimero(pes); }
 			else {
-				cout << "Error al leer una pestaña del archivo." << endl;// Mensaje de error si la lectura falla
+				cout << "Error al leer una pestaña del archivo." << endl;
 				break;
 			}
 		}
 	}
 	file.close();
 }
-// Guarda el historial de cada pestaña actual en archivos binarios.
+
 void AdminPestañas::guardarHistorialPestaña() {
-	NodoPest* actual = tail;// Comienza desde la última pestaña
-	ofstream file;// Declara un archivo de salida
-	string nombre;// Variable para almacenar el nombre del archivo
-	// Itera a través de cada nodo de la lista de pestañas
+	NodoPest* actual = tail;
+	ofstream file;
+	string nombre;
 	while (actual != nullptr) {
-		nombre = "Historial" + actual->pestaña->getNombre() + ".bin";// Crea un nombre de archivo para el historial
-		file.open(nombre, ios::binary);// Abre el archivo para escritura
-		if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }// Mensaje de error si no se puede abrir el archivo
-		actual->pestaña->guardarHistorialBinario(file);// Llama al método de guardar historial de cada pestaña
-		actual = actual->siguiente;// Avanza al siguiente nodoo
+		nombre = "Historial" + actual->pestaña->getNombre() + ".bin";
+		file.open(nombre, ios::binary);
+		if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }
+		actual->pestaña->guardarHistorialBinario(file);
+		actual = actual->siguiente;
 		file.close();
 	}
 }

@@ -93,61 +93,50 @@ string PaginaWeb::mostrarTiempo() {
 // Establece un nuevo valor para el tiempo de ingreso de la página.
 
 void PaginaWeb::setTiempo(time_t t) { tiempoIngreso = t; }
-// Guarda la información de la página web en un archivo binario.
+
 void PaginaWeb::guardarPaginaWeb(ofstream& file) {
-	// Obtiene el estado del marcador, el título y el marcador personal de la página.
 	bool marcadores = getMarcador();
 	string titulo = getTitulo();
 	string marcadorPersonal = getMarcadorPersonal();
-	// Guarda la longitud del título y el título en el archivo.
 
 	size_t longitudTitulo = titulo.size();
-	file.write(reinterpret_cast<const char*>(&longitudTitulo), sizeof(longitudTitulo));// Escribe la longitud de la titulo
-	file.write(titulo.c_str(), longitudTitulo); // Escribe el título.
-	// Guarda la URL de la página.
+	file.write(reinterpret_cast<const char*>(&longitudTitulo), sizeof(longitudTitulo));
+	file.write(titulo.c_str(), longitudTitulo);
 
 	string url = getURL();
 	size_t longitudURL = url.size();
-	file.write(reinterpret_cast<const char*>(&longitudURL), sizeof(longitudURL));// Escribe la longitud del url
+	file.write(reinterpret_cast<const char*>(&longitudURL), sizeof(longitudURL));
 	file.write(url.c_str(), longitudURL);
-	// Guarda el estado del marcador en el archivo.
-	file.write(reinterpret_cast<char*>(&marcadores), sizeof(marcadores)); // Escribe el estado del marcador.
-	// Guarda el marcador personal de la página.
+	file.write(reinterpret_cast<char*>(&marcadores), sizeof(marcadores));
 
 	size_t longitudMarcadorPersonal = marcadorPersonal.size();
-	file.write(reinterpret_cast<const char*>(&longitudMarcadorPersonal), sizeof(longitudMarcadorPersonal));// Escribe la longitud del marcador personal.
-	file.write(marcadorPersonal.c_str(), longitudMarcadorPersonal);// Escribe el marcador personal.
+	file.write(reinterpret_cast<const char*>(&longitudMarcadorPersonal), sizeof(longitudMarcadorPersonal));
+	file.write(marcadorPersonal.c_str(), longitudMarcadorPersonal);
 
 }
 
 PaginaWeb* PaginaWeb::leerPaginaWeb(ifstream& file) {
-	// Declara variables para almacenar la información leída.
 	string titulo;
 	string url;
 	bool marcadores;
 	size_t LTitulo = 0;
-	// Lee la longitud del título y el título desde el archivo.
-	file.read(reinterpret_cast<char*>(&LTitulo), sizeof(LTitulo));// Lee la longitud del título.
+	file.read(reinterpret_cast<char*>(&LTitulo), sizeof(LTitulo));
 	titulo.resize(LTitulo);
-	file.read(&titulo[0], LTitulo);// Lee el título.
-	// Lee la longitud de la URL y la URL desde el archivo.
+	file.read(&titulo[0], LTitulo);
 	size_t LUrl = 0;
-	file.read(reinterpret_cast<char*>(&LUrl), sizeof(LUrl));// Lee la longitud de la URL.
-	url.resize(LUrl);// Lee la URL.
-	// Lee el estado del marcador desde el archivo.
+	file.read(reinterpret_cast<char*>(&LUrl), sizeof(LUrl));
+	url.resize(LUrl);
 	file.read(&url[0], LUrl);
-	file.read(reinterpret_cast<char*>(&marcadores), sizeof(marcadores));// Lee el estado del marcador.
-	// Lee el marcador personal de la página.
+	file.read(reinterpret_cast<char*>(&marcadores), sizeof(marcadores));
+
 	string marcadorPersonal;
 	size_t LMarcadorPersonal = 0;
-	file.read(reinterpret_cast<char*>(&LMarcadorPersonal), sizeof(LMarcadorPersonal));// Lee la longitud del marcador personal.
+	file.read(reinterpret_cast<char*>(&LMarcadorPersonal), sizeof(LMarcadorPersonal));
 	marcadorPersonal.resize(LMarcadorPersonal);
 	file.read(&marcadorPersonal[0], LMarcadorPersonal);
-	// Crea un nuevo objeto PaginaWeb con la URL y el título leídos.
 
 	PaginaWeb* paginaWeb = new PaginaWeb(url, titulo);
-	// Configura el marcador personal y el estado del marcador.
 	paginaWeb->setMarcadorPersonal(marcadorPersonal);
-	if (marcadores) { paginaWeb->PonerMarcador(); }// Activa el marcador si corresponde.
-	return paginaWeb;// Retorna el puntero al objeto PaginaWeb reconstruido
+	if (marcadores) { paginaWeb->PonerMarcador(); }
+	return paginaWeb;
 }
