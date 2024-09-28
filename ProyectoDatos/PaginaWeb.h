@@ -16,6 +16,7 @@ private:
 	string MarcadorPersonal;
 	bool marcador;
 	bool mostrada;
+	bool mostrarFiltro;
 	time_t tiempoIngreso;
 public:
 	//CONSTRUCTORES
@@ -27,6 +28,7 @@ public:
 	string getTitulo();
 	string getMarcadorPersonal();
 	bool getMarcador();
+	bool getMostrarFiltro();
 	time_t getTiempo();
 
 	//SETTERS
@@ -34,6 +36,7 @@ public:
 	void setTitulo(string);
 	void setMarcadorPersonal(string);
 	void setTiempo(time_t);
+	
 
 	//Metodos adicionales
 	bool yaMostrada();
@@ -42,6 +45,9 @@ public:
 	void PonerMarcador();
 	void QuitarMarcador();
 	string mostrarTiempo();
+
+	void activarFiltro();
+	void desactivarFiltro();
 	
 	//archivos
 	void guardarPaginaWeb(ofstream&);

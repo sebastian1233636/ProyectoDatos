@@ -22,6 +22,7 @@ public:
 	//Metodos de lista
 	NodoPest* getTail();
 	NodoPest* getHead();
+	void iniciarNavegador();
 	void InsertarPrimero(Pestaña*);
 	void ExplorarHistorialPestañas();
 	void BuscarFavorito();

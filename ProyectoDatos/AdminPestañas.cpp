@@ -21,6 +21,23 @@ NodoPest* AdminPestañas::getTail() { return tail; }
 
 NodoPest* AdminPestañas::getHead() { return head; }
 
+
+void AdminPestañas::iniciarNavegador()
+{
+	cout << "---------------Bienvenido al navegador---------------" << endl;
+	system("pause");
+	if (tail == nullptr) {
+		cout << "No hay pestañas todavia, agregando una" << endl;
+		string nombrePestaña = "Pestana " + to_string(tam + 1);
+		Pestaña* pes = new Pestaña(nombrePestaña);
+		InsertarPrimero(pes);
+		ExplorarHistorialPestañas();
+	}
+	else {
+		ExplorarHistorialPestañas();
+	}
+}
+
 void AdminPestañas::InsertarPrimero(Pestaña* pes) {
 	NodoPest* nuevo = new NodoPest();
 	nuevo->pestaña = pes;
@@ -95,6 +112,13 @@ void AdminPestañas::ExplorarHistorialPestañas() {
 int AdminPestañas::contadorPestañas() { return tam; }
 
 void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
+
+	if (actual == nullptr) {
+		cout << "No hay pestañas todavia." << endl;
+		return; 
+	}
+
+
 	int op = 0;
 	int op2 = 0;
 	int op3 = 0;
@@ -196,6 +220,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 		case 5: {
 			control4 = true;
 			while (control4 != false) {
+				system("cls");
 				cout << "---------------------------------------" << endl;
 				cout << "1.Mostrar solo favoritos" << endl;
 				cout << "2.Busqueda por palabra clave" << endl;
@@ -206,14 +231,18 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 				switch (op4) {
 
 				case 1: {
+					system("cls");
 					actual->pestaña->buscarFavorito();
+					system("pause");
 					break;
 				}
 
 				case 2: {
 					cout << "Digite la palabra clave para filtrar paginas" << endl;
 					cin >> palabraclave;
+					system("cls");
 					actual->pestaña->buscarPorPalabraClave(palabraclave);
+				
 
 					break;
 				}
@@ -228,6 +257,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 					}
 					else {
 						pag->MostrarPaginaWeb();
+						system("pause");
 					}
 					break;
 				}
@@ -267,7 +297,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 				}
 				case 2: {
 					int mins = 0;
-					cout << "En este opcion se elminarán las paginas que superen los minutos ingresados" << endl;
+					cout << "En esta opcion se elminarán las paginas que superen los minutos ingresados" << endl;
 					cout << "Digite los minutos deseados" << endl;
 					cin >> mins;
 					cout << "Eliminando paginas que superen los " << mins << " minutos" << endl;

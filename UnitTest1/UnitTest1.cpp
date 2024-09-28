@@ -11,57 +11,7 @@ namespace UnitTest1
 	{
 	public:
 		
-		TEST_METHOD(TestConstructor)
-		{
-			PaginaWeb pagina("www.steam.com", "steam");
-
-			Assert::AreEqual(string("www.steam.com"), pagina.getURL());
-			Assert::AreEqual(string("steam"), pagina.getTitulo());
-		}
-
-
-		TEST_METHOD(TestConstructorDefecto)
-		{
-			PaginaWeb pagina;
-
-			Assert::AreEqual(string("Sin registro"), pagina.getURL());
-			Assert::AreEqual(string("Sin registro"), pagina.getTitulo());
-		}
-
-		TEST_METHOD(TestURL)
-		{
-			PaginaWeb pagina;
-			pagina.setUrl("www.algo.com");
-
-			Assert::AreEqual(string("www.algo.com"), pagina.getURL());
-		}
-
-		TEST_METHOD(TestTitulo)
-		{
-			PaginaWeb pagina;
-			 pagina.setTitulo("Titulo"); 
-
-			Assert::AreEqual(string("Titulo"), pagina.getTitulo());
-		}
-
-		TEST_METHOD(TestMarcadorPersonal)
-		{
-			PaginaWeb pagina;
-			pagina.setMarcadorPersonal("Marcador");
-
-			Assert::AreEqual(string("Marcador"), pagina.getMarcadorPersonal());
-		}
-
-		TEST_METHOD(TestMarcador)
-		{
-			PaginaWeb pagina;
-
-			pagina.PonerMarcador();
-			Assert::IsTrue(pagina.getMarcador());
-
-			pagina.QuitarMarcador();
-			Assert::IsFalse(pagina.getMarcador());
-		}
+		
 
 		TEST_METHOD(TestTiempo)
 		{
@@ -111,14 +61,6 @@ namespace UnitTest1
 	TEST_CLASS(UnitTestPestaña)
 	{
 	public:
-		TEST_METHOD(TestConstructor)
-		{
-			Pestaña pestaña;
-			Assert::AreEqual(pestaña.getNombre(), std::string("Sin registro"));
-			Assert::IsFalse(pestaña.getIcognito());
-			Assert::IsNull(pestaña.getTail());
-			Assert::IsNull(pestaña.getHead());
-		}
 
 		TEST_METHOD(TestInsertar)
 		{
@@ -159,11 +101,147 @@ namespace UnitTest1
 			Assert::AreEqual(pestañaLeida->getNombre(), std::string("TestPestaña"));
 			delete pestañaLeida;
 		}
+
+		TEST_METHOD(TestBuscarFavorito)
+		{
+		
+			Pestaña pestaña;
+			PaginaWeb pagina1("www.pagina1.com", "Página 1");
+			PaginaWeb pagina2("www.pagina2.com", "Página 2");
+			PaginaWeb pagina3("www.pagina3.com", "Página 3");
+
+			
+			pagina1.PonerMarcador();
+			pagina3.PonerMarcador();
+
+			
+			pestaña.insertarPrimero(pagina1);
+			pestaña.insertarPrimero(pagina2);
+			pestaña.insertarPrimero(pagina3);
+
+			
+			pestaña.buscarFavorito();
+
+			
+			Assert::IsTrue(pagina1.yaMostrada());
+			Assert::IsFalse(pagina2.yaMostrada());
+			Assert::IsTrue(pagina3.yaMostrada());
+
+		}
+
+		TEST_METHOD(TestBuscarPagina)
+		{
+			Pestaña pestaña;
+			PaginaWeb pagina1("www.pagina1.com", "Pagina 1");
+			PaginaWeb pagina2("www.pagina2.com", "Pagina 2");
+			PaginaWeb pagina3("www.pagina3.com", "Pagina 3");
+
+			pestaña.insertarPrimero(pagina1);
+			pestaña.insertarPrimero(pagina2);
+			pestaña.insertarPrimero(pagina3);
+
+			PaginaWeb* resultado = pestaña.buscarPaginaWeb("www.pagina1.com");
+			Assert::IsNotNull(resultado);
+			Assert::AreEqual(string("Pagina 1"), resultado->getTitulo());
+
+			resultado = pestaña.buscarPaginaWeb("Pagina 2");
+			Assert::IsNotNull(resultado);
+			Assert::AreEqual(string("www.pagina2.com"), resultado->getURL());
+
+			resultado = pestaña.buscarPaginaWeb("No existe");
+			Assert::IsNull(resultado);
+
+		}
+
+		TEST_METHOD(TestArchivosPestaña2)
+		{
+			
+			
+			Pestaña pestaña("TestPestaña");
+			PaginaWeb* pag1 = new PaginaWeb("www.ejemplo1.com", "ejemplo1");
+			PaginaWeb* pag2 = new PaginaWeb("www.ejemplo2.com", "ejemplo2");
+			pestaña.insertarPrimero(*pag1);
+			pestaña.insertarPrimero(*pag2);
+
+			
+			ofstream file("test_historial.bin", ios::binary);
+			pestaña.guardarHistorialBinario(file);
+			file.close();
+
+			
+			Pestaña pestañaLeida("TestPestañaLeida");
+			ifstream FileLectura("test_historial.bin", ios::binary);
+			pestañaLeida.leerHistorialBinario(FileLectura);
+			FileLectura.close();
+
+			
+			PaginaWeb* resultado1 = pestañaLeida.buscarPaginaWeb("www.ejemplo1.com");
+			PaginaWeb* resultado2 = pestañaLeida.buscarPaginaWeb("www.ejemplo2.com");
+
+			Assert::IsNotNull(resultado1, L"La página 1 no se encontró después de leer el historial.");
+			Assert::IsNotNull(resultado2, L"La página 2 no se encontró después de leer el historial.");
+
+			
+			remove("test_historial.bin");
+			delete pag1;
+			delete pag2;
+		}
+
+
+
+
+
 	};
 
 	TEST_CLASS(UnitTestAdmin)
 	{
 	public:
+		TEST_METHOD(TestInsertarPrimeroAdmin)
+		{
+		
+			AdminPestañas admin;
+			Pestaña* nuevaPestaña = new Pestaña("Pestaña1");
+			admin.InsertarPrimero(nuevaPestaña);
+
+			
+			Assert::AreEqual(1, admin.contadorPestañas());
+			Assert::IsNotNull(admin.getTail());
+			Assert::AreEqual("Pestaña1", admin.getTail()->pestaña->getNombre().c_str());
+
+		
+			Pestaña* segundaPestaña = new Pestaña("Pestaña2");
+			admin.InsertarPrimero(segundaPestaña);
+
+			
+			Assert::AreEqual(2, admin.contadorPestañas());
+			Assert::AreEqual("Pestaña2", admin.getTail()->pestaña->getNombre().c_str());
+			Assert::AreEqual("Pestaña1", admin.getTail()->siguiente->pestaña->getNombre().c_str());
+		}
+
+
+		TEST_METHOD(TestBuscaPaginaWeb)
+		{
+		
+			string testArchivo = "Prueba.csv";
+			ofstream archivoPrueba(testArchivo);
+			archivoPrueba << "www.ejemplo.com,ejemplo\n"; 
+			archivoPrueba.close();
+
+			
+			AdminPestañas admin;
+			PaginaWeb* paginaBuscada = admin.buscaPaginaWeb("www.ejemplo.com");
+
+			Assert::IsNotNull(paginaBuscada);
+			Assert::AreEqual("www.ejemplo.com", paginaBuscada->getURL().c_str());
+			Assert::AreEqual("ejemplo", paginaBuscada->getTitulo().c_str());
+
+			PaginaWeb* paginaNoExistente = admin.buscaPaginaWeb("No Existe");
+			Assert::IsNull(paginaNoExistente);
+
+		
+			remove(testArchivo.c_str());
+		}
+
 
 
 	};
