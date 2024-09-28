@@ -174,7 +174,8 @@ string Pestaña::mostrarPestaña()
 	s << "|-------------------------" << nombre << "---------------------------|" << endl;
 	return s.str();
 }
-
+// La función muestra el mensaje de modo incógnito activado.
+// Retorna un string con el diseño de la pestaña en modo incógnito.
 string Pestaña::mostrarPestañaIncognito() {
 	return "|-------------------------" + nombre + "---------------------------|\n"
 		"-------------------------------\n"
@@ -187,63 +188,74 @@ string Pestaña::mostrarPestañaIncognito() {
 		"|     el historial aqui        |\n"
 		"-------------------------------\n";
 }
+// Busca una página web en la lista a partir del nombre o URL.
+// Retorna un puntero a la página web encontrada o nullptr si no la encuentra.
 
 PaginaWeb* Pestaña::buscarPaginaWeb(string nomURL)
 {
-	NodoPag* actual = tail;
+	NodoPag* actual = tail;// Se inicia desde el nodo tail (último).
 	while (actual != nullptr) {
+		// Compara el nombre o URL con el de las páginas.
 		if (nomURL == actual->paginaWeb->getURL() || nomURL == actual->paginaWeb->getTitulo()) {
 			return actual->paginaWeb;
 		}
 		else {
-			actual = actual->siguiente;
+			actual = actual->siguiente;// Avanza al siguiente nodo.
 		}
 	}
-	return nullptr;
+	return nullptr;// Si no se encuentra la página, retorna nullptr.
 }
+// Busca páginas web en la lista que contengan una palabra clave.
+// Imprime las páginas que coincidan con la palabra clave. Si no hay coincidencias, informa al usuario.
 
 void Pestaña::buscarPorPalabraClave(string& palabraclave)
 {
-	NodoPag* actual = tail;
-	bool bandera = false;
+	NodoPag* actual = tail; // Comienza desde el final de la lista.
+	bool bandera = false;// Bandera para saber si se encontró una coincidencia.
 
 	while (actual != nullptr) {
+		// Busca la palabra clave en el título o URL de la página web.
 		string url = actual->paginaWeb->getURL();
 		string titulo = actual->paginaWeb->getTitulo();
 		if (url.find(palabraclave) != string::npos || titulo.find(palabraclave) != string::npos) {
-			actual->paginaWeb->MostrarPaginaWeb();
+			actual->paginaWeb->MostrarPaginaWeb(); // Muestra la página si hay coincidencia.
 			bandera = true;
 		}
-		actual = actual->siguiente;
+		actual = actual->siguiente;// Avanza al siguiente nodo.
 	}
-
+	// Si no se encontraron coincidencias, informa al usuario.
 	if (bandera == false) {
 		cout << "No se encontraron paginas " << endl;
 	}
 }
 
-
+// Filtra y muestra las páginas web cuya antigüedad sea menor al tiempo especificado en minutos.
 void Pestaña::timeFilter(int minutos) {
-	time_t tiempoActual = std::time(nullptr);
-	NodoPag* actual = tail;
+	time_t tiempoActual = std::time(nullptr);// Obtiene el tiempo actual.
+	NodoPag* actual = tail;// Comienza desde el nodo tail.
 
 	while (actual != nullptr) {
+		// Calcula el tiempo transcurrido desde que se accedió a la página.
 		PaginaWeb* pagina = actual->paginaWeb;
 		double segundosTranscurridos = difftime(tiempoActual, pagina->getTiempo());
+		// Si la página fue visitada dentro del rango de tiempo dado, se muestra.
 		if (segundosTranscurridos <= minutos * 60) { pagina->MostrarPaginaWeb(); }
-		actual = actual->siguiente;
+		actual = actual->siguiente;// Avanza al siguiente nodo.
 	}
 }
-
+// Elimina de la lista las páginas que superen un tiempo determinado (en minutos) desde que fueron visitadas.
 void Pestaña::eliminarCadaTiempo(int minutos) {
-	time_t tiempoActual = std::time(nullptr);
-	NodoPag* aux = tail;
+	time_t tiempoActual = std::time(nullptr);/// Obtiene el tiempo actual.
+	NodoPag* aux = tail; // Comienza desde el nodo tail.
 
 	while (aux != nullptr) {
+		// Calcula el tiempo transcurrido desde que se accedió a la página.
 		double segundosTranscurridos = difftime(tiempoActual, aux->paginaWeb->getTiempo());
+		// Si el tiempo transcurrido es mayor al límite, se elimina el nodo correspondiente.
 		if (segundosTranscurridos > minutos * 60) {
 			NodoPag* nodoAEliminar = aux;
-			aux = aux->siguiente;
+			aux = aux->siguiente;// Avanza al siguiente nodo.
+			// Actualiza las referencias entre nodos o la lista si es necesario.
 
 			if (nodoAEliminar == head && nodoAEliminar == tail) { head = tail = nullptr; }
 			else if (nodoAEliminar == tail) {
@@ -265,35 +277,36 @@ void Pestaña::eliminarCadaTiempo(int minutos) {
 				nextNode->anterior = prevNode;
 			}
 
-			delete nodoAEliminar;
+			delete nodoAEliminar;// Libera la memoria del nodo eliminado.
 		}
 		else {
-			aux = aux->siguiente;
+			aux = aux->siguiente;// Avanza al siguiente nodo si no se eliminó.
 		}
 	}
 }
 
 <<<<<<< HEAD
+	// Guarda información básica de la pestaña (nombre y modo incógnito) en un archivo binario.
 void Pestaña::guardarPestaña(ofstream& file) {
 	string name = getNombre();
 	bool incognito = getIcognito();
 	size_t longitudname = name.size();
-	file.write(reinterpret_cast<const char*>(&longitudname), sizeof(longitudname));
+	file.write(reinterpret_cast<const char*>(&longitudname), sizeof(longitudname)); // Escribe la longitud del nombre.
 	file.write(name.c_str(), longitudname);
-	file.write(reinterpret_cast<char*>(&incognito), sizeof(incognito));
+	file.write(reinterpret_cast<char*>(&incognito), sizeof(incognito));// Escribe el estado del modo incógnito.
 }
-
+// Lee la información de una pestaña desde un archivo binario y la reconstruye.
 Pestaña* Pestaña::leerPestaña(ifstream& file) {
 	string name;
 	bool incognito;
 	size_t Lname = 0;
-	file.read(reinterpret_cast<char*>(&Lname), sizeof(Lname));
+	file.read(reinterpret_cast<char*>(&Lname), sizeof(Lname));// Lee la longitud del nombre.
 	name.resize(Lname);
 	file.read(&name[0], Lname);
-	file.read(reinterpret_cast<char*>(&incognito), sizeof(incognito));
+	file.read(reinterpret_cast<char*>(&incognito), sizeof(incognito));// Lee el estado del modo incógnito.
 	Pestaña* pestaña = new Pestaña(name);
 	if (incognito) { pestaña->activarModoIncognito(); }
-	return pestaña;
+	return pestaña;// Retorna la pestaña leída desde el archivo.
 }
 =======
 
@@ -346,6 +359,7 @@ void Pestaña::guardarHistorialBinario(ofstream& file) {
 	file.close();
 }
 <<<<<<< HEAD
+	// Lee el historial de la pestaña (las páginas web) desde un archivo binario
 
 void Pestaña::leerHistorialBinario(ifstream& file) {
 	if (!file.is_open()) {
@@ -368,9 +382,10 @@ void Pestaña::guardarArchivoCSV(const string& archivoCSV)
 
 	while (file.tellg() < fileSize) {
 		PaginaWeb* pagLeida = new PaginaWeb();
-		PaginaWeb* pag = pagLeida->leerPaginaWeb(file);
+		PaginaWeb* pag = pagLeida->leerPaginaWeb(file);// Lee cada página web.
 
-		if (pag != nullptr) { insertarPrimero(*pag); }
+
+		if (pag != nullptr) { insertarPrimero(*pag); }// Inserta la página en la lista.
 		else {
 			cout << "Error al leer una página web del archivo." << endl;
 			break;
@@ -379,7 +394,7 @@ void Pestaña::guardarArchivoCSV(const string& archivoCSV)
 	file.close();
 	cout << "Lectura del historial completada." << endl;
 }
-
+// Función para explorar el historial de navegación en modo incógnito.
 
 void Pestaña::explorarHistorialIncognito() {
 	bool bandera = true;
@@ -391,7 +406,7 @@ void Pestaña::explorarHistorialIncognito() {
 	}
 
 	cout << "Modo incognito activado. No se guardara historial ni marcadores." << endl;
-
+	// Navegación del historial usando las teclas de dirección.
 	while (bandera) {
 		if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 			if (nodoActual->anterior == nullptr) { cout << "No se puede retroceder más." << endl; }
@@ -399,7 +414,7 @@ void Pestaña::explorarHistorialIncognito() {
 				nodoActual->paginaWeb->MostrarPaginaWeb();
 				nodoActual = nodoActual->anterior;
 			}
-			Sleep(300);
+			Sleep(300);// Retardo para evitar múltiples capturas de la tecla.
 		}
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
 			if (nodoActual->siguiente == nullptr) { cout << "No se puede avanzar más." << endl; }
@@ -409,6 +424,6 @@ void Pestaña::explorarHistorialIncognito() {
 			}
 			Sleep(300);
 		}
-		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) { bandera = false; }
+		if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) { bandera = false; } // Finaliza la exploración del historial al presionar Escape.
 	}
 }
