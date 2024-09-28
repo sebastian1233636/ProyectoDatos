@@ -17,7 +17,6 @@ PaginaWeb::PaginaWeb() {
 	mostrada = false;
 	tiempoIngreso = time(nullptr);
 }
-<<<<<<< HEAD
 
 string PaginaWeb::getURL() { return URL; }
 
@@ -26,18 +25,9 @@ string PaginaWeb::getTitulo() { return Titulo; }
 string PaginaWeb::getMarcadorPersonal() { return MarcadorPersonal; }
 
 void PaginaWeb::setUrl(string u) { URL = u; }
-=======
-// Retorna la URL de la página web.
-string PaginaWeb::getURL(){return URL;}
-// Retorna el título de la página web.
-string PaginaWeb::getTitulo(){return Titulo;}
-// Retorna el estado del marcador (true si la página está marcada como favorita).
->>>>>>> documentacion interna
 
 bool PaginaWeb::getMarcador() { return marcador; }
-// Retorna si la página ya ha sido mostrada.
 
-<<<<<<< HEAD
 bool PaginaWeb::yaMostrada() { return mostrada; }
 
 void PaginaWeb::setTitulo(string tit) {	Titulo = tit;}
@@ -45,13 +35,6 @@ void PaginaWeb::setTitulo(string tit) {	Titulo = tit;}
 void PaginaWeb::setMarcadorPersonal(string marcador) { MarcadorPersonal = marcador; }
 
 void PaginaWeb::marcarComoMostrada() { mostrada = true; }
-=======
-bool PaginaWeb::yaMostrada(){return mostrada;}
-// Marca la página como "mostrada" para indicar que ya ha sido visualizada.
-
-void PaginaWeb::marcarComoMostrada() {mostrada = true;}
-// Si la página está marcada como favorita, muestra "Sitio Favorito".
->>>>>>> documentacion interna
 
 void PaginaWeb::MostrarPaginaWeb() {
 	cout << "----------------------------------------\n";
@@ -62,24 +45,12 @@ void PaginaWeb::MostrarPaginaWeb() {
 	cout << "| " << mostrarTiempo() << "\n";
 	cout << "----------------------------------------\n";
 }
-// Marca la página como favorita estableciendo el marcador en verdadero.
+
 void PaginaWeb::PonerMarcador() { marcador = true; }
 
-// Quita el marcador de la página, estableciendo el marcador en falso
-
 void PaginaWeb::QuitarMarcador() { marcador = false; }
-// Retorna el tiempo de ingreso de la página web en formato `time_t`.
 
-<<<<<<< HEAD
 time_t PaginaWeb::getTiempo() { return tiempoIngreso; }
-=======
-time_t PaginaWeb::getTiempo()
-{
-	return tiempoIngreso;
-}
-// Devuelve una cadena que muestra el tiempo transcurrido desde que se registró el ingreso a la página.
-// El tiempo se muestra en minutos.
->>>>>>> documentacion interna
 
 string PaginaWeb::mostrarTiempo() {
 	time_t now = std::time(nullptr);
@@ -90,7 +61,6 @@ string PaginaWeb::mostrarTiempo() {
 	else if (minutos == 1) { return std::to_string(minutos) + " minuto pasado desde ingreso"; }
 	else { return std::to_string(minutos) + " minutos pasados desde ingreso"; }
 }
-// Establece un nuevo valor para el tiempo de ingreso de la página.
 
 void PaginaWeb::setTiempo(time_t t) { tiempoIngreso = t; }
 

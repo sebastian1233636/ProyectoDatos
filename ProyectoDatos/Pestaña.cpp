@@ -20,13 +20,12 @@ Pestaña::~Pestaña() {
 	NodoPag* aux = tail;
 	while (aux != nullptr) {
 		tail = tail->siguiente;
-		delete aux;// Libera la memoria del nodo actual.
+		delete aux;
 		aux = tail;
 	}
 	tail = nullptr;
 	head = nullptr;
 }
-<<<<<<< HEAD
 
 bool Pestaña::getIcognito() { return modoIcognito; }
 
@@ -42,39 +41,21 @@ void Pestaña::insertarPrimero(PaginaWeb& pag) {
 	NodoPag* nuevo = new NodoPag();
 	nuevo->paginaWeb = &pag;
 	if (tail == nullptr) {
-=======
-// Método que devuelve el estado del modo incógnito (false en este caso).
-bool Pestaña::getIcognito()
-{
-	return false;
-}
-// Retorna el puntero al nodo tail (último nodo de la lista).
-NodoPag* Pestaña::getTail() {return tail;}
-// Retorna el puntero al nodo head (primer nodo de la lista).
-NodoPag* Pestaña::getHead() {return head;}
-// Inserta una nueva página web al principio de la lista.
-void Pestaña::insertarPrimero(PaginaWeb* pag){
-	NodoPag* nuevo = new NodoPag(); // Crea un nuevo nodo.
-	nuevo->paginaWeb = pag; // Asigna la página web al nodo.
-	if (tail == nullptr) { // Si la lista está vacía, inicializa head y tail.
->>>>>>> documentacion interna
 		tail = head = nuevo;
-		nuevo->siguiente;// Conecta el nuevo nodo al principio de la lista.
+		nuevo->siguiente;
 		nuevo->anterior;
 	}
 	else {
 		nuevo->siguiente = tail;
-		tail->anterior = nuevo; 
-		tail = nuevo; // Actualiza el tail al nuevo nodo.
+		tail->anterior = nuevo;
+		tail = nuevo;
 	}
 }
-// Método para explorar el historial. Navega hacia adelante o hacia atrás usando teclas
 
 void Pestaña::explorarHistorial() {
 	bool bandera = true;
 	string marcador;
 	NodoPag* nodoActual = tail;
-	// Verifica si el historial está vacío.
 
 	if (nodoActual == nullptr) { 
 		cout << "El historial de paginas web esta vacio." << endl;
@@ -86,7 +67,6 @@ void Pestaña::explorarHistorial() {
 				cout << "No guardar historial ni marcadores" << endl;
 			}
 			else {
-				// Si se presiona la tecla izquierda, retrocede en el historial.
 				if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 					if (nodoActual->anterior == nullptr) {
 						nodoActual->paginaWeb->MostrarPaginaWeb();
@@ -99,7 +79,6 @@ void Pestaña::explorarHistorial() {
 
 					}
 					Sleep(300);
-					// Si se presiona la tecla derecha, avanza en el historial.
 				}
 				if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
 					if (nodoActual->siguiente == nullptr) {
@@ -113,7 +92,6 @@ void Pestaña::explorarHistorial() {
 					}
 					Sleep(300);
 				}
-				// Si se presiona la tecla F, marca la página actual como favorita.
 				if (GetAsyncKeyState('F') & 0x8000) {
 					nodoActual->paginaWeb->PonerMarcador();
 					cout << "Ingrese el nombre del marcador (dejar en blanco para no asignar nombre): ";
@@ -125,49 +103,29 @@ void Pestaña::explorarHistorial() {
 					cout << "Pagina marcada como favorita" << endl;
 					Sleep(300);
 				}
-				// Si se presiona la tecla Escape, sale del ciclo de exploración.
 				if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) { bandera = false; }
 			}
 		}
 	}
 }
-<<<<<<< HEAD
 
 void Pestaña::buscarFavorito() {
-=======
-// Busca y muestra las páginas que están marcadas como favoritas.
-void Pestaña::buscarFavorito(){
->>>>>>> documentacion interna
 	NodoPag* nodoActual = tail;
 	while (nodoActual != nullptr) {
-		// Verifica si la página está marcada como favorita y aún no ha sido mostrada.
 		if (nodoActual->paginaWeb->getMarcador() == true && nodoActual->paginaWeb->yaMostrada() == false) {
 			nodoActual->paginaWeb->marcarComoMostrada();
 			nodoActual->paginaWeb->MostrarPaginaWeb();
 			nodoActual = nodoActual->siguiente;
 		}
-		else(nodoActual = nodoActual->siguiente);// Avanza al siguiente nodo.
+		else(nodoActual = nodoActual->siguiente);
 	}
 }
-// Activa el modo incógnito.
 
-<<<<<<< HEAD
 void Pestaña::activarModoIncognito() { modoIcognito = true; }
-=======
-void Pestaña::activarModoIcognito(){modoIcognito = true;}
-// Desactiva el modo incógnito.
->>>>>>> documentacion interna
 
 void Pestaña::desactivarModoIncognito() { modoIcognito = false; }
 
-<<<<<<< HEAD
 string Pestaña::mostrarPestaña() {
-=======
-// Devuelve una cadena que representa el nombre de la pestaña.
-
-string Pestaña::mostrarPestaña()
-{
->>>>>>> documentacion interna
 	stringstream s;
 	s << "|Si desea moverse entre pestanas, presione la opción 7 y las flechas de arriba y abajo." << endl;
 	s << "|Si desea marcar una pagina web como favorita, presione la tecla F." << endl;
@@ -273,7 +231,6 @@ void Pestaña::eliminarCadaTiempo(int minutos) {
 	}
 }
 
-<<<<<<< HEAD
 void Pestaña::guardarPestaña(ofstream& file) {
 	string name = getNombre();
 	bool incognito = getIcognito();
@@ -295,42 +252,6 @@ Pestaña* Pestaña::leerPestaña(ifstream& file) {
 	if (incognito) { pestaña->activarModoIncognito(); }
 	return pestaña;
 }
-=======
-
-}
-// Carga páginas web desde un archivo CSV binario.
-void Pestaña::cargarArchivoCSV(const string& archivoCVS)
-{
-	ifstream archivo(archivoCVS, ios::binary); // Abre el archivo en modo binario.
-	if (!archivo) {
-		cout << "No se pudo cargar el archivo binario" << endl;
-
-	}
-	int canPestanas = 0;
-	archivo.read(reinterpret_cast<char*>(&canPestanas), sizeof(canPestanas));
-	// Recorre cada pestaña guardada en el archivo.
-	for (int i = 0; i < canPestanas; i++) {
-		bool incogito;
-		archivo.read(reinterpret_cast<char*>(&incogito), sizeof(canPestanas));
-		Pestaña nuevaPestana("nombre");// Crea una nueva pestaña.
-		int canSitio = 0;
-		archivo.read(reinterpret_cast<char*>(&canSitio), sizeof(canSitio));
-		// Lee las páginas dentro de la pestaña.
-		for (int j = 0; j < canSitio; j++) {
-			string titulo;
-			string url;
-			bool marcadores;
-			size_t LTitulo = 0;
-			archivo.read(reinterpret_cast<char*>(&LTitulo), sizeof(LTitulo));
-			titulo.resize(LTitulo);
-			archivo.read(&titulo[0], LTitulo);
-			size_t LUrl = 0;
-			archivo.read(reinterpret_cast<char*>(&LUrl), sizeof(LUrl));
-			archivo.read(&url[0], LUrl);
-			archivo.read(reinterpret_cast<char*>(&marcadores), sizeof(marcadores));
-			PaginaWeb* paginaWeb = new PaginaWeb(titulo, url);
-			nuevaPestana.explorarHistorial();
->>>>>>> documentacion interna
 
 void Pestaña::guardarHistorialBinario(ofstream& file) {
 	NodoPag* actual = tail;
@@ -345,21 +266,11 @@ void Pestaña::guardarHistorialBinario(ofstream& file) {
 	}
 	file.close();
 }
-<<<<<<< HEAD
 
 void Pestaña::leerHistorialBinario(ifstream& file) {
 	if (!file.is_open()) {
 		cout << "El archivo no se pudo abrir" << endl;
 		return;
-=======
-// Guarda las pestañas y páginas en un archivo CSV binario.
-void Pestaña::guardarArchivoCSV(const string& archivoCSV)
-{
-
-	ofstream archivo(archivoCSV, ios::binary);// Abre el archivo en modo binario para escritura.
-	if (!archivo) {
-		cout << "No se pudo abrir el archivo CSV Bianrio" << endl;
->>>>>>> documentacion interna
 	}
 
 	file.seekg(0, ios::end);

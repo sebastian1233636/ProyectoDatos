@@ -1,25 +1,12 @@
 #include "AdminPestañas.h"
-<<<<<<< HEAD
 
 AdminPestañas::AdminPestañas() {
-=======
-// Constructor de la clase AdminPestañas.
-// Inicializa los apuntadores 'tail' y 'head' en nullptr y el tamaño 'tam' en 0, indicando que la lista está vacía.
-AdminPestañas::AdminPestañas(){
->>>>>>> documentacion interna
 	tail = nullptr;
 	head = nullptr;
 	tam = 0;
 }
-<<<<<<< HEAD
 
 AdminPestañas::~AdminPestañas() {
-=======
-// Destructor de la clase AdminPestañas.
-// Libera la memoria de todos los nodos en la lista, eliminando todas las pestañas.
-// Recorre desde 'tail' hacia adelante, eliminando los nodos uno por uno.
-AdminPestañas::~AdminPestañas(){
->>>>>>> documentacion interna
 	NodoPest* aux = tail;
 	while (aux != nullptr) {
 		tail = tail->siguiente;
@@ -29,41 +16,26 @@ AdminPestañas::~AdminPestañas(){
 	tail = nullptr;
 	head = nullptr;
 }
-<<<<<<< HEAD
 
 NodoPest* AdminPestañas::getTail() { return tail; }
 
 NodoPest* AdminPestañas::getHead() { return head; }
 
 void AdminPestañas::InsertarPrimero(Pestaña* pes) {
-=======
-// Retorna el apuntador al nodo 'tail', que representa la pestaña más reciente.
-NodoPest* AdminPestañas::getTail() {return tail;}
-// Retorna el apuntador al nodo 'head', que representa la pestaña más antigua.
-NodoPest* AdminPestañas::getHead() {return head;}
-// Inserta una nueva pestaña al principio de la lista.
-// Si la lista está vacía, 'tail' y 'head' apuntan al mismo nodo nuevo.
-// Si no está vacía, el nuevo nodo se coloca antes del nodo actual de 'tail' y se actualiza el puntero.
-void AdminPestañas::InsertarPrimero(Pestaña* pes){
->>>>>>> documentacion interna
 	NodoPest* nuevo = new NodoPest();
 	nuevo->pestaña = pes;
 	if (tail == nullptr) {
-		// Si la lista está vacía
 		tail = head = nuevo;
 		nuevo->siguiente;
 		nuevo->anterior;
 	}
 	else {
-		// Inserta el nodo antes de 'tail'
 		nuevo->siguiente = tail;
 		tail->anterior = nuevo;
 		tail = nuevo;
 	}
 	tam++;
 }
-// Recorre la lista de pestañas desde 'tail' y busca aquellas que están marcadas como favoritas.
-// Llama a la función buscarFavorito() de cada pestaña.
 
 void AdminPestañas::BuscarFavorito() {
 	NodoPest* nodoActual = tail;
@@ -72,31 +44,20 @@ void AdminPestañas::BuscarFavorito() {
 		nodoActual = nodoActual->siguiente;
 	}
 }
-// Explora el historial de pestañas permitiendo al usuario navegar por las pestañas con las teclas de dirección.
-// Se detiene cuando se llega a los extremos de la lista o cuando el usuario presiona 'ESC' para salir.
 
 void AdminPestañas::ExplorarHistorialPestañas() {
 	bool bandera = true;
 	NodoPest* nodoActual = tail;
-	// Si no hay historial, mostrar mensaje y terminar
 
 	if (nodoActual == nullptr) {
 		cout << "No hay historial todavia" << endl;
 		return;
 	}
-	// Mientras el usuario no presione 'ESC', seguir explorando
+
 	while (bandera) {
-<<<<<<< HEAD
 		system("cls");
 		menuAdminPestañas(nodoActual);
-=======
-		system("cls");// Limpia la pantalla
-		menuAdminPestañas(nodoActual);// Muestra el menú de administración de pestañas
-
-		// Esperar a que el usuario presione una tecla para navegar o salir
->>>>>>> documentacion interna
 		while (true) {
-			// Navegar hacia la pestaña anterior con tecla abajo
 			if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
 				if (nodoActual->anterior == nullptr) {
 					cout << "NO SE PUEDE RETROCEDER MAS" << endl;
@@ -105,10 +66,9 @@ void AdminPestañas::ExplorarHistorialPestañas() {
 				else {
 					nodoActual = nodoActual->anterior;
 				}
-				Sleep(200); // Pausa para evitar múltiples lecturas
+				Sleep(200);
 				break;
 			}
-			// Navegar hacia la pestaña siguiente con tecla arriba
 
 			if (GetAsyncKeyState(VK_UP) & 0x8000) {
 				if (nodoActual->siguiente == nullptr) {
@@ -121,7 +81,6 @@ void AdminPestañas::ExplorarHistorialPestañas() {
 				Sleep(200);
 				break;
 			}
-			// Salir del historial con tecla ESC
 
 			if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
 				bandera = false;
@@ -133,7 +92,6 @@ void AdminPestañas::ExplorarHistorialPestañas() {
 	}
 }
 
-<<<<<<< HEAD
 int AdminPestañas::contadorPestañas() { return tam; }
 
 void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
@@ -150,25 +108,6 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 	bool control4 = true;
 	bool control5 = true;
 	bool control6 = true;
-=======
-// Devuelve el número total de pestañas en la lista.
-
-int AdminPestañas::contadorPestañas()
-{
-
-	return tam;
-}
-// Muestra el menú de administración de pestañas para la pestaña actual.
-// Permite al usuario realizar varias operaciones como ir al sitio web, crear una nueva pestaña, colocar un marcador, activar modo incógnito, etc.
-
-void AdminPestañas::menuAdminPestañas(NodoPest* actual)
-{
-	int op = 0; // Opción seleccionada por el usuario
-	bool incognito;// Indica si el modo incógnito está activado
-	bool control = true; // Control para seguir mostrando el menú
-	bool control6 = true;// Control para la opción 6 (configuración)
-	// Control para la opción 6 (configuración)
->>>>>>> documentacion interna
 	while (control != false) {
 		system("cls");
 		cout << "----------------" << actual->pestaña->getNombre() <<  "----------------" << endl;
@@ -184,11 +123,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 		cout << "---------------------------------------" << endl;
 		cout << "Digite una opcion:";
 		cin >> op;
-<<<<<<< HEAD
 		cout << endl;
-=======
-		// Switch para procesar la opción seleccionada
->>>>>>> documentacion interna
 		switch (op) {
 
 		case 1: {
@@ -203,7 +138,6 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 		}
 
 		case 2: {
-<<<<<<< HEAD
 			string url;
 			cout << "Digite el URL de la pagina:";
 			cin >> url;
@@ -220,34 +154,9 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 			InsertarPrimero(pes);
 			cout << "Se ha creado una nueva pestaña. Siga las instrucciones anteriores para navegar a ella." << endl;
 			system("pause");
-=======
-			// Crear una nueva pestaña
-			string nombrePestaña = "Pestaña " + to_string(tam + 1);
-			Pestaña* pes = new Pestaña(nombrePestaña);
-			InsertarPrimero(pes);
-			break;
-		}
-
-		
-		case 3:{
-			// Colocar un marcador, si no está en modo incógnito
-			if (!incognito) {
-				string marcador;
-				cout << "Ingrese el nombre del marcador: ";
-				cin >> marcador;
-				NodoPag().paginaWeb->getMarcador();
-				cout << "Marcador agregado: " << marcador << endl;
-			}
-			else {
-				cout << "La opción de marcadores no está disponible en modo incógnito." << endl;
-			}
-
-
->>>>>>> documentacion interna
 			break;
 		}
 		case 4: {
-<<<<<<< HEAD
 			control3 = true;
 			while (control3 != false) {
 				system("cls");
@@ -275,9 +184,6 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual)
 					control3 = false;
 					break;
 				}
-=======
-			// Activar/desactivar modo incógnito
->>>>>>> documentacion interna
 
 				default:
 					cout << "Opcion no valida" << endl;
