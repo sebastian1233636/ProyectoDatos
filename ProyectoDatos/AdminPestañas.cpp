@@ -26,11 +26,11 @@ void AdminPestañas::iniciarNavegador()
 {
 	//Metodo que se ejecuta cuando se inicia el programa
 	cout << "---------------Bienvenido al navegador---------------" << endl;
-	system("pause");
 	if (tail == nullptr) {//La sesión inicia en blanco, se crea una pagina web nueva para comenzar el uso del programa 
 		cout << "No hay pestañas todavia, agregando una" << endl;
 		string nombrePestaña = "Pestana " + to_string(tam + 1);
 		Pestaña* pes = new Pestaña(nombrePestaña);
+		system("pause");
 		InsertarPrimero(pes);
 		ExplorarHistorialPestañas();
 	}
@@ -133,6 +133,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 	int op3 = 0;
 	int op4 = 0;
 	int op6 = 0;
+	int opAr = 0;
 	string nom = "";
 	string palabraclave = "";
 	bool incognito = false;
@@ -141,10 +142,17 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 	bool control4 = true;
 	bool control5 = true;
 	bool control6 = true;
+	bool controlAr = true;
 	while (control != false) {
 		system("cls");
 		//Menu principal del programa
-		cout << "----------------" << actual->pestaña->getNombre() << "----------------" << endl;
+		if (actual->pestaña->getIcognito() == false) {
+			cout << "----------------" << actual->pestaña->getNombre() << "----------------" << endl;
+		}
+		else {
+			cout << actual->pestaña->mostrarPestañaIncognito() << endl;
+		}
+		
 		cout << "---------------------------------------" << endl;
 		cout << "1.Ver historial" << endl;
 		cout << "2.Ir al sitio web" << endl;
@@ -166,7 +174,10 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 				cout << actual->pestaña->mostrarPestaña() << endl;
 				actual->pestaña->explorarHistorial();
 			}
-			else { cout << actual->pestaña->mostrarPestañaIncognito() << endl; }
+			else { 
+				cout << "No hay historial en este modo" << endl;
+				system("pause");
+			}
 			break;
 			
 		}
@@ -188,7 +199,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			string nombrePestaña = "Pestana " + to_string(tam + 1);//se crea un nombre junto al tamaño del container, ejemplo si no hay elementos la primera pestaña se llamará "Pestaña 1"
 			Pestaña* pes = new Pestaña(nombrePestaña);
 			InsertarPrimero(pes);
-			cout << "Se ha creado una nueva pestaña. Siga las instrucciones anteriores para navegar a ella." << endl;
+			cout << "Se ha creado una nueva pestaña. Presione 8 para salir del menu y luego flecha de arriba o abajo para navegar." << endl;
 			system("pause");
 			break;
 		}
@@ -355,10 +366,40 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 		}
 		case 7: {
 			//archivos
-			guardarPestañaBinario();
-			guardarHistorialPestaña();
-			cout << "Historial guardado" << endl;
-			system("pause");
+			controlAr = true;
+			while (controlAr != false) {
+				system("cls");
+				cout << "------------M E N U - A R C H I V O S---------------" << endl;
+				cout << "1.Guardar sesion" << endl;
+				cout << "2.Cargar sesión" << endl;
+				cout << "3.Regresar" << endl;
+				cin >> opAr;
+				switch (opAr) {
+
+
+					case 1: {
+						guardarPestañaBinario();
+						guardarHistorialPestaña();
+						cout << "Historial guardado" << endl;
+						system("pause");
+						break;
+					}
+
+					case 2: {
+						leerPestañaBinario();
+						leerHistorialPestaña();
+						cout << "Sesion cargada" << endl;
+						system("pause");
+						break;
+					}
+
+					case 3: {
+						controlAr = false;
+						break;
+					}
+				}
+			}
+
 			break;
 		}
 		case 8:
