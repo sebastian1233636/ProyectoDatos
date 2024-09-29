@@ -205,13 +205,13 @@ void Pestaña::buscarPorPalabraClave(string palabraclave) {
 
 		// Verifica si la URL o el título NO contienen la palabra clave
 		if (url.find(palabraclave) == string::npos && titulo.find(palabraclave) == string::npos) {
-			actual->paginaWeb->desactivarFiltro();
+			actual->paginaWeb->desactivarFiltro();//Desactuva el filtro de las que no cumplen el requisito
 		}
 		else {
-			actual->paginaWeb->activarFiltro();
+			actual->paginaWeb->activarFiltro();//activa el filtro de quienes si cumplen
 			bandera = true;
 		}
-		actual = actual->siguiente;
+		actual = actual->siguiente;//continua la busqueda
 	}
 
 	system("pause");
@@ -233,12 +233,12 @@ void Pestaña::timeFilter(int minutos) {
 		PaginaWeb* pagina = actual->paginaWeb; // Obtiene la página web del nodo actual
 		double segundosTranscurridos = difftime(tiempoActual, pagina->getTiempo()); // Calcula el tiempo transcurrido desde que se guardó la página
 
-		// Muestra la página si fue guardada dentro del límite de tiempo especificado por el usuario
+		// Muestra la página si no fue guardada dentro del límite de tiempo especificado por el usuario
 		if (segundosTranscurridos > minutos * 60) {
-			pagina->desactivarFiltroTiempo();//Muestra la pagina que cumple los requisitos 
+			pagina->desactivarFiltroTiempo();//Desactiva el filtro de quines incumplen el requisito
 		}
 		else {
-			pagina->activarFiltroTiempo();
+			pagina->activarFiltroTiempo();// se activan los que si cumplen para poder mostrarse
 		}
 		actual = actual->siguiente; // Continua la busqueda
 	}
