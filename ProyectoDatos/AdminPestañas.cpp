@@ -1,4 +1,6 @@
 #include "AdminPestañas.h"
+#include<limits>
+#include<ios>
 
 AdminPestañas::AdminPestañas() {
 	tail = nullptr;
@@ -128,12 +130,6 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 	}
 
 	//Variables de control para los diferentes bucles y menus
-	int op = 0;
-	int op2 = 0;
-	int op3 = 0;
-	int op4 = 0;
-	int op6 = 0;
-	int opAr = 0;
 	string nom = "";
 	string palabraclave = "";
 	bool incognito = false;
@@ -152,7 +148,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 		else {
 			cout << actual->pestaña->mostrarPestañaIncognito() << endl;
 		}
-		
+
 		cout << "---------------------------------------" << endl;
 		cout << "1.Ver historial" << endl;
 		cout << "2.Ir al sitio web" << endl;
@@ -163,8 +159,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 		cout << "7.Importacion y exportacion" << endl;
 		cout << "8.Regresar" << endl;
 		cout << "---------------------------------------" << endl;
-		cout << "Digite una opcion:";
-		cin >> op;
+		int op = obtenerOpcion();
 		cout << endl;
 		switch (op) {
 
@@ -183,14 +178,17 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 		}
 
 		case 2: {
-			//Se le pide al usuario que ingrese el URL para buscarlo en el archivo CSV
+			 //Se le pide al usuario que ingrese el URL para buscarlo en el archivo CSV
 			string url;
 			cout << "Digite el URL de la pagina:";
 			cin >> url;
 			cout << endl;
 			PaginaWeb* PagNueva = buscaPaginaWeb(url);
 			if (PagNueva == nullptr) { cout << "ERROR 404 NOT FOUND" << endl; } //Devuelve el respectivo error si no se encuentra la pagina
-			else { actual->pestaña->insertarPrimero(*PagNueva); }// se inserta si se encuentra
+			else {
+				actual->pestaña->insertarPrimero(*PagNueva);
+				actual->pestaña->getTail()->paginaWeb->MostrarPaginaWeb();
+			}// se inserta si se encuentra
 			system("pause");
 			break;
 		}
@@ -212,7 +210,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 				cout << "2.Desactivar modo incognito" << endl;
 				cout << "3.Regresar" << endl;
 				cout << "Digite la opcion" << endl;
-				cin >> op3;
+				int op3 = obtenerOpcion();
 				switch (op3) {
 				case 1:
 					//Activa el modo incognito de la pestaña
@@ -255,7 +253,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 				cout << "4.Desactivar filtro" << endl;
 				cout << "5.regresar" << endl;
 				cout << "---------------------------------------" << endl;
-				cin >> op4;
+				int op4 = obtenerOpcion();
 				switch (op4) {
 
 				case 1: {
@@ -323,7 +321,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 				cout << "3.Desactivar Filtro" << endl;
 				cout << "4.Regresar" << endl;
 				cout << "---------------------------------------" << endl;
-				cin >> op2;
+				int op2 = obtenerOpcion();
 				switch (op2) {
 				case 1: {
 					int min = 0;
@@ -373,7 +371,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 				cout << "1.Guardar sesion" << endl;
 				cout << "2.Cargar sesión" << endl;
 				cout << "3.Regresar" << endl;
-				cin >> opAr;
+				int opAr = obtenerOpcion();
 				switch (opAr) {
 
 
@@ -451,6 +449,23 @@ PaginaWeb* AdminPestañas::buscaPaginaWeb(string urlBuscado) {
 
 	// Retornar nullptr si no se encontró la página con la URL buscada
 	return nullptr;
+}
+
+int AdminPestañas::obtenerOpcion()
+{
+	int op;
+	cout << "Ingrese una opcion: ";
+	cin >> op;
+
+	// Si la entrada no es un número entero
+	while (cin.fail()) {
+		cin.clear();  // Limpia el estado de error de cin
+		cin.ignore(1000, '\n');  // Ignora hasta 1000 caracteres o hasta un salto de línea
+		cout << "Entrada invalida. Por favor, ingrese un numero: ";
+		cin >> op;
+	}
+
+	return op;  // Retorna la opción válida
 }
 
 void AdminPestañas::guardarPestañaBinario() {

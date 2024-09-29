@@ -2,7 +2,6 @@
 #define ADMINPESTAÑAS_H
 
 #include"Pestaña.h"
-
 struct NodoPest {
 	Pestaña* pestaña;
 	NodoPest* siguiente;
@@ -29,6 +28,7 @@ public:
 	int contadorPestañas();
 	void menuAdminPestañas(NodoPest* actual);
 	PaginaWeb* buscaPaginaWeb(string);
+	int obtenerOpcion();
 
 	//archivos
 	void guardarPestañaBinario();
