@@ -184,12 +184,21 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			cin >> url;
 			cout << endl;
 			PaginaWeb* PagNueva = buscaPaginaWeb(url);
-			if (PagNueva == nullptr) { cout << "ERROR 404 NOT FOUND" << endl; } //Devuelve el respectivo error si no se encuentra la pagina
+			if (actual->pestaña->getIcognito() == false) {
+				if (PagNueva == nullptr) { cout << "ERROR 404 NOT FOUND" << endl; } //Devuelve el respectivo error si no se encuentra la pagina
+				else {
+					actual->pestaña->insertarPrimero(*PagNueva);
+					actual->pestaña->getTail()->paginaWeb->MostrarPaginaWeb();
+				}// se inserta si se encuentra
+			}
 			else {
-				actual->pestaña->insertarPrimero(*PagNueva);
-				actual->pestaña->getTail()->paginaWeb->MostrarPaginaWeb();
-			}// se inserta si se encuentra
+				if (PagNueva == nullptr) { cout << "ERROR 404 NOT FOUND" << endl; } //Devuelve el respectivo error si no se encuentra la pagina
+				else {
+					PagNueva->MostrarPaginaWeb();
+				}
+			}
 			system("pause");
+
 			break;
 		}
 		case 3: {
