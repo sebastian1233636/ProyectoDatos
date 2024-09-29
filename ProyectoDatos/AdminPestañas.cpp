@@ -241,7 +241,8 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 				cout << "1.Mostrar solo favoritos" << endl;
 				cout << "2.Busqueda por palabra clave" << endl;
 				cout << "3.Buscar una pagina especifica" << endl;
-				cout << "4.regresar" << endl;
+				cout << "4.Desactivar filtro" << endl;
+				cout << "5.regresar" << endl;
 				cout << "---------------------------------------" << endl;
 				cin >> op4;
 				switch (op4) {
@@ -255,6 +256,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 
 				case 2: {
 					cout << "Digite la palabra clave para filtrar paginas" << endl;
+					cout << "Se enseñaran solo las paginas que tenga la palabra que usted digite ya sea en el titulo o en la URL" << endl;
 					cin >> palabraclave;
 					system("cls");
 					actual->pestaña->buscarPorPalabraClave(palabraclave);
@@ -278,6 +280,13 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 					break;
 				}
 				case 4: {
+					actual->pestaña->desactivarFiltros();
+					cout << "Filtro por palabra clave desactivado" << endl;
+					system("pause");
+					break;
+				}
+
+				case 5: {
 					control4 = false;
 					break;
 				}
@@ -300,15 +309,18 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 				cout << "---------------------------------------" << endl;
 				cout << "1.Limitar cantidad de entradas" << endl;
 				cout << "2.Eliminar historial cada cierto tiempo" << endl;
-				cout << "3.Regresar" << endl;
+				cout << "3.Desactivar Filtro" << endl;
+				cout << "4.Regresar" << endl;
 				cout << "---------------------------------------" << endl;
 				cin >> op2;
 				switch (op2) {
 				case 1: {
 					int min = 0;
+					cout << "Esta funcion mostrara las entradas las cuales hayan sido ingresadas antes del minuto especificado" << endl;
 					cout << "Digite el numero de minutos" << endl;
 					cin >> min;
 					actual->pestaña->timeFilter(min);
+					cout << "Filtro aplicado" << endl;
 					system("pause");
 					break;
 				}
@@ -324,6 +336,13 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 				}
 
 				case 3: {
+					actual->pestaña->desactivarFiltroTiempo();
+					cout << "Filtro por tiempo desactivado" << endl;
+					system("pause");
+					break;
+				}
+
+				case 4: {
 					control5 = false;
 					break;
 				}

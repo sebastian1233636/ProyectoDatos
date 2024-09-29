@@ -7,7 +7,8 @@ PaginaWeb::PaginaWeb(string U, string tit) {
 	MarcadorPersonal = "";  
 	marcador = false;      
 	mostrada = false;      
-	mostrarFiltro = false;
+	mostrarFiltro = true;
+	filtroTiempo = true;
 	tiempoIngreso = time(nullptr); 
 }
 
@@ -29,6 +30,10 @@ string PaginaWeb::getMarcadorPersonal() { return MarcadorPersonal; }
 void PaginaWeb::setUrl(string u) { URL = u; }
 bool PaginaWeb::getMarcador() { return marcador; }
 bool PaginaWeb::getMostrarFiltro() { return mostrarFiltro; }
+bool PaginaWeb::getFiltroTiempo()
+{
+	return filtroTiempo;
+}
 bool PaginaWeb::yaMostrada() { return mostrada; }
 void PaginaWeb::setTitulo(string tit) { Titulo = tit; }
 void PaginaWeb::setMarcadorPersonal(string marcador) { MarcadorPersonal = marcador; }
@@ -78,6 +83,16 @@ void PaginaWeb::activarFiltro() {
 // Desactiva el filtro para que la página sea visible en búsquedas
 void PaginaWeb::desactivarFiltro() {
 	mostrarFiltro = false;
+}
+
+void PaginaWeb::activarFiltroTiempo()
+{
+	filtroTiempo = true;
+}
+
+void PaginaWeb::desactivarFiltroTiempo()
+{
+	filtroTiempo = false;
 }
 
 // Cambia el tiempo de ingreso de la página

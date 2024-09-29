@@ -73,11 +73,15 @@ void Pestaña::explorarHistorial() {
 				// Se presiona la tecla izquierda para avanzar hacia atras
 				if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 					if (nodoActual->anterior == nullptr) {//hace la verificacion correspondiente 
-						nodoActual->paginaWeb->MostrarPaginaWeb(); 
+						if (nodoActual->paginaWeb->getMostrarFiltro() == true && nodoActual->paginaWeb->getFiltroTiempo()==true) {
+							nodoActual->paginaWeb->MostrarPaginaWeb();
+						}
 						cout << "No se puede retroceder mas" << endl;//mensaje limite
 					}
 					else {
-						nodoActual->paginaWeb->MostrarPaginaWeb(); 
+						if (nodoActual->paginaWeb->getMostrarFiltro() == true && nodoActual->paginaWeb->getFiltroTiempo() == true) {
+							nodoActual->paginaWeb->MostrarPaginaWeb();
+						}
 						nodoActual = nodoActual->anterior; 
 					}
 					Sleep(300); // Pausa para evitar múltiples lecturas rápidas
@@ -87,11 +91,16 @@ void Pestaña::explorarHistorial() {
 				if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
 					
 					if (nodoActual->siguiente == nullptr) {//verificacion 
-						nodoActual->paginaWeb->MostrarPaginaWeb(); 
+						if (nodoActual->paginaWeb->getMostrarFiltro() == true && nodoActual->paginaWeb->getFiltroTiempo() == true) {
+							nodoActual->paginaWeb->MostrarPaginaWeb();
+						}
+						
 						cout << "No se puede avanzar mas" << endl; //Mensaje limite
 					}
 					else {
-						nodoActual->paginaWeb->MostrarPaginaWeb(); 
+						if (nodoActual->paginaWeb->getMostrarFiltro() == true && nodoActual->paginaWeb->getFiltroTiempo() == true) {
+							nodoActual->paginaWeb->MostrarPaginaWeb();
+						}
 						nodoActual = nodoActual->siguiente;
 					}
 					Sleep(300); // Pausa para evitar múltiples lecturas rápidas
@@ -186,7 +195,7 @@ PaginaWeb* Pestaña::buscarPaginaWeb(string nomURL)
 
 void Pestaña::buscarPorPalabraClave(string palabraclave) {
 	NodoPag* actual = tail;
-	bool bandera = false; // Controla si se encontraron páginas con la palabra clave
+	bool bandera = false; // Controla si se encontraron páginas que no cumplen con la palabra clave
 
 	// Recorre la lista de páginas
 	while (actual != nullptr) {
@@ -194,20 +203,22 @@ void Pestaña::buscarPorPalabraClave(string palabraclave) {
 		string url = actual->paginaWeb->getURL();
 		string titulo = actual->paginaWeb->getTitulo();
 
-		// Verifica si la URL o el título contienen la palabra clave
-		if (url.find(palabraclave) != string::npos || titulo.find(palabraclave) != string::npos) {
-			actual->paginaWeb->MostrarPaginaWeb(); // Muestra la página que coincide
-			bandera = true; // Marca que se encontró al menos una página
+		// Verifica si la URL o el título NO contienen la palabra clave
+		if (url.find(palabraclave) == string::npos && titulo.find(palabraclave) == string::npos) {
+			actual->paginaWeb->desactivarFiltro();
 		}
-		actual = actual->siguiente; 
+		else {
+			actual->paginaWeb->activarFiltro();
+			bandera = true;
+		}
+		actual = actual->siguiente;
 	}
 
-	system("pause"); 
+	system("pause");
 
-	// Mensaje si no se encontró al menos una paguna web con los requisitos
 	if (bandera == false) {
-		cout << "No se encontraron paginas " << endl;
-		system("pause"); 
+		cout << "No se ha encontrado una pagina que cumpla con el requisito." << endl;
+		system("pause");
 	}
 }
 
@@ -223,8 +234,11 @@ void Pestaña::timeFilter(int minutos) {
 		double segundosTranscurridos = difftime(tiempoActual, pagina->getTiempo()); // Calcula el tiempo transcurrido desde que se guardó la página
 
 		// Muestra la página si fue guardada dentro del límite de tiempo especificado por el usuario
-		if (segundosTranscurridos <= minutos * 60) {
-			pagina->MostrarPaginaWeb();//Muestra la pagina que cumple los requisitos 
+		if (segundosTranscurridos > minutos * 60) {
+			pagina->desactivarFiltroTiempo();//Muestra la pagina que cumple los requisitos 
+		}
+		else {
+			pagina->activarFiltroTiempo();
 		}
 		actual = actual->siguiente; // Continua la busqueda
 	}
@@ -264,6 +278,26 @@ void Pestaña::eliminarCadaTiempo(int minutos) {
 		else {
 			aux = aux->siguiente;
 		}
+	}
+}
+
+void Pestaña::desactivarFiltros()
+{
+	NodoPag* actual = tail;
+
+	while (actual != nullptr) {
+		actual->paginaWeb->activarFiltro();
+		actual = actual->siguiente;
+	}
+}
+
+void Pestaña::desactivarFiltroTiempo()
+{
+	NodoPag* actual = tail;
+
+	while (actual != nullptr) {
+		actual->paginaWeb->activarFiltroTiempo();
+		actual = actual->siguiente;
 	}
 }
 

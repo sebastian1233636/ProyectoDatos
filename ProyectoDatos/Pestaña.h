@@ -45,6 +45,8 @@ public:
 	void buscarPorPalabraClave(string);
 	void timeFilter(int);
 	void eliminarCadaTiempo(int);
+	void desactivarFiltros();
+	void desactivarFiltroTiempo();
 
 	//Archivos
 	void guardarPestaña(ofstream&);
