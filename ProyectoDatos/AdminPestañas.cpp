@@ -25,17 +25,16 @@ NodoPest* AdminPestañas::getTail() { return tail; }
 NodoPest* AdminPestañas::getHead() { return head; }
 
 
-void AdminPestañas::iniciarNavegador()
-{
-	setlocale(LC_ALL, "spanish"); // Asegura la correcta visualización de caracteres especiales como la 'ñ' y tildes
+void AdminPestañas::iniciarNavegador() {
+	setlocale(LC_ALL, "spanish");
 
-	//Metodo que se ejecuta cuando se inicia el programa
 	cout << "\x1B[36m\n  ***************************************************" << endl;
 	cout << "  *                                                 *" << endl;
 	cout << "  *       BIENVENIDO AL NAVEGADOR DE PESTAÑAS       *" << endl;
 	cout << "  *                                                 *" << endl;
 	cout << "  ***************************************************\x1B[0m\n" << endl;
-	if (tail == nullptr) {//La sesión inicia en blanco, se crea una pagina web nueva para comenzar el uso del programa 
+
+	if (tail == nullptr) {
 		cout << "  > No hay pestañas todavia, agregando la primera...\n" << endl;
 		string nombrePestaña = "Pestana " + to_string(tam + 1);
 		Pestaña* pes = new Pestaña(nombrePestaña);
@@ -43,7 +42,7 @@ void AdminPestañas::iniciarNavegador()
 		InsertarPrimero(pes);
 		ExplorarHistorialPestañas();
 	}
-	else {//Si hay pestañas inicia normalmente 
+	else {
 		ExplorarHistorialPestañas();
 	}
 }
@@ -166,18 +165,15 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 		return; 
 	}
 
-	//Variables de control para los diferentes bucles y menus
-	string nom = "";
-	string palabraclave = "";
-	bool incognito = false;
 	bool control = true;
 	bool control3 = true;
 	bool control4 = true;
 	bool control5 = true;
-	bool control6 = true;
 	bool controlAr = true;
 	string estadoFiltroTiempo = "INACTIVO";
 	string detalleFiltro = "";
+	string nom = "";
+	string palabraclave = "";
 	while (control != false) {
 		cout << "\x1B[2J\x1B[H";
 		//Menu principal del programa
@@ -219,7 +215,6 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 		}
 
 		case 2: {
-			 //Se le pide al usuario que ingrese el URL para buscarlo en el archivo CSV
 			string url;
 			cout << "\x1B[2J\x1B[H";
 			cout << "\x1B[36m\n  =======================================================\x1B[0m" << endl;
@@ -229,38 +224,27 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			cin >> url;
 
 			cout << "\n  \x1B[33m[~] Buscando el dominio...\x1B[0m";
-			Sleep(800); // Simulacion de espera de carga del sitio web
-			cout << "\x1B[2J\x1B[H"; // Limpiar nuevamente antes de mostrar el resultado
+			Sleep(800);
+			cout << "\x1B[2J\x1B[H";
 
 			PaginaWeb* PagNueva = buscaPaginaWeb(url);
-			if (actual->pestaña->getIcognito() == false) {
-				if (PagNueva == nullptr) { 
-					cout << "\x1B[31m\n  =======================================================\x1B[0m" << endl;
-					cout << "\x1B[31m  ||           ERROR 404 - SITE NOT FOUND              ||\x1B[0m" << endl;
-					cout << "\x1B[31m  =======================================================\x1B[0m" << endl;
-					cout << "  \x1B[31m[!] El dominio en la URL ingresada no existe o no responde.\x1B[0m\n" << endl;
-				} //Devuelve el respectivo error si no se encuentra la pagina
-				else {
-					actual->pestaña->insertarPrimero(*PagNueva);
-					cout << "  \x1B[32m[+] Pagina cargada exitosamente\x1B[0m\n" << endl;
-					actual->pestaña->getTail()->paginaWeb->MostrarPaginaWeb();
-				}// se inserta si se encuentra
+			if (PagNueva == nullptr) {
+				cout << "\x1B[31m\n  =======================================================\x1B[0m" << endl;
+				cout << "\x1B[31m  ||           ERROR 404 - SITE NOT FOUND              ||\x1B[0m" << endl;
+				cout << "\x1B[31m  =======================================================\x1B[0m" << endl;
+				cout << "  \x1B[31m[!] El dominio en la URL ingresada no existe o no responde.\x1B[0m\n" << endl;
+			}
+			else if (actual->pestaña->getIcognito() == false) {
+				actual->pestaña->insertarPrimero(*PagNueva);
+				cout << "  \x1B[32m[+] Pagina cargada exitosamente\x1B[0m\n" << endl;
+				actual->pestaña->getTail()->paginaWeb->MostrarPaginaWeb();
 			}
 			else {
-				if (PagNueva == nullptr) { 
-					cout << "\x1B[31m\n  =======================================================\x1B[0m" << endl;
-					cout << "\x1B[31m  ||           ERROR 404 - SITE NOT FOUND              ||\x1B[0m" << endl;
-					cout << "\x1B[31m  =======================================================\x1B[0m" << endl;
-					cout << "  \x1B[31m[!] El dominio en la URL ingresada no existe o no responde.\x1B[0m\n" << endl;
-				} //Devuelve el respectivo error si no se encuentra la pagina
-				else {
-					cout << "  \x1B[32m[+] Pagina cargada exitosamente\x1B[0m\n" << endl;
-					PagNueva->MostrarPaginaWeb(); // No se inserta en historial x incognito
-				}
+				cout << "  \x1B[32m[+] Pagina cargada exitosamente\x1B[0m\n" << endl;
+				PagNueva->MostrarPaginaWeb();
 			}
 			cout << endl;
 			system("pause");
-
 			break;
 		}
 		case 3: {
@@ -345,8 +329,6 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 					cin >> palabraclave;
 					cout << "\x1B[2J\x1B[H";
 					actual->pestaña->buscarPorPalabraClave(palabraclave);
-
-
 					break;
 				}
 
@@ -386,7 +368,6 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			break;
 		}
 		case 5: {
-			//--------------------------------------------------------------------------------------
 			control5 = true;
 			while (control5 != false) {
 				cout << "\x1B[2J\x1B[H";
@@ -516,41 +497,28 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 PaginaWeb* AdminPestañas::buscaPaginaWeb(string urlBuscado) {
 	string archivo("Prueba.csv");
 	ifstream file(archivo);
-	PaginaWeb* pagAr = new PaginaWeb();
 
-	// Verificar si el archivo se abrió correctamente
 	if (!file.is_open()) {
 		cout << "El archivo no se abrio" << endl;
+		return nullptr;
 	}
-	else {
-		string linea;
 
-		// Leer cada línea del archivo CSV
-		while (getline(file, linea)) {
-			stringstream ss(linea);
-			string url;
-			string titulo;
+	string linea;
+	while (getline(file, linea)) {
+		stringstream ss(linea);
+		string url;
+		string titulo;
 
-			// Separar URL y título usando coma como delimitador
-			if (getline(ss, url, ',') && getline(ss, titulo)) {
-				// Comparar la URL de la línea actual con la URL buscada
-				if (url == urlBuscado) {
-					// Si coincide, crear un nuevo objeto PaginaWeb y retornarlo
-					pagAr = new PaginaWeb(url, titulo);
-					return pagAr;
-				}
-				else {
-					// Si no coincide, devolver nullptr
-					pagAr = nullptr;
-				}
+		if (getline(ss, url, ',') && getline(ss, titulo)) {
+			if (url == urlBuscado) {
+				PaginaWeb* pagAr = new PaginaWeb(url, titulo);
+				file.close();
+				return pagAr;
 			}
 		}
-
-		// Cerrar el archivo después de la lectura
-		file.close();
 	}
 
-	// Retornar nullptr si no se encontró la página con la URL buscada
+	file.close();
 	return nullptr;
 }
 
@@ -608,28 +576,32 @@ void AdminPestañas::guardarHistorialPestaña() {
 	NodoPest* actual = tail;
 	ofstream file;
 	string nombre;
-	//Se recorre la lista y guarda el historia de cada pestaña con un nombre diferente para mayor facilidad de lectura
-	while (actual != nullptr) {
-		nombre = "Historial" + actual->pestaña->getNombre() + ".bin";//toma el nombre de cada pestaña y lo convierte en el nombre del archivo 
-		file.open(nombre, ios::binary);
-		if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }
-		actual->pestaña->guardarHistorialBinario(file);
-		actual = actual->siguiente;
-		file.close();
-	}
-}
 
-void AdminPestañas::leerHistorialPestaña(){
-	NodoPest* actual = tail;
-	ifstream file;
-	string nombre;
-	//Abre los archivos segun se guardaron para lectura
 	while (actual != nullptr) {
 		nombre = "Historial" + actual->pestaña->getNombre() + ".bin";
 		file.open(nombre, ios::binary);
-		if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }
-		actual->pestaña->leerHistorialBinario(file);
-		actual = actual->siguiente;
+		if (!file.is_open()) {
+			cout << "El archivo no se abrio" << endl;
+		}
+		actual->pestaña->guardarHistorialBinario(file);
 		file.close();
+		actual = actual->siguiente;
+	}
+}
+
+void AdminPestañas::leerHistorialPestaña() {
+	NodoPest* actual = tail;
+	ifstream file;
+	string nombre;
+
+	while (actual != nullptr) {
+		nombre = "Historial" + actual->pestaña->getNombre() + ".bin";
+		file.open(nombre, ios::binary);
+		if (!file.is_open()) {
+			cout << "El archivo no se abrio" << endl;
+		}
+		actual->pestaña->leerHistorialBinario(file);
+		file.close();
+		actual = actual->siguiente;
 	}
 }
