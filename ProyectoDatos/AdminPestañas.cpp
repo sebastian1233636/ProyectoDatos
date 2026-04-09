@@ -1,6 +1,7 @@
 #include "AdminPestañas.h"
 #include<limits>
 #include<ios>
+#include<clocale>
 
 AdminPestañas::AdminPestañas() {
 	tail = nullptr;
@@ -26,10 +27,16 @@ NodoPest* AdminPestañas::getHead() { return head; }
 
 void AdminPestañas::iniciarNavegador()
 {
+	setlocale(LC_ALL, "spanish"); // Asegura la correcta visualización de caracteres especiales como la 'ñ' y tildes
+
 	//Metodo que se ejecuta cuando se inicia el programa
-	cout << "---------------Bienvenido al navegador---------------" << endl;
+	cout << "\x1B[36m\n  ***************************************************" << endl;
+	cout << "  *                                                 *" << endl;
+	cout << "  *       BIENVENIDO AL NAVEGADOR DE PESTAÑAS       *" << endl;
+	cout << "  *                                                 *" << endl;
+	cout << "  ***************************************************\x1B[0m\n" << endl;
 	if (tail == nullptr) {//La sesión inicia en blanco, se crea una pagina web nueva para comenzar el uso del programa 
-		cout << "No hay pestañas todavia, agregando una" << endl;
+		cout << "  > No hay pestañas todavia, agregando la primera...\n" << endl;
 		string nombrePestaña = "Pestana " + to_string(tam + 1);
 		Pestaña* pes = new Pestaña(nombrePestaña);
 		system("pause");
@@ -78,8 +85,27 @@ void AdminPestañas::ExplorarHistorialPestañas() {
 
 	while (bandera) {
 		// Limpiar pantalla y mostrar el menú de administración de pestañas
-		system("cls");
+		cout << "\x1B[2J\x1B[H";
 		menuAdminPestañas(nodoActual);
+
+		cout << "\x1B[2J\x1B[H";
+		cout << "\x1B[36m\n  ===================================================\x1B[0m" << endl;
+		cout << "\x1B[36m  ||          MODO NAVEGACION DE PESTAÑAS          ||\x1B[0m" << endl;
+		cout << "\x1B[36m  ===================================================\x1B[0m" << endl;
+		if (nodoActual != nullptr && nodoActual->pestaña != nullptr) {
+			if (!nodoActual->pestaña->getIcognito()) {
+				cout << "  :: Pestaña actual : \x1B[32m" << nodoActual->pestaña->getNombre() << "\x1B[0m | (Total: " << tam << ")" << endl;
+			} else {
+				cout << "  :: Pestaña actual : \x1B[35m[Modo Incognito Activo]\x1B[0m | (Total: " << tam << ")" << endl;
+			}
+		}
+		cout << "\x1B[36m  ---------------------------------------------------\x1B[0m" << endl;
+		cout << "    [ ^ ] FLECHA ARRIBA -> Siguiente pestaña" << endl;
+		cout << "    [ v ] FLECHA ABAJO  -> Pestaña anterior" << endl;
+		cout << "    [ N ] Letra N       -> Crear una nueva pestaña" << endl;
+		cout << "    [ESC]               -> Finalizar y salir" << endl;
+		cout << "  ===================================================" << endl;
+		cout << "\n  > Esperando accion de navegacion..." << endl;
 
 		while (true) {
 			// Moverse a la pestaña anterior si se presiona flecha abajo
@@ -111,7 +137,18 @@ void AdminPestañas::ExplorarHistorialPestañas() {
 			// Salir si se presiona ESC
 			if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
 				bandera = false;  // Finalizar el bucle principal
-				system("cls");  // Limpiar pantalla al salir
+				cout << "\x1B[2J\x1B[H";  // Limpiar pantalla al salir
+				break;
+			}
+
+			// Crear nueva pestaña si se presiona N
+			if (GetAsyncKeyState('N') & 0x8000) {
+				string nombrePestaña = "Pestana " + to_string(tam + 1);
+				Pestaña* pes = new Pestaña(nombrePestaña);
+				InsertarPrimero(pes);
+				nodoActual = tail; // Se mueve automáticamente a la nueva pestaña
+				cout << "\x1B[32m\n  > Se ha creado una nueva pestaña con exito.\x1B[0m" << endl;
+				Sleep(500);  // Darle un breve tiempo para evitar registrarlo multiples veces
 				break;
 			}
 
@@ -139,26 +176,30 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 	bool control5 = true;
 	bool control6 = true;
 	bool controlAr = true;
+	string estadoFiltroTiempo = "INACTIVO";
+	string detalleFiltro = "";
 	while (control != false) {
-		system("cls");
+		cout << "\x1B[2J\x1B[H";
 		//Menu principal del programa
+		cout << "\x1B[36m\n  =============================================\x1B[0m" << endl;
 		if (actual->pestaña->getIcognito() == false) {
-			cout << "----------------" << actual->pestaña->getNombre() << "----------------" << endl;
+			cout << "\x1B[36m  ||\x1B[0m   PESTAÑA: \x1B[32m" << actual->pestaña->getNombre() << "\x1B[0m" << endl;
 		}
 		else {
-			cout << actual->pestaña->mostrarPestañaIncognito() << endl;
+			cout << "\x1B[36m  ||\x1B[0m   \x1B[35m" << actual->pestaña->mostrarPestañaIncognito() << "\x1B[0m" << endl;
 		}
+		cout << "\x1B[36m  =============================================\x1B[0m" << endl;
 
-		cout << "---------------------------------------" << endl;
-		cout << "1.Ver historial" << endl;
-		cout << "2.Ir al sitio web" << endl;
-		cout << "3.Nueva pestaña" << endl;
-		cout << "4.Modo incognito" << endl;
-		cout << "5.Busquedas y filtros" << endl;
-		cout << "6.Configuracion" << endl;
-		cout << "7.Importacion y exportacion" << endl;
-		cout << "8.Regresar" << endl;
-		cout << "---------------------------------------" << endl;
+		cout << "    [1] Ver el historial de esta pestaña" << endl;
+		cout << "    [2] Ir a un sitio web (Escribir URL)" << endl;
+		cout << "    [3] Opciones de modo incognito" << endl;
+		cout << "    [4] Busquedas y filtros en la pestaña" << endl;
+		cout << "    [5] Configuracion del historial" << endl;
+		cout << "    [6] Guardar / Cargar sesion" << endl;
+		cout << "  ---------------------------------------------" << endl;
+		cout << "    [7] <--- Navegar a otra pestaña o Salir" << endl;
+		cout << "  =============================================" << endl;
+		cout << "  > ";
 		int op = obtenerOpcion();
 		cout << endl;
 		switch (op) {
@@ -166,59 +207,81 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 		case 1: {//Permite meterse al historial de cada pestaña, a menos que sea incognito
 			if (actual->pestaña->getIcognito() == false) {
 
-				cout << actual->pestaña->mostrarPestaña() << endl;
 				actual->pestaña->explorarHistorial();
 			}
 			else { 
-				cout << "No hay historial en este modo" << endl;
+				cout << "\x1B[2J\x1B[H";
+				cout << "\n  \x1B[35m[!] No hay historial en este modo.\x1B[0m\n" << endl;
 				system("pause");
 			}
 			break;
-			
+
 		}
 
 		case 2: {
 			 //Se le pide al usuario que ingrese el URL para buscarlo en el archivo CSV
 			string url;
-			cout << "Digite el URL de la pagina:";
+			cout << "\x1B[2J\x1B[H";
+			cout << "\x1B[36m\n  =======================================================\x1B[0m" << endl;
+			cout << "\x1B[36m  ||                IR A UN SITIO WEB                  ||\x1B[0m" << endl;
+			cout << "\x1B[36m  =======================================================\x1B[0m" << endl;
+			cout << "  > Digite el URL de la pagina (Ej. devdocs.io): ";
 			cin >> url;
-			cout << endl;
+
+			cout << "\n  \x1B[33m[~] Buscando el dominio...\x1B[0m";
+			Sleep(800); // Simulacion de espera de carga del sitio web
+			cout << "\x1B[2J\x1B[H"; // Limpiar nuevamente antes de mostrar el resultado
+
 			PaginaWeb* PagNueva = buscaPaginaWeb(url);
 			if (actual->pestaña->getIcognito() == false) {
-				if (PagNueva == nullptr) { cout << "ERROR 404 NOT FOUND" << endl; } //Devuelve el respectivo error si no se encuentra la pagina
+				if (PagNueva == nullptr) { 
+					cout << "\x1B[31m\n  =======================================================\x1B[0m" << endl;
+					cout << "\x1B[31m  ||           ERROR 404 - SITE NOT FOUND              ||\x1B[0m" << endl;
+					cout << "\x1B[31m  =======================================================\x1B[0m" << endl;
+					cout << "  \x1B[31m[!] El dominio en la URL ingresada no existe o no responde.\x1B[0m\n" << endl;
+				} //Devuelve el respectivo error si no se encuentra la pagina
 				else {
 					actual->pestaña->insertarPrimero(*PagNueva);
+					cout << "  \x1B[32m[+] Pagina cargada exitosamente\x1B[0m\n" << endl;
 					actual->pestaña->getTail()->paginaWeb->MostrarPaginaWeb();
 				}// se inserta si se encuentra
 			}
 			else {
-				if (PagNueva == nullptr) { cout << "ERROR 404 NOT FOUND" << endl; } //Devuelve el respectivo error si no se encuentra la pagina
+				if (PagNueva == nullptr) { 
+					cout << "\x1B[31m\n  =======================================================\x1B[0m" << endl;
+					cout << "\x1B[31m  ||           ERROR 404 - SITE NOT FOUND              ||\x1B[0m" << endl;
+					cout << "\x1B[31m  =======================================================\x1B[0m" << endl;
+					cout << "  \x1B[31m[!] El dominio en la URL ingresada no existe o no responde.\x1B[0m\n" << endl;
+				} //Devuelve el respectivo error si no se encuentra la pagina
 				else {
-					PagNueva->MostrarPaginaWeb();
+					cout << "  \x1B[32m[+] Pagina cargada exitosamente\x1B[0m\n" << endl;
+					PagNueva->MostrarPaginaWeb(); // No se inserta en historial x incognito
 				}
 			}
+			cout << endl;
 			system("pause");
 
 			break;
 		}
 		case 3: {
-			//Opcion para crear una nueva pestaña
-			string nombrePestaña = "Pestana " + to_string(tam + 1);//se crea un nombre junto al tamaño del container, ejemplo si no hay elementos la primera pestaña se llamará "Pestaña 1"
-			Pestaña* pes = new Pestaña(nombrePestaña);
-			InsertarPrimero(pes);
-			cout << "Se ha creado una nueva pestaña. Presione 8 para salir del menu y luego flecha de arriba o abajo para navegar." << endl;
-			system("pause");
-			break;
-		}
-		case 4: {
 			//Menu para el modo incognito
 			control3 = true;
 			while (control3 != false) {
-				system("cls");
-				cout << "1.Activar modo incognito" << endl;
-				cout << "2.Desactivar modo incognito" << endl;
-				cout << "3.Regresar" << endl;
-				cout << "Digite la opcion" << endl;
+				cout << "\x1B[2J\x1B[H";
+				cout << "\x1B[35m\n  =======================================\x1B[0m" << endl;
+				cout << "\x1B[35m  ||         MODO INCOGNITO            ||\x1B[0m" << endl;
+				cout << "\x1B[35m  =======================================\x1B[0m" << endl;
+				if (actual->pestaña->getIcognito()) {
+					cout << "    Estado actual: \x1B[32mACTIVO\x1B[0m\n" << endl;
+				} else {
+					cout << "    Estado actual: \x1B[31mINACTIVO\x1B[0m\n" << endl;
+				}
+				cout << "    [1] Activar modo incognito" << endl;
+				cout << "    [2] Desactivar modo incognito" << endl;
+				cout << "\x1B[35m  ---------------------------------------\x1B[0m" << endl;
+				cout << "    [3] Regresar al menu de la pestaña" << endl;
+				cout << "\x1B[35m  =======================================\x1B[0m" << endl;
+				cout << "  > ";
 				int op3 = obtenerOpcion();
 				switch (op3) {
 				case 1:
@@ -250,23 +313,27 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			}
 			break;
 		}
-		case 5: {
+		case 4: {
 			control4 = true;
 			while (control4 != false) {
-				system("cls");
+				cout << "\x1B[2J\x1B[H";
 				//Menu para manejar las busquedas y filtros
-				cout << "---------------------------------------" << endl;
-				cout << "1.Mostrar solo favoritos" << endl;
-				cout << "2.Busqueda por palabra clave" << endl;
-				cout << "3.Buscar una pagina especifica" << endl;
-				cout << "4.Desactivar filtro" << endl;
-				cout << "5.regresar" << endl;
-				cout << "---------------------------------------" << endl;
+				cout << "\x1B[36m\n  =================================================\x1B[0m" << endl;
+				cout << "\x1B[36m  ||             BUSQUEDAS Y FILTROS             ||\x1B[0m" << endl;
+				cout << "\x1B[36m  =================================================\x1B[0m" << endl;
+				cout << "    [1] Mostrar solo paginas favoritas" << endl;
+				cout << "    [2] Busqueda por palabra clave en URL/Titulo" << endl;
+				cout << "    [3] Buscar una pagina especifica" << endl;
+				cout << "    [4] Desactivar cualquier filtro activo" << endl;
+				cout << "\x1B[36m  -------------------------------------------------\x1B[0m" << endl;
+				cout << "    [5] Regresar" << endl;
+				cout << "\x1B[36m  =================================================\x1B[0m" << endl;
+				cout << "  > ";
 				int op4 = obtenerOpcion();
 				switch (op4) {
 
 				case 1: {
-					system("cls");
+					cout << "\x1B[2J\x1B[H";
 					actual->pestaña->buscarFavorito();
 					system("pause");
 					break;
@@ -276,9 +343,9 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 					cout << "Digite la palabra clave para filtrar paginas" << endl;
 					cout << "Se enseñaran solo las paginas que tenga la palabra que usted digite ya sea en el titulo o en la URL" << endl;
 					cin >> palabraclave;
-					system("cls");
+					cout << "\x1B[2J\x1B[H";
 					actual->pestaña->buscarPorPalabraClave(palabraclave);
-				
+
 
 					break;
 				}
@@ -318,44 +385,66 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			}
 			break;
 		}
-		case 6: {
+		case 5: {
 			//--------------------------------------------------------------------------------------
 			control5 = true;
 			while (control5 != false) {
-				system("cls");
+				cout << "\x1B[2J\x1B[H";
 				//Menu para manejar las politicas del historial
-				cout << "---------------------------------------" << endl;
-				cout << "1.Limitar cantidad de entradas" << endl;
-				cout << "2.Eliminar historial cada cierto tiempo" << endl;
-				cout << "3.Desactivar Filtro" << endl;
-				cout << "4.Regresar" << endl;
-				cout << "---------------------------------------" << endl;
+				cout << "\x1B[36m\n  =======================================================\x1B[0m" << endl;
+				cout << "\x1B[36m  ||            CONFIGURACION DEL HISTORIAL            ||\x1B[0m" << endl;
+				cout << "\x1B[36m  =======================================================\x1B[0m" << endl;
+				if (estadoFiltroTiempo == "ACTIVO") {
+					cout << "    Estado actual: \x1B[32mACTIVO\x1B[0m " << detalleFiltro << "\n" << endl;
+				} else {
+					cout << "    Estado actual: \x1B[31mINACTIVO\x1B[0m\n" << endl;
+				}
+				cout << "    [1] Limitar entradas por antiguedad (ej. N minutos)" << endl;
+				cout << "    [2] Eliminar historial que exceda cierta antiguedad" << endl;
+				cout << "    [3] Desactivar filtro de tiempo" << endl;
+				cout << "\x1B[36m  -------------------------------------------------------\x1B[0m" << endl;
+				cout << "    [4] Regresar" << endl;
+				cout << "\x1B[36m  =======================================================\x1B[0m" << endl;
+				cout << "  > ";
 				int op2 = obtenerOpcion();
 				switch (op2) {
 				case 1: {
 					int min = 0;
-					cout << "Esta funcion mostrara las entradas las cuales hayan sido ingresadas antes del minuto especificado" << endl;
-					cout << "Digite el numero de minutos" << endl;
+					cout << "\x1B[2J\x1B[H";
+					cout << "\x1B[36m\n  =======================================================\x1B[0m" << endl;
+					cout << "\x1B[36m  ||                FILTRAR POR TIEMPO                 ||\x1B[0m" << endl;
+					cout << "\x1B[36m  =======================================================\x1B[0m" << endl;
+					cout << "  > Esta funcion ocultara las entradas mas antiguas que el tiempo especificado." << endl;
+					cout << "  > Digite el numero de minutos: ";
 					cin >> min;
 					actual->pestaña->timeFilter(min);
-					cout << "Filtro aplicado" << endl;
+					estadoFiltroTiempo = "ACTIVO";
+					detalleFiltro = "(Limitando a " + to_string(min) + " min)";
+					cout << "\n  \x1B[32m[+] Filtro aplicado con exito.\x1B[0m\n" << endl;
 					system("pause");
 					break;
 				}
 				case 2: {
 					int mins = 0;
-					cout << "En esta opcion se elminarán las paginas que superen los minutos ingresados" << endl;
-					cout << "Digite los minutos deseados" << endl;
+					cout << "\x1B[2J\x1B[H";
+					cout << "\x1B[31m\n  =======================================================\x1B[0m" << endl;
+					cout << "\x1B[31m  ||           ELIMINAR HISTORIAL POR TIEMPO           ||\x1B[0m" << endl;
+					cout << "\x1B[31m  =======================================================\x1B[0m" << endl;
+					cout << "  > En esta opcion se ELIMINARAN permanentemente las paginas." << endl;
+					cout << "  > Digite los minutos limite de antiguedad: ";
 					cin >> mins;
-					cout << "Eliminando paginas que superen los " << mins << " minutos" << endl;
+					cout << "\n  Eliminando paginas que superen los " << mins << " minutos...\n" << endl;
 					actual->pestaña->eliminarCadaTiempo(mins);
+					cout << "  \x1B[32m[+] Paginas antiguas eliminadas.\x1B[0m\n" << endl;
 					system("pause");
 					break;
 				}
 
 				case 3: {
 					actual->pestaña->desactivarFiltroTiempo();
-					cout << "Filtro por tiempo desactivado" << endl;
+					estadoFiltroTiempo = "INACTIVO";
+					detalleFiltro = "";
+					cout << "\x1B[32mFiltro por tiempo desactivado exitosamente.\x1B[0m" << endl;
 					system("pause");
 					break;
 				}
@@ -371,15 +460,20 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 			}
 			break;
 		}
-		case 7: {
+		case 6: {
 			//archivos
 			controlAr = true;
 			while (controlAr != false) {
-				system("cls");
-				cout << "------------M E N U - A R C H I V O S---------------" << endl;
-				cout << "1.Guardar sesion" << endl;
-				cout << "2.Cargar sesión" << endl;
-				cout << "3.Regresar" << endl;
+				cout << "\x1B[2J\x1B[H";
+				cout << "\x1B[36m\n  ===========================================\x1B[0m" << endl;
+				cout << "\x1B[36m  ||        GUARDAR / CARGAR SESION        ||\x1B[0m" << endl;
+				cout << "\x1B[36m  ===========================================\x1B[0m" << endl;
+				cout << "    [1] Guardar sesion actual y el historial" << endl;
+				cout << "    [2] Cargar sesion guardada previamente" << endl;
+				cout << "\x1B[36m  -------------------------------------------\x1B[0m" << endl;
+				cout << "    [3] Regresar" << endl;
+				cout << "\x1B[36m  ===========================================\x1B[0m" << endl;
+				cout << "  > ";
 				int opAr = obtenerOpcion();
 				switch (opAr) {
 
@@ -387,7 +481,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 					case 1: {
 						guardarPestañaBinario();
 						guardarHistorialPestaña();
-						cout << "Historial guardado" << endl;
+						cout << "\x1B[32mHistorial guardado exitosamente\x1B[0m" << endl;
 						system("pause");
 						break;
 					}
@@ -395,7 +489,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 					case 2: {
 						leerPestañaBinario();
 						leerHistorialPestaña();
-						cout << "Sesion cargada" << endl;
+						cout << "\x1B[32mSesion cargada exitosamente\x1B[0m" << endl;
 						system("pause");
 						break;
 					}
@@ -409,7 +503,7 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 
 			break;
 		}
-		case 8:
+		case 7:
 			control = false;
 			break;
 		default:

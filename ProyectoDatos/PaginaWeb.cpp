@@ -40,13 +40,13 @@ void PaginaWeb::setMarcadorPersonal(string marcador) { MarcadorPersonal = marcad
 void PaginaWeb::marcarComoMostrada() { mostrada = true; }
 
 void PaginaWeb::MostrarPaginaWeb() {
-	cout << "----------------------------------------\n";
-	if (!getMarcadorPersonal().empty()) { cout << "| " << getMarcadorPersonal() << endl; }
-	cout << "| " << getURL() << "\n";
-	if (marcador) { cout << "| Sitio Favorito \n"; }
-	cout << "| " << getTitulo() << "\n";
-	cout << "| " << mostrarTiempo() << "\n";
-	cout << "----------------------------------------\n";
+	cout << "    \x1B[34m+-------------------------------------------+\x1B[0m\n";
+	if (!getMarcadorPersonal().empty()) { cout << "    \x1B[34m|\x1B[0m \x1B[32m" << getMarcadorPersonal() << "\x1B[0m\n"; }
+	if (marcador) { cout << "    \x1B[34m|\x1B[0m [\x1B[33mSitio Favorito\x1B[0m]\n"; }
+	cout << "    \x1B[34m|\x1B[0m URL: " << getURL() << "\n";
+	cout << "    \x1B[34m|\x1B[0m Titulo: " << getTitulo() << "\n";
+	cout << "    \x1B[34m|\x1B[0m " << mostrarTiempo() << "\n";
+	cout << "    \x1B[34m+-------------------------------------------+\x1B[0m\n";
 }
 
 // Marca la página web como favorita

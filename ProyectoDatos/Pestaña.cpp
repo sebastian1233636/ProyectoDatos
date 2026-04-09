@@ -59,49 +59,95 @@ void Pestaña::explorarHistorial() {
 
 	// Verifica si el historial está vacío
 	if (nodoActual == nullptr) {
-		cout << "El historial de paginas web esta vacio." << endl; 
+		cout << "\x1B[2J\x1B[H";
+		cout << "\x1B[36m\n  ===================================================\x1B[0m" << endl;
+		cout << "\x1B[36m  ||              HISTORIAL DE PESTAÑA             ||\x1B[0m" << endl;
+		cout << "\x1B[36m  ===================================================\x1B[0m\n" << endl;
+		cout << "  \x1B[31m[!] El historial de paginas web esta vacio.\x1B[0m\n" << endl; 
 		system("pause"); // Pausa el sistema
 	}
 	else {
+		// Mostrar la página actual por primera vez antes de entrar al bucle de teclas
+		cout << "\x1B[2J\x1B[H";
+		cout << "\x1B[36m\n  ===================================================\x1B[0m" << endl;
+		cout << "\x1B[36m  ||              HISTORIAL DE PESTAÑA             ||\x1B[0m" << endl;
+		cout << "\x1B[36m  ===================================================\x1B[0m" << endl;
+		cout << "  \x1B[33mCONTROLES:\x1B[0m" << endl;
+		cout << "  [ <- ] Flecha Izquierda | Volver (Atras)" << endl;
+		cout << "  [ -> ] Flecha Derecha   | Avanzar (Adelante)" << endl;
+		cout << "  [ F ]  Tecla F          | Marcar pág. como Favorito" << endl;
+		cout << "  [ESC]  Escape           | Salir del historial" << endl;
+		cout << "\x1B[36m  ---------------------------------------------------\x1B[0m\n" << endl;
+
+		if (modoIcognito) {
+			cout << "  \x1B[35m> No guardar historial ni marcadores\x1B[0m" << endl; 
+		} else {
+			if (nodoActual->paginaWeb->getMostrarFiltro() == true && nodoActual->paginaWeb->getFiltroTiempo() == true) {
+				nodoActual->paginaWeb->MostrarPaginaWeb();
+			} else {
+				cout << "  \x1B[31m[PAGINA OCULTA POR FILTRO]\x1B[0m" << endl;
+			}
+		}
+
 		// Bucle que permite la exploración del historial
 		while (bandera == true) {
-			
-			if (modoIcognito) {//Verificacion para el modo incognito
-				cout << "No guardar historial ni marcadores" << endl; 
-			}
-			else {
+
+			if (!modoIcognito) {
 				// Se presiona la tecla izquierda para avanzar hacia atras
 				if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 					if (nodoActual->anterior == nullptr) {//hace la verificacion correspondiente 
-						if (nodoActual->paginaWeb->getMostrarFiltro() == true && nodoActual->paginaWeb->getFiltroTiempo()==true) {
-							nodoActual->paginaWeb->MostrarPaginaWeb();
-						}
-						cout << "No se puede retroceder mas" << endl;//mensaje limite
+						cout << "\n  \x1B[31m[!] No se puede retroceder mas.\x1B[0m" << endl;//mensaje limite
 					}
 					else {
+						nodoActual = nodoActual->anterior; 
+
+						// Reimprimir todo
+						cout << "\x1B[2J\x1B[H";
+						cout << "\x1B[36m\n  ===================================================\x1B[0m" << endl;
+						cout << "\x1B[36m  ||              HISTORIAL DE PESTAÑA             ||\x1B[0m" << endl;
+						cout << "\x1B[36m  ===================================================\x1B[0m" << endl;
+						cout << "  \x1B[33mCONTROLES:\x1B[0m" << endl;
+						cout << "  [ <- ] Flecha Izquierda | Volver (Atras)" << endl;
+						cout << "  [ -> ] Flecha Derecha   | Avanzar (Adelante)" << endl;
+						cout << "  [ F ]  Tecla F          | Marcar pág. como Favorito" << endl;
+						cout << "  [ESC]  Escape           | Salir del historial" << endl;
+						cout << "\x1B[36m  ---------------------------------------------------\x1B[0m\n" << endl;
+
 						if (nodoActual->paginaWeb->getMostrarFiltro() == true && nodoActual->paginaWeb->getFiltroTiempo() == true) {
 							nodoActual->paginaWeb->MostrarPaginaWeb();
+						} else {
+							cout << "  \x1B[31m[PAGINA OCULTA POR FILTRO]\x1B[0m" << endl;
 						}
-						nodoActual = nodoActual->anterior; 
 					}
 					Sleep(300); // Pausa para evitar múltiples lecturas rápidas
 				}
 
 				// Se presiona la tecla derecha para ir hacia adelante
 				if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
-					
+
 					if (nodoActual->siguiente == nullptr) {//verificacion 
-						if (nodoActual->paginaWeb->getMostrarFiltro() == true && nodoActual->paginaWeb->getFiltroTiempo() == true) {
-							nodoActual->paginaWeb->MostrarPaginaWeb();
-						}
-						
-						cout << "No se puede avanzar mas" << endl; //Mensaje limite
+						cout << "\n  \x1B[31m[!] No se puede avanzar mas.\x1B[0m" << endl; //Mensaje limite
 					}
 					else {
+						nodoActual = nodoActual->siguiente;
+
+						// Reimprimir todo
+						cout << "\x1B[2J\x1B[H";
+						cout << "\x1B[36m\n  ===================================================\x1B[0m" << endl;
+						cout << "\x1B[36m  ||              HISTORIAL DE PESTAÑA             ||\x1B[0m" << endl;
+						cout << "\x1B[36m  ===================================================\x1B[0m" << endl;
+						cout << "  \x1B[33mCONTROLES:\x1B[0m" << endl;
+						cout << "  [ <- ] Flecha Izquierda | Volver (Atras)" << endl;
+						cout << "  [ -> ] Flecha Derecha   | Avanzar (Adelante)" << endl;
+						cout << "  [ F ]  Tecla F          | Marcar pág. como Favorito" << endl;
+						cout << "  [ESC]  Escape           | Salir del historial" << endl;
+						cout << "\x1B[36m  ---------------------------------------------------\x1B[0m\n" << endl;
+
 						if (nodoActual->paginaWeb->getMostrarFiltro() == true && nodoActual->paginaWeb->getFiltroTiempo() == true) {
 							nodoActual->paginaWeb->MostrarPaginaWeb();
+						} else {
+							cout << "  \x1B[31m[PAGINA OCULTA POR FILTRO]\x1B[0m" << endl;
 						}
-						nodoActual = nodoActual->siguiente;
 					}
 					Sleep(300); // Pausa para evitar múltiples lecturas rápidas
 				}
@@ -109,18 +155,22 @@ void Pestaña::explorarHistorial() {
 				// Si se presiona la tecla F
 				if (GetAsyncKeyState('F') & 0x8000) {
 					nodoActual->paginaWeb->PonerMarcador(); // Activa el marcador para la página
-					cout << "Ingrese el nombre del marcador (dejar en blanco para no asignar nombre): ";
+					cout << "\n  \x1B[33mIngrese el nombre del marcador (dejar en blanco para no asignar):\x1B[0m ";
 					cin.ignore(); // Ignora el buffer de entrada
 					getline(cin, marcador); // Obtiene el nombre del marcador
-					
+
 					if (!marcador.empty()) {// Si no se ingresó un nombre de marcador
 						nodoActual->paginaWeb->setMarcadorPersonal(marcador); // Asigna el marcador personal como favorito
 					}
-					cout << "Pagina marcada como favorita" << endl; 
+					cout << "  \x1B[32m[+] Pagina marcada como favorita\x1B[0m" << endl; 
 					Sleep(300); 
 				}
 
 				// Se presiona la tecla Escape para salir del bucle
+				if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
+					bandera = false;
+				}
+			} else {
 				if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
 					bandera = false;
 				}
@@ -166,16 +216,7 @@ string Pestaña::mostrarPestaña() {//El cuerpo de la pestaña que se va a mostrar
 }
 
 string Pestaña::mostrarPestañaIncognito() {//Mensaje si se selecciona el modo incognito
-	return "|-------------------------" + nombre + "---------------------------|\n"
-		"-------------------------------\n"
-		"|       MODO INCOGNITO         |\n"
-		"|       _____________          |\n"
-		"|      |             |         |\n"
-		"|      |   PRIVADO   |         |\n"
-		"|      |_____________|         |\n"
-		"|       No se guarda           |\n"
-		"|     el historial aqui        |\n"
-		"-------------------------------\n";
+	return "PESTAÑA: [Modo Incognito Activo]";
 }
 
 PaginaWeb* Pestaña::buscarPaginaWeb(string nomURL)
