@@ -198,6 +198,60 @@ PaginaWeb* Pestaña::buscarPaginaWeb(string nomURL) {
 	return nullptr;
 }
 
+void Pestaña::mostrarFavoritos() {
+	NodoPag* nodoActual = tail;
+	int contador = 0;
+
+	while (nodoActual != nullptr) {
+		if (nodoActual->paginaWeb->getMarcador()) {
+			contador++;
+		}
+		nodoActual = nodoActual->siguiente;
+	}
+
+	cout << "\x1B[2J\x1B[H";
+	cout << "\x1B[36m\n  ===================================================\x1B[0m" << endl;
+	cout << "\x1B[36m  ||              PAGINAS FAVORITAS               ||\x1B[0m" << endl;
+	cout << "\x1B[36m  ===================================================\x1B[0m\n" << endl;
+
+	if (contador > 0) {
+		cout << "  \x1B[32m[+] Total de paginas favoritas: " << contador << "\x1B[0m" << endl;
+	} else {
+		cout << "  \x1B[31m[!] No hay paginas marcadas como favoritas\x1B[0m" << endl;
+	}
+	cout << endl;
+	system("pause");
+}
+
+void Pestaña::mostrarPorPalabraClave(string palabraclave) {
+	NodoPag* actual = tail;
+	int contador = 0;
+
+	while (actual != nullptr) {
+		string url = actual->paginaWeb->getURL();
+		string titulo = actual->paginaWeb->getTitulo();
+
+		if (url.find(palabraclave) != string::npos || titulo.find(palabraclave) != string::npos) {
+			contador++;
+		}
+		actual = actual->siguiente;
+	}
+
+	cout << "\x1B[2J\x1B[H";
+	cout << "\x1B[36m\n  ===================================================\x1B[0m" << endl;
+	cout << "\x1B[36m  ||          RESULTADOS DE BUSQUEDA              ||\x1B[0m" << endl;
+	cout << "\x1B[36m  ||  Palabra clave: \x1B[32m" << palabraclave << "\x1B[36m" << "                      ||\x1B[0m" << endl;
+	cout << "\x1B[36m  ===================================================\x1B[0m\n" << endl;
+
+	if (contador > 0) {
+		cout << "  \x1B[32m[+] Se encontraron " << contador << " pagina(s) que cumplen con el requisito.\x1B[0m" << endl;
+	} else {
+		cout << "  \x1B[31m[!] No se ha encontrado ninguna pagina que cumpla con el requisito.\x1B[0m" << endl;
+	}
+	cout << endl;
+	system("pause");
+}
+
 void Pestaña::buscarPorPalabraClave(string palabraclave) {
 	NodoPag* actual = tail;
 	bool bandera = false;

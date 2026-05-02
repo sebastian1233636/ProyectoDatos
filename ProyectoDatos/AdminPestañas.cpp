@@ -320,17 +320,15 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 
 				case 1: {
 					cout << "\x1B[2J\x1B[H";
-					actual->pestaña->buscarFavorito();
-					system("pause");
+					actual->pestaña->mostrarFavoritos();
 					break;
 				}
 
 				case 2: {
-					cout << "Digite la palabra clave para filtrar paginas" << endl;
-					cout << "Se enseñaran solo las paginas que tenga la palabra que usted digite ya sea en el titulo o en la URL" << endl;
+					cout << "Digite la palabra clave para buscar en paginas" << endl;
+					cout << "Se mostraran las paginas que contengan la palabra en el titulo o en la URL" << endl;
 					cin >> palabraclave;
-					cout << "\x1B[2J\x1B[H";
-					actual->pestaña->buscarPorPalabraClave(palabraclave);
+					actual->pestaña->mostrarPorPalabraClave(palabraclave);
 					break;
 				}
 
@@ -340,7 +338,8 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 					cin >> nom;
 					pag = actual->pestaña->buscarPaginaWeb(nom);
 					if (pag == nullptr) {
-						cout << "La pagina que busca no se encuentra" << endl;
+						cout << "\x1B[31mLa pagina que busca no se encuentra\x1B[0m" << endl;
+						system("pause");
 					}
 					else {
 						pag->MostrarPaginaWeb();

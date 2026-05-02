@@ -43,6 +43,8 @@ public:
 	string mostrarPestañaIncognito();
 	PaginaWeb* buscarPaginaWeb(string);
 	void buscarPorPalabraClave(string);
+	void mostrarFavoritos();
+	void mostrarPorPalabraClave(string);
 	void timeFilter(int);
 	void eliminarCadaTiempo(int);
 	void desactivarFiltros();
