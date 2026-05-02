@@ -18,30 +18,30 @@
     <ClCompile Include="main.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Pestaña.cpp">
+    <ClCompile Include="Pestana.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="PaginaWeb.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="AdminPestañas.cpp">
+    <ClCompile Include="AdminPestanas.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Marcador.cpp">
+    <ClCompile Include="Benchmark.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Pestaña.h">
+    <ClInclude Include="Pestana.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="PaginaWeb.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="AdminPestañas.h">
+    <ClInclude Include="AdminPestanas.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Marcador.h">
+    <ClInclude Include="Benchmark.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

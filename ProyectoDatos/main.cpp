@@ -1,8 +1,17 @@
-#include"AdminPestañas.h"
+#include "AdminPestanas.h"
+#include "Benchmark.h"
 
 int main() {
-	AdminPestañas* Admin = new AdminPestañas();
-	Admin->iniciarNavegador();
+	bool ejecutarBenchmark = true;
+
+	if (ejecutarBenchmark) {
+		ejecutarBenchmarks();
+	}
+	else {
+		AdminPestanas* Admin = new AdminPestanas();
+		Admin->iniciarNavegador();
+		delete Admin;
+	}
 
 	return 0;
 }

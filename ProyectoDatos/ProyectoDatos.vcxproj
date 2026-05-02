@@ -127,15 +127,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AdminPestañas.cpp" />
+    <ClCompile Include="AdminPestanas.cpp" />
+    <ClCompile Include="Benchmark.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PaginaWeb.cpp" />
-    <ClCompile Include="Pestaña.cpp" />
+    <ClCompile Include="Pestana.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AdminPestañas.h" />
+    <ClInclude Include="AdminPestanas.h" />
+    <ClInclude Include="Benchmark.h" />
     <ClInclude Include="PaginaWeb.h" />
-    <ClInclude Include="Pestaña.h" />
+    <ClInclude Include="Pestana.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
