@@ -30,10 +30,11 @@ public:
 	PaginaWeb* buscaPaginaWeb(string);
 	int obtenerOpcion();
 
-	//archivos
-	void guardarPestañaBinario();
-	void leerPestañaBinario();
-	void guardarHistorialPestaña();
-	void leerHistorialPestaña();
+	//Archivos
+	void guardarPestañaTexto();
+	void leerPestañaTexto();
+	void guardarHistorialPestañaTexto();
+	void leerHistorialPestañaTexto();
+
 };
 #endif

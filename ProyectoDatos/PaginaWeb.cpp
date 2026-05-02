@@ -79,48 +79,28 @@ void PaginaWeb::activarFiltroTiempo() { filtroTiempo = true; }
 
 void PaginaWeb::desactivarFiltroTiempo() { filtroTiempo = false; }
 void PaginaWeb::guardarPaginaWeb(ofstream& file) {
-	bool marcadores = getMarcador();
-	string titulo = getTitulo();
-	string marcadorPersonal = getMarcadorPersonal();
-	string url = getURL();
-
-	size_t longitudTitulo = titulo.size();
-	file.write(reinterpret_cast<const char*>(&longitudTitulo), sizeof(longitudTitulo));
-	file.write(titulo.c_str(), longitudTitulo);
-
-	size_t longitudURL = url.size();
-	file.write(reinterpret_cast<const char*>(&longitudURL), sizeof(longitudURL));
-	file.write(url.c_str(), longitudURL);
-
-	file.write(reinterpret_cast<char*>(&marcadores), sizeof(marcadores));
-
-	size_t longitudMarcadorPersonal = marcadorPersonal.size();
-	file.write(reinterpret_cast<const char*>(&longitudMarcadorPersonal), sizeof(longitudMarcadorPersonal));
-	file.write(marcadorPersonal.c_str(), longitudMarcadorPersonal);
+	file << getURL() << "|" << getTitulo() << "|" << getMarcador() << "|" << getMarcadorPersonal() << "\n";
 }
 
 PaginaWeb* PaginaWeb::leerPaginaWeb(ifstream& file) {
-	string titulo;
-	string url;
-	bool marcadores;
+	string linea;
+	if (!getline(file, linea)) {
+		return nullptr;
+	}
 
-	size_t LTitulo = 0;
-	file.read(reinterpret_cast<char*>(&LTitulo), sizeof(LTitulo));
-	titulo.resize(LTitulo);
-	file.read(&titulo[0], LTitulo);
+	size_t pos1 = linea.find('|');
+	size_t pos2 = linea.find('|', pos1 + 1);
+	size_t pos3 = linea.find('|', pos2 + 1);
+	size_t pos4 = linea.find('|', pos3 + 1);
 
-	size_t LUrl = 0;
-	file.read(reinterpret_cast<char*>(&LUrl), sizeof(LUrl));
-	url.resize(LUrl);
-	file.read(&url[0], LUrl);
+	if (pos1 == string::npos || pos2 == string::npos || pos3 == string::npos) {
+		return nullptr;
+	}
 
-	file.read(reinterpret_cast<char*>(&marcadores), sizeof(marcadores));
-
-	string marcadorPersonal;
-	size_t LMarcadorPersonal = 0;
-	file.read(reinterpret_cast<char*>(&LMarcadorPersonal), sizeof(LMarcadorPersonal));
-	marcadorPersonal.resize(LMarcadorPersonal);
-	file.read(&marcadorPersonal[0], LMarcadorPersonal);
+	string url = linea.substr(0, pos1);
+	string titulo = linea.substr(pos1 + 1, pos2 - pos1 - 1);
+	bool marcadores = stoi(linea.substr(pos2 + 1, pos3 - pos2 - 1)) != 0;
+	string marcadorPersonal = linea.substr(pos3 + 1, pos4 - pos3 - 1);
 
 	PaginaWeb* paginaWeb = new PaginaWeb(url, titulo);
 	paginaWeb->setMarcadorPersonal(marcadorPersonal);

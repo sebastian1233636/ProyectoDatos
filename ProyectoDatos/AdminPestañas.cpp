@@ -13,12 +13,14 @@ AdminPestañas::~AdminPestañas() {
 	NodoPest* aux = tail;
 	while (aux != nullptr) {
 		tail = tail->siguiente;
+		delete aux->pestaña;
 		delete aux;
 		aux = tail;
 	}
 	tail = nullptr;
 	head = nullptr;
 }
+
 
 NodoPest* AdminPestañas::getTail() { return tail; }
 
@@ -36,7 +38,7 @@ void AdminPestañas::iniciarNavegador() {
 
 	if (tail == nullptr) {
 		cout << "  > No hay pestañas todavia, agregando la primera...\n" << endl;
-		string nombrePestaña = "Pestana " + to_string(tam + 1);
+		string nombrePestaña = "Pestaña 0";
 		Pestaña* pes = new Pestaña(nombrePestaña);
 		system("pause");
 		InsertarPrimero(pes);
@@ -142,7 +144,7 @@ void AdminPestañas::ExplorarHistorialPestañas() {
 
 			// Crear nueva pestaña si se presiona N
 			if (GetAsyncKeyState('N') & 0x8000) {
-				string nombrePestaña = "Pestana " + to_string(tam + 1);
+				string nombrePestaña = "Pestaña " + to_string(tam);
 				Pestaña* pes = new Pestaña(nombrePestaña);
 				InsertarPrimero(pes);
 				nodoActual = tail; // Se mueve automáticamente a la nueva pestaña
@@ -460,16 +462,16 @@ void AdminPestañas::menuAdminPestañas(NodoPest* actual) {
 
 
 					case 1: {
-						guardarPestañaBinario();
-						guardarHistorialPestaña();
+						guardarPestañaTexto();
+						guardarHistorialPestañaTexto();
 						cout << "\x1B[32mHistorial guardado exitosamente\x1B[0m" << endl;
 						system("pause");
 						break;
 					}
 
 					case 2: {
-						leerPestañaBinario();
-						leerHistorialPestaña();
+						leerPestañaTexto();
+						leerHistorialPestañaTexto();
 						cout << "\x1B[32mSesion cargada exitosamente\x1B[0m" << endl;
 						system("pause");
 						break;
@@ -539,68 +541,72 @@ int AdminPestañas::obtenerOpcion()
 	return op;  // Retorna la opción válida
 }
 
-void AdminPestañas::guardarPestañaBinario() {
-	ofstream file("Pestañas.bin", ios::binary);
-	if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }
-	else {
-		NodoPest* actual = tail;
-		while (actual != nullptr) {
-			actual->pestaña->guardarPestaña(file);
-			actual = actual->siguiente;
-		}
+void AdminPestañas::guardarPestañaTexto() {
+	ofstream file("Pestañas.txt");
+	if (!file.is_open()) {
+		cout << "El archivo no se abrio" << endl;
+		return;
+	}
+
+	NodoPest* actual = tail;
+	while (actual != nullptr) {
+		actual->pestaña->guardarPestaña(file);
+		actual = actual->siguiente;
 	}
 	file.close();
 }
 
-void AdminPestañas::leerPestañaBinario() {
-	ifstream file("Pestañas.bin", ios::binary);
-	if (!file.is_open()) { cout << "El archivo no se abrio" << endl; }
-	else {
-		file.seekg(0, ios::end);
-		std::streampos fileSize = file.tellg();
-		file.seekg(0, ios::beg);
-		while (file.tellg() < fileSize) {
-			Pestaña* pestaña = new Pestaña();
-			Pestaña* pes = pestaña->leerPestaña(file);
-			if (pes != nullptr) { InsertarPrimero(pes); }
-			else {
-				cout << "Error al leer una pestaña del archivo." << endl;
-				break;
-			}
+void AdminPestañas::leerPestañaTexto() {
+	ifstream file("Pestañas.txt");
+	if (!file.is_open()) {
+		cout << "El archivo no se abrio" << endl;
+		return;
+	}
+
+	// Guarda la primera pestaña (la inicial del programa)
+	NodoPest* pestañaInicial = head;
+
+	while (true) {
+		Pestaña* pestaña = new Pestaña();
+		Pestaña* pes = pestaña->leerPestaña(file);
+		if (pes == nullptr) {
+			delete pestaña;
+			break;
 		}
+		InsertarPrimero(pes);
 	}
 	file.close();
 }
 
-void AdminPestañas::guardarHistorialPestaña() {
+void AdminPestañas::guardarHistorialPestañaTexto() {
 	NodoPest* actual = tail;
 	ofstream file;
 	string nombre;
 
 	while (actual != nullptr) {
-		nombre = "Historial" + actual->pestaña->getNombre() + ".bin";
-		file.open(nombre, ios::binary);
+		nombre = "Historial_" + actual->pestaña->getNombre() + ".txt";
+		file.open(nombre);
 		if (!file.is_open()) {
 			cout << "El archivo no se abrio" << endl;
 		}
-		actual->pestaña->guardarHistorialBinario(file);
+		actual->pestaña->guardarHistorial(file);
 		file.close();
 		actual = actual->siguiente;
 	}
 }
 
-void AdminPestañas::leerHistorialPestaña() {
+void AdminPestañas::leerHistorialPestañaTexto() {
 	NodoPest* actual = tail;
 	ifstream file;
 	string nombre;
 
-	while (actual != nullptr) {
-		nombre = "Historial" + actual->pestaña->getNombre() + ".bin";
-		file.open(nombre, ios::binary);
+	while (actual != nullptr && actual != head) {  // No tocar la pestaña inicial (head)
+		nombre = "Historial_" + actual->pestaña->getNombre() + ".txt";
+		file.open(nombre);
 		if (!file.is_open()) {
 			cout << "El archivo no se abrio" << endl;
 		}
-		actual->pestaña->leerHistorialBinario(file);
+		actual->pestaña->leerHistorial(file);
 		file.close();
 		actual = actual->siguiente;
 	}

@@ -48,11 +48,10 @@ public:
 	void desactivarFiltros();
 	void desactivarFiltroTiempo();
 
-	//Archivos
+	//Archivos de Texto
 	void guardarPestaña(ofstream&);
 	static Pestaña* leerPestaña(ifstream&);
-
-	void guardarHistorialBinario(ofstream&);
-	void leerHistorialBinario(ifstream&);
+	void guardarHistorial(ofstream&);
+	void leerHistorial(ifstream&);
 };
 #endif

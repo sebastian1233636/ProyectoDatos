@@ -296,50 +296,32 @@ void Pestaña::desactivarFiltroTiempo() {
 }
 
 void Pestaña::guardarPestaña(ofstream& file) {
-	string name = getNombre(); // Agarra el nombre de la pestaña
-	bool incognito = getIcognito(); // Verifica si la pestaña está en modo incógnito
-	size_t longitudname = name.size(); // Agarra la longitud del nombre de la pestaña
-
-	// Escribe la longitud del nombre en el archivo
-	file.write(reinterpret_cast<const char*>(&longitudname), sizeof(longitudname));
-
-	// Escribe el nombre de la pestaña en el archivo
-	file.write(name.c_str(), longitudname);
-
-	// Escribe el estado de incógnito en el archivo
-	file.write(reinterpret_cast<char*>(&incognito), sizeof(incognito));
+	file << getNombre() << "|" << getIcognito() << "\n";
 }
 
 Pestaña* Pestaña::leerPestaña(ifstream& file) {
-	string name; 
-	bool incognito; 
-	size_t Lname = 0; // Variable para almacenar la longitud del nombre
+	string linea;
+	if (!getline(file, linea)) {
+		return nullptr;
+	}
 
-	// Lee la longitud del nombre desde el archivo
-	file.read(reinterpret_cast<char*>(&Lname), sizeof(Lname));
+	size_t pos = linea.find('|');
+	if (pos == string::npos) {
+		return nullptr;
+	}
 
-	// Redimensiona el string usado para el nombre
-	name.resize(Lname);
+	string name = linea.substr(0, pos);
+	bool incognito = stoi(linea.substr(pos + 1)) != 0;
 
-	// Lee el nombre de la pestaña desde el archivo
-	file.read(&name[0], Lname);
-
-	// Lee el estado de incógnito desde el archivo
-	file.read(reinterpret_cast<char*>(&incognito), sizeof(incognito));
-
-	// Crea una nueva pestaña con el nombre leído
 	Pestaña* pestaña = new Pestaña(name);
-
-	// Si ña pestaña estaba en modo incógnito, lo activa
 	if (incognito) {
 		pestaña->activarModoIncognito();
 	}
-
-	return pestaña; // Devuelve el puntero a la nueva pestaña
+	return pestaña;
 }
 
 
-void Pestaña::guardarHistorialBinario(ofstream& file) {
+void Pestaña::guardarHistorial(ofstream& file) {
 	NodoPag* actual = tail;
 
 	if (!file.is_open()) {
@@ -354,29 +336,23 @@ void Pestaña::guardarHistorialBinario(ofstream& file) {
 	file.close();
 }
 
-void Pestaña::leerHistorialBinario(ifstream& file) {
+void Pestaña::leerHistorial(ifstream& file) {
 	if (!file.is_open()) {
 		cout << "El archivo no se pudo abrir" << endl;
 		return;
 	}
 
-	file.seekg(0, ios::end);
-	std::streampos fileSize = file.tellg();
-	file.seekg(0, ios::beg);
+	while (true) {
+		PaginaWeb* pag = new PaginaWeb();
+		PaginaWeb* pagLeida = pag->leerPaginaWeb(file);
 
-	while (file.tellg() < fileSize) {
-		PaginaWeb* pagLeida = new PaginaWeb();
-		PaginaWeb* pag = pagLeida->leerPaginaWeb(file);
-
-		if (pag != nullptr) {
-			insertarPrimero(*pag);
-		} else {
-			cout << "Error al leer una página web del archivo." << endl;
+		if (pagLeida == nullptr) {
+			delete pag;
 			break;
 		}
+		insertarPrimero(*pagLeida);
 	}
 	file.close();
-	cout << "Lectura del historial completada." << endl;
 }
 
 
