@@ -2,6 +2,7 @@
 #include<limits>
 #include<ios>
 #include<clocale>
+#include <omp.h>
 
 AdminPestanas::AdminPestanas() {
 	tail = nullptr;
@@ -496,31 +497,73 @@ void AdminPestanas::menuAdminPestanas(NodoPest* actual) {
 }
 
 PaginaWeb* AdminPestanas::buscaPaginaWeb(string urlBuscado) {
+	int numHilos = 8; 
 	string archivo("Prueba.csv");
-	ifstream file(archivo);
 
-	if (!file.is_open()) {
+	ifstream tempFile(archivo, ios::ate | ios::binary);
+	if (!tempFile.is_open()) {
 		cout << "El archivo no se abrio" << endl;
 		return nullptr;
 	}
+	streamoff fileSize = tempFile.tellg();
+	tempFile.close();
 
-	string linea;
-	while (getline(file, linea)) {
-		stringstream ss(linea);
-		string url;
-		string titulo;
+	PaginaWeb* resultado = nullptr;
+	bool encontrado = false;
 
-		if (getline(ss, url, ',') && getline(ss, titulo)) {
-			if (url == urlBuscado) {
-				PaginaWeb* pagAr = new PaginaWeb(url, titulo);
-				file.close();
-				return pagAr;
+	#pragma omp parallel num_threads(numHilos) shared(encontrado, resultado)
+	{
+		int idHilo = omp_get_thread_num();
+		int totalHilos = omp_get_num_threads();
+
+		streamoff chunkSize = fileSize / totalHilos;
+		streamoff startPos = idHilo * chunkSize;
+		streamoff endPos = (idHilo == totalHilos - 1) ? fileSize : (startPos + chunkSize);
+
+		ifstream file(archivo, ios::binary);
+		if (file.is_open()) {
+			file.seekg(startPos);
+
+			if (startPos != 0) {
+				string descartado;
+				getline(file, descartado);
 			}
+
+			streamoff currentPos = file.tellg();
+			string linea;
+
+			while (!encontrado && currentPos != -1 && currentPos < endPos && getline(file, linea)) {
+
+				currentPos = file.tellg(); 
+
+				if (!linea.empty() && linea.back() == '\r') {
+					linea.pop_back();
+				}
+
+				if (linea.empty()) continue;
+
+				size_t pos_coma = linea.find(',');
+
+				if (pos_coma != string::npos) {
+					if (linea.compare(0, pos_coma, urlBuscado) == 0) {
+
+						string url = linea.substr(0, pos_coma);
+						string titulo = linea.substr(pos_coma + 1);
+
+						#pragma omp critical
+						{
+							if (!encontrado) {
+								resultado = new PaginaWeb(url, titulo);
+								encontrado = true;
+							}
+						}
+					}
+				}
+			}
+			file.close();
 		}
 	}
-
-	file.close();
-	return nullptr;
+	return resultado;
 }
 
 int AdminPestanas::obtenerOpcion()
