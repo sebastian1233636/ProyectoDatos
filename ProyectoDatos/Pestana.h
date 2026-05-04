@@ -54,6 +54,8 @@ public:
 	void guardarPestana(ofstream&);
 	static Pestana* leerPestana(ifstream&);
 	void guardarHistorial(ofstream&);
+	void guardarHistorialParalelo(ofstream&);
 	void leerHistorial(ifstream&);
+	void leerHistorialParalelo(ifstream&);
 };
 #endif

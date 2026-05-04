@@ -1,5 +1,7 @@
 #include "Pestana.h"
 #include <iostream>
+#include <omp.h>
+#include <vector>
 
 
 Pestana::Pestana(string nom) {
@@ -385,10 +387,52 @@ void Pestana::guardarHistorial(ofstream& file) {
 
 	while (actual != nullptr) {
 		actual->paginaWeb->guardarPaginaWeb(file);
+		file.flush();
 		actual = actual->siguiente;
 	}
+
 	file.close();
 }
+
+
+void Pestana::guardarHistorialParalelo(ofstream& file) {
+	if (!file.is_open()) {
+		cout << "El archivo no se abrio" << endl;
+		return;
+	}
+
+	int numHilos = 5; 
+
+	vector<PaginaWeb*> paginas;
+	paginas.reserve(100000);
+
+	NodoPag* actual = tail;
+	while (actual != nullptr) {
+		paginas.push_back(actual->paginaWeb);
+		actual = actual->siguiente;
+	}
+
+	int n = paginas.size();
+
+	if (numHilos <= 0) {
+		numHilos = omp_get_max_threads();
+	}
+
+#pragma omp parallel for ordered schedule(dynamic,1000) num_threads(numHilos)
+	for (int i = 0; i < n; ++i) {
+#pragma omp ordered
+		{
+			file << paginas[i]->getURL() << '|'
+				<< paginas[i]->getTitulo() << '|'
+				<< paginas[i]->getMarcador() << '|'
+				<< paginas[i]->getMarcadorPersonal() << '\n';
+		}
+	}
+
+	file.close();
+}
+
+
 
 void Pestana::leerHistorial(ifstream& file) {
 	if (!file.is_open()) {
@@ -408,6 +452,81 @@ void Pestana::leerHistorial(ifstream& file) {
 	}
 	file.close();
 }
+
+void Pestana::leerHistorialParalelo(ifstream& file) {
+	if (!file.is_open()) {
+		cout << "El archivo no se pudo abrir" << endl;
+		return;
+	}
+
+	int numHilos = 5; 
+
+	vector<string> lineas;
+	lineas.reserve(100000);
+
+	string linea;
+	while (getline(file, linea)) {
+		if (!linea.empty()) {
+			lineas.push_back(linea);
+		}
+	}
+	file.close();
+
+	int n = lineas.size();
+
+	if (numHilos <= 0) {
+		numHilos = omp_get_max_threads();
+	}
+
+	vector<PaginaWeb*> paginasLeidas(n, nullptr);
+
+#pragma omp parallel for schedule(static) num_threads(numHilos) default(none) shared(lineas, paginasLeidas, n)
+	for (int i = 0; i < n; ++i) {
+		const string& linea = lineas[i];
+
+		size_t pos1 = linea.find('|');
+		if (pos1 == string::npos) {
+			continue;
+		}
+
+		size_t pos2 = linea.find('|', pos1 + 1);
+		if (pos2 == string::npos) {
+			continue;
+		}
+
+		size_t pos3 = linea.find('|', pos2 + 1);
+		if (pos3 == string::npos) {
+			continue;
+		}
+
+		string url = linea.substr(0, pos1);
+		string titulo = linea.substr(pos1 + 1, pos2 - pos1 - 1);
+
+		bool marcadores = false;
+		if (pos2 + 1 < linea.size()) {
+			marcadores = linea[pos2 + 1] == '1';
+		}
+
+		string marcadorPersonal = linea.substr(pos3 + 1);
+
+		PaginaWeb* paginaWeb = new PaginaWeb(url, titulo);
+		paginaWeb->setMarcadorPersonal(marcadorPersonal);
+
+		if (marcadores) {
+			paginaWeb->PonerMarcador();
+		}
+
+		paginasLeidas[i] = paginaWeb;
+	}
+
+	for (int i = n - 1; i >= 0; --i) {
+		if (paginasLeidas[i] != nullptr) {
+			insertarPrimero(*paginasLeidas[i]);
+		}
+	}
+}
+
+
 
 
 
