@@ -126,7 +126,7 @@ void ejecutarBenchmarks() {
 	medirOperacion("Guardado de historial", benchmarkGuardadoHistorial);
 	medirOperacion("Busqueda por palabra clave", benchmarkBusquedaPalabraClave);
 	medirOperacion("Filtrado por tiempo", benchmarkFiltradoPorTiempo);
-	medirOperacion("Mostrar favoritos", benchmarkMostrarFavoritos);
+	//medirOperacion("Mostrar favoritos", benchmarkMostrarFavoritos);
 
 	cout << "==============================================" << endl;
 	cout << "          FIN DE LAS PRUEBAS                  " << endl;
