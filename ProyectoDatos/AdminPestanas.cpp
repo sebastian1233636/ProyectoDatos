@@ -329,7 +329,6 @@ void AdminPestanas::menuAdminPestanas(NodoPest* actual) {
 					cout << "Digite la palabra clave para buscar en paginas" << endl;
 					cout << "Se mostraran las paginas que contengan la palabra en el titulo o en la URL" << endl;
 					cin >> palabraclave;
-					actual->pestana->mostrarPorPalabraClave(palabraclave);
 					break;
 				}
 

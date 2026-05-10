@@ -3,7 +3,6 @@
 #include <omp.h>
 #include <vector>
 
-
 Pestana::Pestana(string nom) {
 	tail = nullptr;
 	head = nullptr;
@@ -80,9 +79,11 @@ void Pestana::explorarHistorial() {
 
 	if (modoIcognito) {
 		cout << "  \x1B[35m> No guardar historial ni marcadores\x1B[0m" << endl;
-	} else if (nodoActual->paginaWeb->getMostrarFiltro() && nodoActual->paginaWeb->getFiltroTiempo()) {
+	}
+	else if (nodoActual->paginaWeb->getMostrarFiltro() && nodoActual->paginaWeb->getFiltroTiempo()) {
 		nodoActual->paginaWeb->MostrarPaginaWeb();
-	} else {
+	}
+	else {
 		cout << "  \x1B[31m[PAGINA OCULTA POR FILTRO]\x1B[0m" << endl;
 	}
 
@@ -91,7 +92,8 @@ void Pestana::explorarHistorial() {
 			if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 				if (nodoActual->anterior == nullptr) {
 					cout << "\n  \x1B[31m[!] No se puede retroceder mas.\x1B[0m" << endl;
-				} else {
+				}
+				else {
 					nodoActual = nodoActual->anterior;
 					cout << "\x1B[2J\x1B[H";
 					cout << "\x1B[36m\n  ===================================================\x1B[0m" << endl;
@@ -106,7 +108,8 @@ void Pestana::explorarHistorial() {
 
 					if (nodoActual->paginaWeb->getMostrarFiltro() && nodoActual->paginaWeb->getFiltroTiempo()) {
 						nodoActual->paginaWeb->MostrarPaginaWeb();
-					} else {
+					}
+					else {
 						cout << "  \x1B[31m[PAGINA OCULTA POR FILTRO]\x1B[0m" << endl;
 					}
 				}
@@ -116,7 +119,8 @@ void Pestana::explorarHistorial() {
 			if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
 				if (nodoActual->siguiente == nullptr) {
 					cout << "\n  \x1B[31m[!] No se puede avanzar mas.\x1B[0m" << endl;
-				} else {
+				}
+				else {
 					nodoActual = nodoActual->siguiente;
 					cout << "\x1B[2J\x1B[H";
 					cout << "\x1B[36m\n  ===================================================\x1B[0m" << endl;
@@ -131,7 +135,8 @@ void Pestana::explorarHistorial() {
 
 					if (nodoActual->paginaWeb->getMostrarFiltro() && nodoActual->paginaWeb->getFiltroTiempo()) {
 						nodoActual->paginaWeb->MostrarPaginaWeb();
-					} else {
+					}
+					else {
 						cout << "  \x1B[31m[PAGINA OCULTA POR FILTRO]\x1B[0m" << endl;
 					}
 				}
@@ -156,7 +161,6 @@ void Pestana::explorarHistorial() {
 		}
 	}
 }
-
 
 void Pestana::buscarFavorito() {
 	NodoPag* nodoActual = tail;
@@ -218,68 +222,41 @@ void Pestana::mostrarFavoritos() {
 
 	if (contador > 0) {
 		cout << "  \x1B[32m[+] Total de paginas favoritas: " << contador << "\x1B[0m" << endl;
-	} else {
+	}
+	else {
 		cout << "  \x1B[31m[!] No hay paginas marcadas como favoritas\x1B[0m" << endl;
 	}
 	cout << endl;
 	system("pause");
 }
 
-void Pestana::mostrarPorPalabraClave(string palabraclave) {
+void Pestana::buscarPorPalabraClave(string palabraclave) {
+	vector<PaginaWeb*> paginas;
 	NodoPag* actual = tail;
-	int contador = 0;
 
 	while (actual != nullptr) {
-		string url = actual->paginaWeb->getURL();
-		string titulo = actual->paginaWeb->getTitulo();
-
-		if (url.find(palabraclave) != string::npos || titulo.find(palabraclave) != string::npos) {
-			contador++;
-		}
+		paginas.push_back(actual->paginaWeb);
 		actual = actual->siguiente;
 	}
 
-	cout << "\x1B[2J\x1B[H";
-	cout << "\x1B[36m\n  ===================================================\x1B[0m" << endl;
-	cout << "\x1B[36m  ||          RESULTADOS DE BUSQUEDA              ||\x1B[0m" << endl;
-	cout << "\x1B[36m  ||  Palabra clave: \x1B[32m" << palabraclave << "\x1B[36m" << "                      ||\x1B[0m" << endl;
-	cout << "\x1B[36m  ===================================================\x1B[0m\n" << endl;
-
-	if (contador > 0) {
-		cout << "  \x1B[32m[+] Se encontraron " << contador << " pagina(s) que cumplen con el requisito.\x1B[0m" << endl;
-	} else {
-		cout << "  \x1B[31m[!] No se ha encontrado ninguna pagina que cumpla con el requisito.\x1B[0m" << endl;
-	}
-	cout << endl;
-	system("pause");
-}
-
-void Pestana::buscarPorPalabraClave(string palabraclave) {
-	NodoPag* actual = tail;
 	bool bandera = false;
+	int numHilos = 2;
+	int n = paginas.size();
 
-	while (actual != nullptr) {
-		string url = actual->paginaWeb->getURL();
-		string titulo = actual->paginaWeb->getTitulo();
+#pragma omp parallel for num_threads(numHilos) schedule(static) reduction(|:bandera)
+	for (int i = 0; i < n; ++i) {
+		string url = paginas[i]->getURL();
+		string titulo = paginas[i]->getTitulo();
 
 		if (url.find(palabraclave) == string::npos && titulo.find(palabraclave) == string::npos) {
-			actual->paginaWeb->desactivarFiltro();
-		} else {
-			actual->paginaWeb->activarFiltro();
-			bandera = true;
+			paginas[i]->desactivarFiltro();
 		}
-		actual = actual->siguiente;
-	}
-
-	system("pause");
-
-	if (!bandera) {
-		cout << "No se ha encontrado una pagina que cumpla con el requisito." << endl;
-		system("pause");
+		else {
+			paginas[i]->activarFiltro();
+			bandera = true; 
+		}
 	}
 }
-
-
 
 void Pestana::timeFilter(int minutos) {
 	time_t tiempoActual = std::time(nullptr);
@@ -291,12 +268,14 @@ void Pestana::timeFilter(int minutos) {
 
 		if (segundosTranscurridos > minutos * 60) {
 			pagina->desactivarFiltroTiempo();
-		} else {
+		}
+		else {
 			pagina->activarFiltroTiempo();
 		}
 		actual = actual->siguiente;
 	}
 }
+
 void Pestana::eliminarCadaTiempo(int minutos) {
 	time_t tiempoActual = std::time(nullptr);//Obtiene  el tiempo actual
 	NodoPag* aux = tail;
@@ -376,32 +355,13 @@ Pestana* Pestana::leerPestana(ifstream& file) {
 	return pestana;
 }
 
-
 void Pestana::guardarHistorial(ofstream& file) {
-	NodoPag* actual = tail;
-
 	if (!file.is_open()) {
 		cout << "El archivo no se abrio" << endl;
 		return;
 	}
 
-	while (actual != nullptr) {
-		actual->paginaWeb->guardarPaginaWeb(file);
-		file.flush();
-		actual = actual->siguiente;
-	}
-
-	file.close();
-}
-
-
-void Pestana::guardarHistorialParalelo(ofstream& file) {
-	if (!file.is_open()) {
-		cout << "El archivo no se abrio" << endl;
-		return;
-	}
-
-	int numHilos = 5; 
+	int numHilos = 5;
 
 	vector<PaginaWeb*> paginas;
 	paginas.reserve(100000);
@@ -432,34 +392,13 @@ void Pestana::guardarHistorialParalelo(ofstream& file) {
 	file.close();
 }
 
-
-
 void Pestana::leerHistorial(ifstream& file) {
 	if (!file.is_open()) {
 		cout << "El archivo no se pudo abrir" << endl;
 		return;
 	}
 
-	while (true) {
-		PaginaWeb* pag = new PaginaWeb();
-		PaginaWeb* pagLeida = pag->leerPaginaWeb(file);
-
-		if (pagLeida == nullptr) {
-			delete pag;
-			break;
-		}
-		insertarPrimero(*pagLeida);
-	}
-	file.close();
-}
-
-void Pestana::leerHistorialParalelo(ifstream& file) {
-	if (!file.is_open()) {
-		cout << "El archivo no se pudo abrir" << endl;
-		return;
-	}
-
-	int numHilos = 5; 
+	int numHilos = 5;
 
 	vector<string> lineas;
 	lineas.reserve(100000);
@@ -526,10 +465,6 @@ void Pestana::leerHistorialParalelo(ifstream& file) {
 	}
 }
 
-
-
-
-
 void Pestana::explorarHistorialIncognito() {
 	bool bandera = true;
 	NodoPag* nodoActual = tail;
@@ -545,7 +480,8 @@ void Pestana::explorarHistorialIncognito() {
 		if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 			if (nodoActual->anterior == nullptr) {
 				cout << "No se puede retroceder más." << endl;
-			} else {
+			}
+			else {
 				nodoActual->paginaWeb->MostrarPaginaWeb();
 				nodoActual = nodoActual->anterior;
 			}
@@ -554,7 +490,8 @@ void Pestana::explorarHistorialIncognito() {
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
 			if (nodoActual->siguiente == nullptr) {
 				cout << "No se puede avanzar más." << endl;
-			} else {
+			}
+			else {
 				nodoActual->paginaWeb->MostrarPaginaWeb();
 				nodoActual = nodoActual->siguiente;
 			}
@@ -565,3 +502,4 @@ void Pestana::explorarHistorialIncognito() {
 		}
 	}
 }
+

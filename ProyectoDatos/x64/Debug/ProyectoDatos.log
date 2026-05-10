@@ -1,4 +1,5 @@
 ﻿  Pestana.cpp
-C:\Users\alvar\source\repos\ProyectoDatos\ProyectoDatos\Pestana.cpp(415,8): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\alvar\source\repos\ProyectoDatos\ProyectoDatos\Pestana.cpp(475,8): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-  ProyectoDatos.vcxproj -> C:\Users\alvar\source\repos\ProyectoDatos\x64\Debug\ProyectoDatos.exe
+C:\Users\antho\Downloads\ProyectoDatos\ProyectoDatos\Pestana.cpp(244,8): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\antho\Downloads\ProyectoDatos\ProyectoDatos\Pestana.cpp(375,8): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\antho\Downloads\ProyectoDatos\ProyectoDatos\Pestana.cpp(414,8): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+  ProyectoDatos.vcxproj -> C:\Users\antho\Downloads\ProyectoDatos\x64\Debug\ProyectoDatos.exe
