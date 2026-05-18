@@ -9,6 +9,9 @@
 #include<fstream>
 
 using namespace std;
+
+
+//Clase encargada de representar una pagina web visitada por el usuario, con su URL, titulo, marcador personal, tiempo de ingreso, y filtros para mostrarla o no en el historial.
 class PaginaWeb {
 private:
 	string URL;

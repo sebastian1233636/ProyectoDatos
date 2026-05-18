@@ -12,6 +12,8 @@ struct NodoPag {
 	NodoPag* anterior;
 };
 
+//Clase encargada de representar una pestana del navegador, con su historial de paginas web visitadas, su nombre, 
+//y su modo incognito. Permite explorar el historial, buscar favoritos, activar/desactivar el modo incognito, aplicar filtros por tiempo, y guardar/cargar la informacion en archivos de texto.
 class Pestana {
 private:
 	NodoPag* tail;//Primero

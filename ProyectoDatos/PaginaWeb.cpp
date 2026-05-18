@@ -55,6 +55,8 @@ void PaginaWeb::PonerMarcador() { marcador = true; }
 
 void PaginaWeb::QuitarMarcador() { marcador = false; }
 
+
+// Devuelve un string que indica el tiempo transcurrido desde que se ingreso a la pagina web, en formato "Hace X minutos" o "Hace unos segundos" si es menos de un minuto.
 string PaginaWeb::mostrarTiempo() {
 	time_t now = std::time(nullptr);
 	double seconds = difftime(now, tiempoIngreso);
@@ -78,10 +80,15 @@ void PaginaWeb::desactivarFiltro() { mostrarFiltro = false; }
 void PaginaWeb::activarFiltroTiempo() { filtroTiempo = true; }
 
 void PaginaWeb::desactivarFiltroTiempo() { filtroTiempo = false; }
+
+// Guarda la información de la página web en un archivo de texto, separando los campos con el carácter '|'. El formato es: URL|Titulo|Marcador(1 o 0)|MarcadorPersonal
 void PaginaWeb::guardarPaginaWeb(ofstream& file) {
 	file << getURL() << "|" << getTitulo() << "|" << getMarcador() << "|" << getMarcadorPersonal() << "\n";
 }
 
+
+// Lee una línea del archivo de texto y crea un objeto PaginaWeb a partir de ella. El formato esperado es:
+// URL|Titulo|Marcador(1 o 0)|MarcadorPersonal. Retorna un puntero a PaginaWeb si la lectura fue exitosa, o nullptr si hubo un error.
 PaginaWeb* PaginaWeb::leerPaginaWeb(ifstream& file) {
 	string linea;
 	if (!getline(file, linea)) {

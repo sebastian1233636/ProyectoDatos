@@ -51,6 +51,8 @@ void Pestana::insertarPrimero(PaginaWeb& pag) {
 	}
 }
 
+// Permite al usuario explorar el historial de paginas web visitadas en la pestana, mostrando una pagina a la vez. El usuario puede navegar hacia adelante y hacia atras con las flechas, 
+// marcar paginas como favoritas con la tecla F, y salir del historial con ESC. Si el modo incognito esta activo, no se muestra el historial ni se permiten marcadores.		
 void Pestana::explorarHistorial() {
 	bool bandera = true;
 	string marcador;
@@ -162,6 +164,8 @@ void Pestana::explorarHistorial() {
 	}
 }
 
+
+// Recorre el historial de la pestana y muestra las paginas que estan marcadas como favoritas. Si no hay ninguna, muestra un mensaje indicando que no hay favoritos.
 void Pestana::buscarFavorito() {
 	NodoPag* nodoActual = tail;
 	bool bandera = false;
@@ -193,6 +197,9 @@ string Pestana::mostrarPestanaIncognito() {
 	return "PESTAnA: [Modo Incognito Activo]";
 }
 
+
+
+// Busca una pagina web en el historial de la pestana por su URL o titulo. Devuelve un puntero a la pagina si se encuentra, o nullptr si no.
 PaginaWeb* Pestana::buscarPaginaWeb(string nomURL) {
 	NodoPag* actual = tail;
 	while (actual != nullptr) {
@@ -317,6 +324,8 @@ void Pestana::timeFilterParalelo(int minutos) {
 	}
 }
 
+
+// Elimina las paginas del historial que superen el limite de tiempo impuesto por el usuario (en minutos).
 void Pestana::eliminarCadaTiempo(int minutos) {
 	time_t tiempoActual = std::time(nullptr);//Obtiene  el tiempo actual
 	NodoPag* aux = tail;
@@ -355,6 +364,8 @@ void Pestana::eliminarCadaTiempo(int minutos) {
 	}
 }
 
+
+//Desactiva los filtros de todas las paginas de la pestana, mostrando asi todo el historial sin ocultar nada.
 void Pestana::desactivarFiltros() {
 	NodoPag* actual = tail;
 	while (actual != nullptr) {
@@ -363,6 +374,7 @@ void Pestana::desactivarFiltros() {
 	}
 }
 
+//Desactiva el filtro de tiempo de todas las paginas de la pestana, mostrando asi todo el historial sin ocultar nada por el filtro de tiempo.
 void Pestana::desactivarFiltroTiempo() {
 	NodoPag* actual = tail;
 	while (actual != nullptr) {
@@ -371,6 +383,8 @@ void Pestana::desactivarFiltroTiempo() {
 	}
 }
 
+
+//Archivos de texto
 void Pestana::guardarPestana(ofstream& file) {
 	file << getNombre() << "|" << getIcognito() << "\n";
 }
@@ -397,32 +411,41 @@ Pestana* Pestana::leerPestana(ifstream& file) {
 }
 
 void Pestana::guardarHistorial(ofstream& file) {
+	// Verifica que el archivo esté abierto antes de escribir
 	if (!file.is_open()) {
 		cout << "El archivo no se abrio" << endl;
 		return;
 	}
 
-	int numHilos = 5;
+	int numHilos = 5; 
 
+	// Vector para almacenar punteros a las páginas del historial
 	vector<PaginaWeb*> paginas;
-	paginas.reserve(100000);
+	paginas.reserve(100000); // Reserva espacio para evitar realocaciones frecuentes
 
+	// Recorre la lista enlazada desde la cola (tail) hasta el inicio
 	NodoPag* actual = tail;
 	while (actual != nullptr) {
 		paginas.push_back(actual->paginaWeb);
 		actual = actual->siguiente;
 	}
 
-	int n = paginas.size();
+	int n = paginas.size(); 
 
+	// Si numHilos es inválido, usa el máximo disponible en el sistema
 	if (numHilos <= 0) {
 		numHilos = omp_get_max_threads();
 	}
 
+	// Paraleliza el ciclo con OpenMP:
+	// - ordered: garantiza que la escritura se haga en orden secuencial (i=0,1,2,...)
+	// - schedule(dynamic, 1000): reparte bloques de 1000 iteraciones dinámicamente entre hilos
+	// - num_threads: limita el número de hilos al valor definido
 #pragma omp parallel for ordered schedule(dynamic,1000) num_threads(numHilos)
 	for (int i = 0; i < n; ++i) {
 #pragma omp ordered
 		{
+			// Escribe cada página en formato CSV separado por '|'
 			file << paginas[i]->getURL() << '|'
 				<< paginas[i]->getTitulo() << '|'
 				<< paginas[i]->getMarcador() << '|'
@@ -430,75 +453,94 @@ void Pestana::guardarHistorial(ofstream& file) {
 		}
 	}
 
-	file.close();
+	file.close(); // Cierra el archivo al terminar
 }
 
 void Pestana::leerHistorial(ifstream& file) {
+	// Verifica que el archivo esté abierto antes de leer
 	if (!file.is_open()) {
 		cout << "El archivo no se pudo abrir" << endl;
 		return;
 	}
 
-	int numHilos = 5;
+	int numHilos = 5; 
 
+	// Vector donde se almacenarán todas las líneas del archivo
 	vector<string> lineas;
-	lineas.reserve(100000);
+	lineas.reserve(100000); // Reserva espacio para evitar realocaciones
 
 	string linea;
 	while (getline(file, linea)) {
 		if (!linea.empty()) {
-			lineas.push_back(linea);
+			lineas.push_back(linea); // Solo agrega líneas con contenido
 		}
 	}
-	file.close();
+	file.close(); // Cierra el archivo una vez leído todo el contenido
 
-	int n = lineas.size();
+	int n = lineas.size(); 
 
+	// Si numHilos es inválido, usa el máximo disponible en el sistema
 	if (numHilos <= 0) {
 		numHilos = omp_get_max_threads();
 	}
 
+	// Vector de resultados indexado, permite escritura paralela sin condiciones de carrera
+	// ya que cada hilo escribe en su propia posición i
 	vector<PaginaWeb*> paginasLeidas(n, nullptr);
 
+	// Paraleliza el parseo de cada línea:
+	// - schedule(static): reparte las iteraciones en bloques iguales entre hilos (predecible)
+	// - default(none): obliga a declarar explícitamente el uso de cada variable
+	// - shared: lineas y paginasLeidas son compartidas (acceso por índice, sin conflicto)
 #pragma omp parallel for schedule(static) num_threads(numHilos) default(none) shared(lineas, paginasLeidas, n)
 	for (int i = 0; i < n; ++i) {
 		const string& linea = lineas[i];
 
+		// Busca el primer separador '|' → delimita la URL
 		size_t pos1 = linea.find('|');
 		if (pos1 == string::npos) {
-			continue;
+			continue; 
 		}
 
+		// Busca el segundo separador '|' → delimita el título
 		size_t pos2 = linea.find('|', pos1 + 1);
 		if (pos2 == string::npos) {
-			continue;
+			continue; 
 		}
 
+		// Busca el tercer separador '|' → delimita el campo de marcador
 		size_t pos3 = linea.find('|', pos2 + 1);
 		if (pos3 == string::npos) {
-			continue;
+			continue; 
 		}
 
+		// Extrae los campos según las posiciones de los separadores
 		string url = linea.substr(0, pos1);
 		string titulo = linea.substr(pos1 + 1, pos2 - pos1 - 1);
 
+		// El marcador es un booleano guardado como '1' o '0'
 		bool marcadores = false;
 		if (pos2 + 1 < linea.size()) {
 			marcadores = linea[pos2 + 1] == '1';
 		}
 
+		// El marcador personal es el texto que sigue al tercer '|'
 		string marcadorPersonal = linea.substr(pos3 + 1);
 
+		// Crea el objeto PaginaWeb y le asigna sus propiedades
 		PaginaWeb* paginaWeb = new PaginaWeb(url, titulo);
 		paginaWeb->setMarcadorPersonal(marcadorPersonal);
 
 		if (marcadores) {
-			paginaWeb->PonerMarcador();
+			paginaWeb->PonerMarcador(); // Activa el marcador si corresponde
 		}
 
+		// Guarda el resultado en su posición correspondiente (thread-safe por índice único)
 		paginasLeidas[i] = paginaWeb;
 	}
 
+	// Inserta las páginas en orden inverso para reconstruir el historial correctamente
+	// (la primera página leída debe quedar al frente de la lista)
 	for (int i = n - 1; i >= 0; --i) {
 		if (paginasLeidas[i] != nullptr) {
 			insertarPrimero(*paginasLeidas[i]);
@@ -506,6 +548,10 @@ void Pestana::leerHistorial(ifstream& file) {
 	}
 }
 
+
+// Permite explorar el historial de páginas web en modo incógnito usando las teclas
+// de dirección (izquierda/derecha) para navegar entre páginas, y ESC para salir.
+// En este modo no se guarda historial ni marcadores.
 void Pestana::explorarHistorialIncognito() {
 	bool bandera = true;
 	NodoPag* nodoActual = tail;

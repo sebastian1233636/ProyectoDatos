@@ -8,6 +8,9 @@ struct NodoPest {
 	NodoPest* anterior;
 };
 
+
+//Clase encargada de administrar las pestanas del navegador, permitiendo crear nuevas pestanas, navegar entre ellas, 
+//explorar su historial, buscar favoritos, y guardar/cargar la informacion en archivos de texto.
 class AdminPestanas {
 private:
 	NodoPest* tail;//Primero
