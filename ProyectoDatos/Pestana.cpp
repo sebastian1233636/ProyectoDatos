@@ -230,32 +230,42 @@ void Pestana::mostrarFavoritos() {
 	system("pause");
 }
 
+// Filtra las paginas de la pestana segun una palabra clave.
+// Activa el filtro en las paginas que contienen la palabra (en URL o titulo) y lo desactiva en las que no. 
 void Pestana::buscarPorPalabraClave(string palabraclave) {
-	vector<PaginaWeb*> paginas;
-	NodoPag* actual = tail;
 
-	while (actual != nullptr) {
-		paginas.push_back(actual->paginaWeb);
-		actual = actual->siguiente;
-	}
+    // Copia los punteros de la lista enlazada a un vector para poder usar indices con OpenMP
+    vector<PaginaWeb*> paginas;
+    NodoPag* actual = tail;
 
-	bool bandera = false;
-	int numHilos = 2;
-	int n = paginas.size();
+    // Recorre la lista enlazada.
+    while (actual != nullptr) {
+        paginas.push_back(actual->paginaWeb);
+        actual = actual->siguiente;
+    }
 
-#pragma omp parallel for num_threads(numHilos) schedule(static) reduction(|:bandera)
-	for (int i = 0; i < n; ++i) {
-		string url = paginas[i]->getURL();
-		string titulo = paginas[i]->getTitulo();
+    bool bandera = false; // Bandera que sera true si al menos una pagina coincide con la palabra clave
+    int numHilos = 2;
+    int n = paginas.size();
 
-		if (url.find(palabraclave) == string::npos && titulo.find(palabraclave) == string::npos) {
-			paginas[i]->desactivarFiltro();
-		}
-		else {
-			paginas[i]->activarFiltro();
-			bandera = true; 
-		}
-	}
+    // Divide el vector en X bloques estaticos iguales entre los hilos.
+    // 'reduction(|:bandera)' evita condicion de carrera: cada hilo tiene su copia
+    // de bandera y al final se combinan con OR para obtener el resultado
+    #pragma omp parallel for num_threads(numHilos) schedule(static) reduction(|:bandera)
+    for (int i = 0; i < n; ++i) {
+        string url    = paginas[i]->getURL();
+        string titulo = paginas[i]->getTitulo();
+
+        // Si la palabra clave NO aparece ni en la URL ni en el titulo -> desactivar filtro
+        if (url.find(palabraclave) == string::npos && titulo.find(palabraclave) == string::npos) {
+            paginas[i]->desactivarFiltro();
+        }
+        else {
+            // La palabra clave aparece en la URL o en el titulo -> activar filtro
+            paginas[i]->activarFiltro();
+            bandera = true; // Al menos una pagina coincidio
+        }
+    }
 }
 
 void Pestana::timeFilter(int minutos) {
