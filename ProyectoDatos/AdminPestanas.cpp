@@ -495,74 +495,83 @@ void AdminPestanas::menuAdminPestanas(NodoPest* actual) {
 	}
 }
 
+// Busca una página web por URL en el archivo CSV usando paralelismo con OpenMP. Retorna un puntero a PaginaWeb si la encuentra, o nullptr si no existe.
 PaginaWeb* AdminPestanas::buscaPaginaWeb(string urlBuscado) {
-	int numHilos = 8; 
-	string archivo("Prueba.csv");
+    int numHilos = 8;
+    string archivo("Prueba.csv");
 
-	ifstream tempFile(archivo, ios::ate | ios::binary);
-	if (!tempFile.is_open()) {
-		cout << "El archivo no se abrio" << endl;
-		return nullptr;
-	}
-	streamoff fileSize = tempFile.tellg();
-	tempFile.close();
+    // Abre el archivo solo para medir su tamaño en bytes (ios::ate posiciona al final)
+    ifstream tempFile(archivo, ios::ate | ios::binary);
+    if (!tempFile.is_open()) {
+        cout << "El archivo no se abrio" << endl;
+        return nullptr;
+    }
+    streamoff fileSize = tempFile.tellg(); // Tamaño total del archivo
+    tempFile.close();
 
-	PaginaWeb* resultado = nullptr;
-	bool encontrado = false;
+    PaginaWeb* resultado = nullptr;
+    bool encontrado = false; // Bandera compartida para detener todos los hilos al encontrar
 
-	#pragma omp parallel num_threads(numHilos) shared(encontrado, resultado)
-	{
-		int idHilo = omp_get_thread_num();
-		int totalHilos = omp_get_num_threads();
+    // Lanza X hilos en paralelo. 'encontrado' y 'resultado' son compartidos entre hilos
+    #pragma omp parallel num_threads(numHilos) shared(encontrado, resultado)
+    {
+        int idHilo = omp_get_thread_num();    // ID del hilo actual (0 al 7)
+        int totalHilos = omp_get_num_threads(); // Total de hilos activos
 
-		streamoff chunkSize = fileSize / totalHilos;
-		streamoff startPos = idHilo * chunkSize;
-		streamoff endPos = (idHilo == totalHilos - 1) ? fileSize : (startPos + chunkSize);
+        // Calcula el rango de bytes que le corresponde a este hilo
+        streamoff chunkSize = fileSize / totalHilos;
+        streamoff startPos = idHilo * chunkSize;
+        // El ultimo hilo llega hasta el final del archivo para no perder bytes
+        streamoff endPos = (idHilo == totalHilos - 1) ? fileSize : (startPos + chunkSize);
 
-		ifstream file(archivo, ios::binary);
-		if (file.is_open()) {
-			file.seekg(startPos);
+        ifstream file(archivo, ios::binary); // Cada hilo abre su propia instancia del archivo
+        if (file.is_open()) {
+            file.seekg(startPos); // Posiciona el cursor en el inicio del chunk
 
-			if (startPos != 0) {
-				string descartado;
-				getline(file, descartado);
-			}
+            // Si no es el primer hilo, descarta la primera linea porque puede estar cortada a la mitad
+            if (startPos != 0) {
+                string descartado;
+                getline(file, descartado);
+            }
 
-			streamoff currentPos = file.tellg();
-			string linea;
+            streamoff currentPos = file.tellg();
+            string linea;
 
-			while (!encontrado && currentPos != -1 && currentPos < endPos && getline(file, linea)) {
+            // Recorre lineas mientras: nadie haya encontrado el resultado, el cursor este dentro del chunk asignado, y haya lineas por leer
+            while (!encontrado && currentPos != -1 && currentPos < endPos && getline(file, linea)) {
 
-				currentPos = file.tellg(); 
+                currentPos = file.tellg(); // Actualiza la posicion actual del cursor
 
-				if (!linea.empty() && linea.back() == '\r') {
-					linea.pop_back();
-				}
+                if (!linea.empty() && linea.back() == '\r') {
+                    linea.pop_back();
+                }
 
-				if (linea.empty()) continue;
+                if (linea.empty()) continue; // Ignora lineas vacias
 
-				size_t pos_coma = linea.find(',');
+                size_t pos_coma = linea.find(','); // Busca el separador del CSV
 
-				if (pos_coma != string::npos) {
-					if (linea.compare(0, pos_coma, urlBuscado) == 0) {
+                if (pos_coma != string::npos) {
+                    // Compara solo la parte de la URL (antes de la coma) con la URL buscada
+                    if (linea.compare(0, pos_coma, urlBuscado) == 0) {
 
-						string url = linea.substr(0, pos_coma);
-						string titulo = linea.substr(pos_coma + 1);
+                        string url = linea.substr(0, pos_coma);       // Extrae la URL
+                        string titulo = linea.substr(pos_coma + 1);   // Extrae el titulo
 
-						#pragma omp critical
-						{
-							if (!encontrado) {
-								resultado = new PaginaWeb(url, titulo);
-								encontrado = true;
-							}
-						}
-					}
-				}
-			}
-			file.close();
-		}
-	}
-	return resultado;
+                        // Seccion critica: solo un hilo puede crear el resultado a la vez
+                        #pragma omp critical
+                        {
+                            if (!encontrado) {
+                                resultado = new PaginaWeb(url, titulo);
+                                encontrado = true; // Señala a los demas hilos que paren
+                            }
+                        }
+                    }
+                }
+            }
+            file.close();
+        }
+    }
+    return resultado;
 }
 
 int AdminPestanas::obtenerOpcion()
