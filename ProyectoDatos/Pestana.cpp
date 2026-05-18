@@ -73,7 +73,7 @@ void Pestana::explorarHistorial() {
 	cout << "  \x1B[33mCONTROLES:\x1B[0m" << endl;
 	cout << "  [ <- ] Flecha Izquierda | Volver (Atras)" << endl;
 	cout << "  [ -> ] Flecha Derecha   | Avanzar (Adelante)" << endl;
-	cout << "  [ F ]  Tecla F          | Marcar pág. como Favorito" << endl;
+	cout << "  [ F ]  Tecla F          | Marcar pï¿½g. como Favorito" << endl;
 	cout << "  [ESC]  Escape           | Salir del historial" << endl;
 	cout << "\x1B[36m  ---------------------------------------------------\x1B[0m\n" << endl;
 
@@ -102,7 +102,7 @@ void Pestana::explorarHistorial() {
 					cout << "  \x1B[33mCONTROLES:\x1B[0m" << endl;
 					cout << "  [ <- ] Flecha Izquierda | Volver (Atras)" << endl;
 					cout << "  [ -> ] Flecha Derecha   | Avanzar (Adelante)" << endl;
-					cout << "  [ F ]  Tecla F          | Marcar pág. como Favorito" << endl;
+					cout << "  [ F ]  Tecla F          | Marcar pï¿½g. como Favorito" << endl;
 					cout << "  [ESC]  Escape           | Salir del historial" << endl;
 					cout << "\x1B[36m  ---------------------------------------------------\x1B[0m\n" << endl;
 
@@ -129,7 +129,7 @@ void Pestana::explorarHistorial() {
 					cout << "  \x1B[33mCONTROLES:\x1B[0m" << endl;
 					cout << "  [ <- ] Flecha Izquierda | Volver (Atras)" << endl;
 					cout << "  [ -> ] Flecha Derecha   | Avanzar (Adelante)" << endl;
-					cout << "  [ F ]  Tecla F          | Marcar pág. como Favorito" << endl;
+					cout << "  [ F ]  Tecla F          | Marcar pï¿½g. como Favorito" << endl;
 					cout << "  [ESC]  Escape           | Salir del historial" << endl;
 					cout << "\x1B[36m  ---------------------------------------------------\x1B[0m\n" << endl;
 
@@ -182,7 +182,7 @@ void Pestana::buscarFavorito() {
 
 string Pestana::mostrarPestana() {
 	stringstream s;
-	s << "|Si desea moverse entre pestanas, presione la opción 7 y las flechas de arriba y abajo." << endl;
+	s << "|Si desea moverse entre pestanas, presione la opciï¿½n 7 y las flechas de arriba y abajo." << endl;
 	s << "|Si desea marcar una pagina web como favorita, presione la tecla F." << endl;
 	s << "|Para dejar de ver el historial y volver al menu de Pestana presionar ESC." << endl;
 	s << "|-------------------------" << nombre << "---------------------------|" << endl;
@@ -276,12 +276,43 @@ void Pestana::timeFilter(int minutos) {
 	}
 }
 
+void Pestana::timeFilterParalelo(int minutos) {
+	time_t tiempoActual = std::time(nullptr);
+	vector<PaginaWeb*> paginas;
+	NodoPag* actual = tail;
+
+	while (actual != nullptr) {
+		paginas.push_back(actual->paginaWeb);
+		actual = actual->siguiente;
+	}
+
+	int n = paginas.size();
+	int numHilos = 5;
+
+	if (numHilos <= 0) {
+		numHilos = omp_get_max_threads();
+	}
+
+#pragma omp parallel for schedule(static) num_threads(numHilos) default(none) shared(paginas, n, tiempoActual, minutos)
+	for (int i = 0; i < n; ++i) {
+		PaginaWeb* pagina = paginas[i];
+		double segundosTranscurridos = difftime(tiempoActual, pagina->getTiempo());
+
+		if (segundosTranscurridos > minutos * 60) {
+			pagina->desactivarFiltroTiempo();
+		}
+		else {
+			pagina->activarFiltroTiempo();
+		}
+	}
+}
+
 void Pestana::eliminarCadaTiempo(int minutos) {
 	time_t tiempoActual = std::time(nullptr);//Obtiene  el tiempo actual
 	NodoPag* aux = tail;
 
 	while (aux != nullptr) {
-		double segundosTranscurridos = difftime(tiempoActual, aux->paginaWeb->getTiempo());//cacula el timepo transcurrido desde que se ingresó la página
+		double segundosTranscurridos = difftime(tiempoActual, aux->paginaWeb->getTiempo());//cacula el timepo transcurrido desde que se ingresï¿½ la pï¿½gina
 		if (segundosTranscurridos > minutos * 60) {//Si la pagina supera el limite inpuesto por el usuario se elimina
 			NodoPag* nodoAEliminar = aux;
 			aux = aux->siguiente;
@@ -479,7 +510,7 @@ void Pestana::explorarHistorialIncognito() {
 	while (bandera) {
 		if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 			if (nodoActual->anterior == nullptr) {
-				cout << "No se puede retroceder más." << endl;
+				cout << "No se puede retroceder mï¿½s." << endl;
 			}
 			else {
 				nodoActual->paginaWeb->MostrarPaginaWeb();
@@ -489,7 +520,7 @@ void Pestana::explorarHistorialIncognito() {
 		}
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
 			if (nodoActual->siguiente == nullptr) {
-				cout << "No se puede avanzar más." << endl;
+				cout << "No se puede avanzar mï¿½s." << endl;
 			}
 			else {
 				nodoActual->paginaWeb->MostrarPaginaWeb();

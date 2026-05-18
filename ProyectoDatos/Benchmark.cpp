@@ -59,6 +59,10 @@ void benchmarkCargaHistorialDesdeArchivo() {
 	file.close();
 }
 
+void benchmarkFiltradoPorTiempoParalelo() {
+	benchmark.timeFilterParalelo(10);
+}
+
 //Guarda el historial ya existente de la pestaña benchmark en un nuevo archivo de texto
 void benchmarkGuardadoHistorial() {
 	ofstream fileSalida("Historial_Benchmark_Salida.txt");
@@ -93,12 +97,9 @@ void ejecutarBenchmarks() {
 	medirOperacion("Busqueda por URL en archivo CSV", benchmarkBusquedaURLArchivoCSV);
 	medirOperacion("Carga de historial", benchmarkCargaHistorialDesdeArchivo);
 	medirOperacion("Guardado de historial", benchmarkGuardadoHistorial);
-
 	medirOperacion("Busqueda por palabra clave", benchmarkBusquedaPalabraClave);
-
-	medirOperacion("Filtrado por tiempo", benchmarkFiltradoPorTiempo);
-
-
+	medirOperacion("Filtrado por tiempo (secuencial)", benchmarkFiltradoPorTiempo);
+	medirOperacion("Filtrado por tiempo (paralelo)", benchmarkFiltradoPorTiempoParalelo);
 	cout << "==============================================" << endl;
 	cout << "==============================================" << endl;
 	cout << "          FIN DE LAS PRUEBAS                  " << endl;

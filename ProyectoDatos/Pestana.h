@@ -45,6 +45,7 @@ public:
 	void buscarPorPalabraClave(string);
 	void mostrarFavoritos();
 	void timeFilter(int);
+	void timeFilterParalelo(int);
 	void eliminarCadaTiempo(int);
 	void desactivarFiltros();
 	void desactivarFiltroTiempo();

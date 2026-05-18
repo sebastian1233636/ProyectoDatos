@@ -76,7 +76,7 @@ void AdminPestanas::BuscarFavorito() {
 }
 
 void AdminPestanas::ExplorarHistorialPestanas() {
-	bool bandera = true;  // Controla si el modo de exploración sigue activo
+	bool bandera = true;  // Controla si el modo de exploraciï¿½n sigue activo
 	NodoPest* nodoActual = tail;  // Comienza desde la primera pestana (tail)
 
 	if (nodoActual == nullptr) {
@@ -86,7 +86,7 @@ void AdminPestanas::ExplorarHistorialPestanas() {
 	}
 
 	while (bandera) {
-		// Limpiar pantalla y mostrar el menú de administración de pestanas
+		// Limpiar pantalla y mostrar el menï¿½ de administraciï¿½n de pestanas
 		cout << "\x1B[2J\x1B[H";
 		menuAdminPestanas(nodoActual);
 
@@ -119,7 +119,7 @@ void AdminPestanas::ExplorarHistorialPestanas() {
 				else {
 					nodoActual = nodoActual->anterior;
 				}
-				Sleep(200);  // Evitar detección continua de la tecla
+				Sleep(200);  // Evitar detecciï¿½n continua de la tecla
 				break;
 			}
 
@@ -132,7 +132,7 @@ void AdminPestanas::ExplorarHistorialPestanas() {
 				else {
 					nodoActual = nodoActual->siguiente;
 				}
-				Sleep(200);  // Evitar detección continua de la tecla
+				Sleep(200);  // Evitar detecciï¿½n continua de la tecla
 				break;
 			}
 
@@ -148,7 +148,7 @@ void AdminPestanas::ExplorarHistorialPestanas() {
 				string nombrePestana = "Pestana " + to_string(tam);
 				Pestana* pes = new Pestana(nombrePestana);
 				InsertarPrimero(pes);
-				nodoActual = tail; // Se mueve automáticamente a la nueva pestana
+				nodoActual = tail; // Se mueve automï¿½ticamente a la nueva pestana
 				cout << "\x1B[32m\n  > Se ha creado una nueva pestana con exito.\x1B[0m" << endl;
 				Sleep(500);  // Darle un breve tiempo para evitar registrarlo multiples veces
 				break;
@@ -399,7 +399,7 @@ void AdminPestanas::menuAdminPestanas(NodoPest* actual) {
 					cout << "  > Esta funcion ocultara las entradas mas antiguas que el tiempo especificado." << endl;
 					cout << "  > Digite el numero de minutos: ";
 					cin >> min;
-					actual->pestana->timeFilter(min);
+					actual->pestana->timeFilterParalelo(min);
 					estadoFiltroTiempo = "ACTIVO";
 					detalleFiltro = "(Limitando a " + to_string(min) + " min)";
 					cout << "\n  \x1B[32m[+] Filtro aplicado con exito.\x1B[0m\n" << endl;
@@ -571,15 +571,15 @@ int AdminPestanas::obtenerOpcion()
 	cout << "Ingrese una opcion: ";
 	cin >> op;
 
-	// Si la entrada no es un número entero
+	// Si la entrada no es un nï¿½mero entero
 	while (cin.fail()) {
 		cin.clear();  // Limpia el estado de error de cin
-		cin.ignore(1000, '\n');  // Ignora hasta 1000 caracteres o hasta un salto de línea
+		cin.ignore(1000, '\n');  // Ignora hasta 1000 caracteres o hasta un salto de lï¿½nea
 		cout << "Entrada invalida. Por favor, ingrese un numero: ";
 		cin >> op;
 	}
 
-	return op;  // Retorna la opción válida
+	return op;  // Retorna la opciï¿½n vï¿½lida
 }
 
 void AdminPestanas::guardarPestanaTexto() {
